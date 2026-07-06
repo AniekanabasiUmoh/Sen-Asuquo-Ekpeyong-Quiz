@@ -1,0 +1,88 @@
+@import "tailwindcss";
+
+:root {
+  --navy-950: #031a4a;
+  --navy-900: #06245f;
+  --navy-800: #082b6f;
+  --blue-600: #2f6bff;
+  --green-600: #2eaf5d;
+  --gold-500: #f4b400;
+  --orange-500: #f97316;
+  --purple-600: #7c3aed;
+  --rose-500: #f43f5e;
+  --red-500: #dc2626;
+  --surface: #f7f9fc;
+  --card: #ffffff;
+  --border: #e7ecf4;
+  --text: #1d2a44;
+  --muted: #6b7890;
+  --background: #ffffff;
+  --foreground: #1d2a44;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+}
+
+.btn-primary {
+  background: var(--navy-950);
+  color: white;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: opacity 0.15s;
+}
+
+.btn-primary:hover {
+  opacity: 0.88;
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--navy-950);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-weight: 600;
+  transition: background 0.15s;
+}
+
+.btn-secondary:hover {
+  background: var(--surface);
+}
+
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  color: rgba(255,255,255,0.65);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.15s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.sidebar-link:hover {
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+}
+
+.sidebar-link.active {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+}
