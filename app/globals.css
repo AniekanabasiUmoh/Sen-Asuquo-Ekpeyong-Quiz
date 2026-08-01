@@ -1,88 +1,170 @@
 @import "tailwindcss";
 
-:root {
-  --navy-950: #031a4a;
-  --navy-900: #06245f;
-  --navy-800: #082b6f;
-  --blue-600: #2f6bff;
-  --green-600: #2eaf5d;
-  --gold-500: #f4b400;
-  --orange-500: #f97316;
-  --purple-600: #7c3aed;
-  --rose-500: #f43f5e;
-  --red-500: #dc2626;
-  --surface: #f7f9fc;
-  --card: #ffffff;
-  --border: #e7ecf4;
-  --text: #1d2a44;
-  --muted: #6b7890;
-  --background: #ffffff;
-  --foreground: #1d2a44;
+/* ---------------------------------------------------------------
+   Lama Sans — SAEAC primary typeface (Baianat, 2021)
+   Body weights + condensed cuts used for display headlines.
+---------------------------------------------------------------- */
+@font-face {
+  font-family: "Lama Sans";
+  src: url("/fonts/LamaSans-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lama Sans";
+  src: url("/fonts/LamaSans-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lama Sans";
+  src: url("/fonts/LamaSans-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lama Sans";
+  src: url("/fonts/LamaSans-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lama Sans";
+  src: url("/fonts/LamaSans-ExtraBold.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lama Sans";
+  src: url("/fonts/LamaSans-Black.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
 }
 
-* {
-  box-sizing: border-box;
+/* Condensed display family — the heavy all-caps headline voice */
+@font-face {
+  font-family: "Lama Sans Condensed";
+  src: url("/fonts/LamaSans-BoldCondensed.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lama Sans Condensed";
+  src: url("/fonts/LamaSans-ExtraBoldCondensed.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Lama Sans Condensed";
+  src: url("/fonts/LamaSans-BlackCondensed.woff2") format("woff2");
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Libre Caslon Condensed (SIL OFL) — editorial serif used by Variant C only.
+   Variable weight axis, so one file covers the whole range. */
+@font-face {
+  font-family: "Libre Caslon Cond";
+  src: url("/fonts/LibreCaslonCond.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Libre Caslon Cond";
+  src: url("/fonts/LibreCaslonCond-Italic.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ---------------------------------------------------------------
+   Brand tokens — from the SAEAC Brand Design & Application guide.
+   See saeac-v2/BRAND-TOKENS.md
+---------------------------------------------------------------- */
+@theme {
+  --font-sans: "Lama Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Lama Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-condensed: "Lama Sans Condensed", "Lama Sans", ui-sans-serif, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  --font-serif: "Libre Caslon Cond", ui-serif, Georgia, serif;
+
+  /* Core */
+  --color-ink: #000513;
+  --color-brand: #0006eb;
+  --color-navy: #14339f;
+  --color-navy-deep: #0d2270;
+  --color-cyan: #01daeb;
+
+  /* Accents */
+  --color-flame: #f44423;
+  --color-orange: #fe6c03;
+  --color-gold: #ffe169;
+  --color-grass: #2dc653;
+  --color-forest: #155d27;
+  --color-plum: #3c096c;
+  --color-violet: #9d4edd;
+
+  /* Tints */
+  --color-violet-light: #e0aaff;
+  --color-mint: #b7efc5;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--font-sans);
+  font-feature-settings: "kern" 1;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
 
-.card {
-  background: #ffffff;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+/* Heavy condensed caps — the SAEAC headline treatment */
+.display {
+  font-family: var(--font-condensed);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 0.92;
 }
 
-.btn-primary {
-  background: var(--navy-950);
-  color: white;
-  border-radius: 10px;
-  font-weight: 600;
-  transition: opacity 0.15s;
+/* Focus ring consistent across variants */
+:focus-visible {
+  outline: 3px solid var(--color-cyan);
+  outline-offset: 2px;
 }
 
-.btn-primary:hover {
-  opacity: 0.88;
-}
-
-.btn-secondary {
-  background: white;
-  color: var(--navy-950);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  font-weight: 600;
-  transition: background 0.15s;
-}
-
-.btn-secondary:hover {
-  background: var(--surface);
-}
-
-.sidebar-link {
-  display: flex;
+/* WCAG 2.5.8 — list links sit on a 17px line box, which is under the 24px
+   minimum target size. Pad the row so the tap area clears it without
+   changing the visual rhythm. */
+footer li > a,
+nav a {
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
-  border-radius: 10px;
-  color: rgba(255,255,255,0.65);
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.15s;
-  cursor: pointer;
-  text-decoration: none;
+  min-height: 24px;
 }
 
-.sidebar-link:hover {
-  background: rgba(255,255,255,0.08);
-  color: #fff;
-}
-
-.sidebar-link.active {
-  background: rgba(255,255,255,0.12);
-  color: #fff;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
 }

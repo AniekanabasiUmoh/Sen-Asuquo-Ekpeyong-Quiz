@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SAEAC Website — Phase 0
 
-## Getting Started
+Five homepage concepts for the Senator Asuquo Ekpenyong Academic Championship, built so the
+project team can pick one design direction before the rest of the site is built.
 
-First, run the development server:
+## Run it
 
 ```bash
+cd saeac-v2/site
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open <http://localhost:3000>. The index page lists all five variants; a bar at the bottom of
+every page jumps between them.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Route | Variant | Reference template | Character |
+|---|---|---|---|
+| `/` | Comparison index | — | Side-by-side review page |
+| `/a` | Bold Editorial | Caladan | Oversized condensed caps, full-bleed navy, loudest |
+| `/b` | Minimal Institutional | Origin Studio | Whitespace-driven, restrained, official |
+| `/c` | Editorial Contrast | People Work | Photography-led storytelling scroll |
+| `/d` | Warm Community | Safeer | Rounded cards, soft tints, parent-friendly |
+| `/e` | Data-Forward | Setrex SaaS | Stat tiles, live scoreboard, platform feel |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## What is fixed vs. what is being chosen
 
-## Learn More
+**Fixed — not part of this review.** SAEAC has a completed brand identity, so all five variants
+share it exactly:
 
-To learn more about Next.js, take a look at the following resources:
+- SÆAC logo (note the **Æ ligature**), white and blue lockups
+- The official 12-colour palette — primary blue `#0006EB`, logo navy `#14339F`, gold `#FFE169`
+- Lama Sans (Baianat) — body weights plus the condensed cuts used for headline caps
+- The four-colour ribbon motif (red / orange / blue / gold)
+- All copy, figures, and competition mechanics
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Being chosen.** Layout, section rhythm, component style, density, and tone.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Structure
 
-## Deploy on Vercel
+```
+app/
+  page.tsx            comparison index
+  a|b|c|d|e/page.tsx  the five homepage variants
+  globals.css         @font-face declarations + brand tokens (Tailwind v4 @theme)
+components/
+  brand.tsx           Logo, Ribbon, CornerRibbon, Pill
+  countdown.tsx       live countdown (hydration-safe)
+  switcher.tsx        review-only variant switcher bar
+content/
+  homepage.ts         ALL copy and data — single source of truth for every variant
+public/
+  brand/              logo PNGs at web sizes
+  fonts/              Lama Sans woff2 (9 weights, ~44 KB each)
+  img/                placeholder photography
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Every variant imports from `content/homepage.ts`, so the five pages are guaranteed to show
+identical content. To correct a fact, edit that one file.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Verification
+
+```bash
+node shots.mjs    # screenshots to shots/  (ROUTES=a,b MOBILE=1 to narrow)
+node audit.mjs    # horizontal overflow, broken images, heading order, tap-target sizes
+```
+
+Both currently pass clean at 390px and 1440px, and `npm run build` prerenders all six routes
+as static pages.
+
+## Placeholder content to replace
+
+- **Photography** — stock imagery of West African secondary school students (Pexels, licensed for
+  commercial use, no attribution required). Replace with real SAEAC event photography.
+- **Countdown deadline** — provisionally 30 October 2026. Needs the Organising Committee's
+  confirmed registration deadline.
+- **News items, sponsor names, Variant E scoreboard** — illustrative dummy data.
+
+Everything else — 117 schools, the seven LGAs and their school counts, all seven stages, the prize
+schedule, and the Round 3 Striker/Assist/Substitution/VAR mechanics — comes directly from the
+Website Content Guide and the RD deck.
+
+## Not in Phase 0
+
+No backend, no authentication, no CMS, no database. Supabase arrives in Phase 2. See
+[../SAEAC-PHASES-AND-SPRINTS.md](../SAEAC-PHASES-AND-SPRINTS.md).

@@ -1,13 +1,26 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { RoleProvider } from "@/lib/RoleContext";
-
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Sen. Asuquo Ekpenyong Quiz Competition — Cross River State",
-  description: "A fair, transparent and inclusive platform for state-level quiz competitions in Cross River State, championed by Senator Asuquo Ekpenyong.",
+  title: {
+    default: "SÆAC — Senator Asuquo Ekpenyong Academic Championship",
+    template: "%s · SÆAC",
+  },
+  description:
+    "A district-wide academic championship for secondary schools across the seven Local Government Areas of the Cross River South Senatorial District.",
+  metadataBase: new URL("https://www.saeac.org"),
+  openGraph: {
+    title: "SÆAC — Senator Asuquo Ekpenyong Academic Championship",
+    description:
+      "Igniting Minds. Inspiring Excellence. Building Leaders. The maiden edition of the Cross River South academic championship.",
+    type: "website",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#14339f",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({
@@ -16,12 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
-      <body className={`${inter.className} min-h-full`}>
-        <RoleProvider>
-          {children}
-        </RoleProvider>
-      </body>
+    <html lang="en-NG" className="h-full antialiased">
+      <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
 }
