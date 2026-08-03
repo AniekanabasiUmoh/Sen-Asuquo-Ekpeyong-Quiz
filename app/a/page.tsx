@@ -9,6 +9,7 @@ import {
   contact,
   countdown,
   faq,
+  featuredSchools,
   footerLinks,
   hero,
   lgaNote,
@@ -81,7 +82,7 @@ const stageThumbs = [
 
 export default function VariantA() {
   return (
-    <div className="bg-[#f4f4f2] text-[#0d2270]">
+    <div className="bg-[#faf6ee] text-[#0d2270]">
       {/* ── Hero: full-bleed photograph, floating pill nav, headline low-left ── */}
       <section className="relative isolate min-h-[92svh] overflow-hidden px-3 pb-3 pt-3 sm:px-4 sm:pb-4 sm:pt-4">
         <div className="relative flex min-h-[calc(92svh-1.5rem)] flex-col overflow-hidden rounded-[28px]">
@@ -169,9 +170,12 @@ export default function VariantA() {
       {/* ── Stats: quiet rule-separated row on the light ground ── */}
       <section className="mx-auto max-w-7xl px-5 pb-4 pt-16 sm:pt-20">
         <div className="grid grid-cols-2 gap-y-10 border-y border-black/10 py-10 md:grid-cols-4">
-          {stats.map((s) => (
+          {stats.map((s, i) => (
             <div key={s.label} className="px-2 md:border-l md:border-black/10 md:first:border-l-0 md:px-8">
-              <div className="font-display text-5xl font-extrabold tracking-[-0.03em] sm:text-6xl">
+              <div
+                className="font-display text-5xl font-extrabold tracking-[-0.03em] sm:text-6xl"
+                style={{ color: ["#f44423", "#fe6c03", "#2dc653", "#0006eb"][i] }}
+              >
                 {s.value}
               </div>
               <div className="mt-2 text-[13px] font-semibold">{s.label}</div>
@@ -347,7 +351,7 @@ export default function VariantA() {
 
       {/* ── LGAs ── */}
       <section id="lgas" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
-        <div className="grid gap-12 lg:grid-cols-[0.95fr_1.05fr]">
+        <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <Eyebrow>Cross River South</Eyebrow>
             <Split
@@ -355,45 +359,101 @@ export default function VariantA() {
               trail="One District"
               className="mt-5 text-[clamp(2.25rem,4.6vw,3.5rem)] leading-[1.03]"
             />
-            <p className="mt-5 max-w-md text-[15px] leading-relaxed text-[#0d2270]/55">
-              {lgaNote}
-            </p>
-            <div className="relative mt-8 aspect-[4/3] overflow-hidden rounded-2xl">
-              <Image
-                src="/img/students-outdoors.jpg"
-                alt="Students outside their school"
-                fill
-                sizes="(min-width: 1024px) 45vw, 100vw"
-                className="object-cover"
-              />
-            </div>
           </div>
+          <p className="max-w-sm text-[15px] leading-relaxed text-[#0d2270]/55">{lgaNote}</p>
+        </div>
 
-          <div className="flex flex-col rounded-2xl bg-white p-3 sm:p-4">
-            {lgas.map((l) => (
-              <div
-                key={l.name}
-                className="flex flex-1 items-center justify-between gap-4 border-b border-black/[0.07] px-4 py-5"
-              >
-                <span className="flex flex-wrap items-center gap-2 font-medium">
-                  {l.name}
-                  {l.combined && (
-                    <span className="rounded-full bg-[#0d2270]/[0.06] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#0d2270]/55">
-                      Combined
-                    </span>
-                  )}
+        {/* Photo tiles — each LGA gets a face, not just a row in a table */}
+        <div className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {lgas.map((l) => (
+            <div
+              key={l.name}
+              className="group relative aspect-[4/5] overflow-hidden rounded-2xl"
+            >
+              <Image
+                src={l.img}
+                alt={`Secondary school students in ${l.name}`}
+                fill
+                sizes="(min-width: 1024px) 25vw, 50vw"
+                className="object-cover transition duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
+              {l.combined && (
+                <span className="absolute left-4 top-4 rounded-full bg-[#ffe169] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#0d2270]">
+                  Combined
                 </span>
-                <span className="font-display text-xl font-extrabold">{l.schools}</span>
+              )}
+              <div className="absolute inset-x-0 bottom-0 p-5">
+                <h3 className="font-display text-lg font-bold leading-tight text-white sm:text-xl">
+                  {l.name}
+                </h3>
+                <p className="mt-1 text-[13px] text-white/70">{l.schools} schools</p>
               </div>
-            ))}
-            <div className="mt-2 flex items-center justify-between gap-4 rounded-xl bg-[#0d2270] px-4 py-5 text-white">
-              <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/70">
-                Total Schools
-              </span>
-              <span className="font-display text-2xl font-extrabold text-[#ffe169]">117</span>
+            </div>
+          ))}
+
+          {/* Eighth tile completes the 4-up grid and carries the total */}
+          <div className="flex aspect-[4/5] flex-col justify-between rounded-2xl bg-[#0d2270] p-5 text-white">
+            <span className="text-[11px] font-bold uppercase tracking-[0.16em] text-white/60">
+              Across the District
+            </span>
+            <div>
+              <div className="font-display text-6xl font-extrabold leading-none text-[#ffe169]">
+                117
+              </div>
+              <p className="mt-2 text-[13px] text-white/70">
+                Secondary schools eligible to enter
+              </p>
             </div>
           </div>
         </div>
+      </section>
+
+      {/* ── Schools of the District ── */}
+      <section id="schools" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+        <div className="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <Eyebrow>Who&rsquo;s Competing</Eyebrow>
+            <Split
+              lead="Schools of"
+              trail="the District"
+              className="mt-5 text-[clamp(2.25rem,4.6vw,3.5rem)] leading-[1.03]"
+            />
+          </div>
+          <p className="max-w-sm text-[15px] leading-relaxed text-[#0d2270]/55">
+            From Creek Town to Akamkpa, schools across all seven LGAs line up for the
+            maiden edition. A few of them below.
+          </p>
+        </div>
+
+        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {featuredSchools.map((s) => (
+            <article
+              key={s.name}
+              className="group overflow-hidden rounded-2xl bg-white transition hover:shadow-lg"
+            >
+              <div className="relative aspect-[16/11] overflow-hidden">
+                <Image
+                  src={s.img}
+                  alt={`Students of ${s.name}`}
+                  fill
+                  sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover transition duration-700 group-hover:scale-105"
+                />
+                <span className="absolute left-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-[#0d2270] backdrop-blur">
+                  {s.lga}
+                </span>
+              </div>
+              <div className="p-6">
+                <h3 className="font-display text-[17px] font-bold leading-snug">{s.name}</h3>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <p className="mt-6 text-[13px] text-[#0d2270]/40">
+          Every registered school appears here once registration opens.
+        </p>
       </section>
 
       {/* ── Prizes ── */}

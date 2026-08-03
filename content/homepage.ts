@@ -105,13 +105,65 @@ export const stages = [
 ] as const;
 
 export const lgas = [
-  { name: "Akpabuyo", schools: 7, combined: true },
-  { name: "Biase", schools: 22, combined: false },
-  { name: "Odukpani", schools: 23, combined: false },
-  { name: "Akamkpa", schools: 24, combined: false },
-  { name: "Bakassi", schools: 4, combined: true },
-  { name: "Calabar Municipality", schools: 22, combined: false },
-  { name: "Calabar South", schools: 15, combined: false },
+  { name: "Akpabuyo", schools: 7, combined: true, img: "/img/lga-akpabuyo.jpg" },
+  { name: "Biase", schools: 22, combined: false, img: "/img/lga-biase.jpg" },
+  { name: "Odukpani", schools: 23, combined: false, img: "/img/lga-odukpani.jpg" },
+  { name: "Akamkpa", schools: 24, combined: false, img: "/img/lga-akamkpa.jpg" },
+  { name: "Bakassi", schools: 4, combined: true, img: "/img/lga-bakassi.jpg" },
+  {
+    name: "Calabar Municipality",
+    schools: 22,
+    combined: false,
+    img: "/img/lga-calabar-municipality.jpg",
+  },
+  {
+    name: "Calabar South",
+    schools: 15,
+    combined: false,
+    img: "/img/lga-calabar-south.jpg",
+  },
+] as const;
+
+/**
+ * A sample of real secondary schools across the district, used for the
+ * "Schools of the District" showcase. These are genuine institutions in the
+ * named LGAs, shown to give the competition a local face.
+ *
+ * PLACEHOLDER photography — each school's own building/students photograph
+ * should replace `img` once the Organising Committee supplies them, and the
+ * full 117-school roster should come from the registration database in Phase 2.
+ */
+export const featuredSchools = [
+  {
+    name: "Hope Waddell Training Institution",
+    lga: "Calabar Municipality",
+    img: "/img/school-1.jpg",
+  },
+  {
+    name: "Duke Town Secondary School",
+    lga: "Calabar South",
+    img: "/img/school-2.jpg",
+  },
+  {
+    name: "Government Secondary School, Akamkpa",
+    lga: "Akamkpa",
+    img: "/img/school-3.jpg",
+  },
+  {
+    name: "Creek Town Government Secondary School",
+    lga: "Odukpani",
+    img: "/img/school-4.jpg",
+  },
+  {
+    name: "Ikot Nakanda Secondary School",
+    lga: "Akpabuyo",
+    img: "/img/school-5.jpg",
+  },
+  {
+    name: "Uyanga Model High School",
+    lga: "Akamkpa",
+    img: "/img/school-6.jpg",
+  },
 ] as const;
 
 export const lgaNote =
@@ -243,6 +295,7 @@ export const nav = [
   { label: "About", href: "#overview" },
   { label: "Competition", href: "#stages" },
   { label: "LGAs", href: "#lgas" },
+  { label: "Schools", href: "#schools" },
   { label: "Prizes", href: "#prizes" },
   { label: "News", href: "#news" },
 ] as const;
