@@ -361,3 +361,9 @@ export const variants = [
 ] as const;
 
 export type VariantId = (typeof variants)[number]["id"];
+
+/**
+ * Variant A was chosen as the site's direction, so it lives at the root.
+ * The rest stay on their letter routes for comparison.
+ */
+export const variantHref = (id: VariantId) => (id === "a" ? "/" : `/${id}`);
