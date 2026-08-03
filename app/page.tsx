@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Logo, Ribbon } from "@/components/brand";
 import { Countdown } from "@/components/countdown";
 import { Accordion } from "@/components/accordion";
+import { YouTubeEmbed } from "@/components/video";
 import {
   brand,
   contact,
@@ -15,9 +16,11 @@ import {
   mentorPrize,
   nav,
   news,
+  origin,
   overview,
   portalLinks,
   prizes,
+  senator,
   showdown,
   sponsors,
   stages,
@@ -270,6 +273,49 @@ export default function VariantA() {
         </div>
       </section>
 
+      {/* ── Message from the Patron: video left, quote right ── */}
+      <section id="patron" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+        <div className="overflow-hidden rounded-[28px] bg-[#0d2270] text-white">
+          <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
+            <div className="p-5 sm:p-7 lg:p-8">
+              <YouTubeEmbed
+                id={senator.video.youTubeId}
+                title={senator.video.title}
+                poster={senator.video.poster}
+              />
+            </div>
+
+            <div className="flex flex-col justify-center px-7 pb-10 sm:px-9 lg:py-12 lg:pl-2 lg:pr-10">
+              <span className="inline-flex w-fit items-center rounded-full border border-white/25 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/75">
+                {senator.eyebrow}
+              </span>
+
+              <blockquote className="mt-6">
+                <p className="font-display text-[21px] font-medium leading-[1.35] sm:text-2xl">
+                  &ldquo;{senator.quote}&rdquo;
+                </p>
+              </blockquote>
+
+              <div className="mt-7 flex items-center gap-4">
+                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full">
+                  <Image
+                    src={senator.portrait}
+                    alt={senator.name}
+                    fill
+                    sizes="56px"
+                    className="object-cover"
+                  />
+                </div>
+                <div>
+                  <p className="font-display text-[15px] font-bold">{senator.name}</p>
+                  <p className="text-[13px] text-white/60">{senator.role}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Stages: thin rules, number, title, copy, thumbnail right ── */}
       <section id="stages" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
         <div className="flex flex-wrap items-end justify-between gap-6">
@@ -453,6 +499,65 @@ export default function VariantA() {
         <p className="mt-6 text-[13px] text-[#0d2270]/40">
           Every registered school appears here once registration opens.
         </p>
+      </section>
+
+      {/* ── Origin / Background ── */}
+      <section id="origin" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+        <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
+          <div>
+            <Eyebrow>{origin.eyebrow}</Eyebrow>
+            <Split
+              lead={origin.title}
+              trail={origin.titleTrail}
+              className="mt-5 text-[clamp(2.25rem,4.6vw,3.5rem)] leading-[1.03]"
+            />
+            <p className="mt-6 text-[15px] leading-relaxed text-[#0d2270]/60">{origin.body}</p>
+            <p className="mt-4 text-[15px] leading-relaxed text-[#0d2270]/60">{origin.body2}</p>
+
+            <figure className="mt-8 border-l-2 border-[#ffe169] pl-5">
+              <blockquote className="font-display text-lg font-bold leading-snug sm:text-xl">
+                {origin.pullQuote}
+              </blockquote>
+            </figure>
+
+            <a
+              href={origin.cta.href}
+              className="mt-8 inline-flex items-center gap-2 rounded-full border border-black/15 px-6 py-3 text-[13px] font-semibold transition hover:bg-white"
+            >
+              {origin.cta.label}
+            </a>
+          </div>
+
+          {/* Photo mosaic: the presentation, the team, the forms */}
+          <div className="grid gap-3">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+              <Image
+                src={origin.images[0].src}
+                alt={origin.images[0].alt}
+                fill
+                sizes="(min-width: 1024px) 52vw, 100vw"
+                className="object-cover"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {origin.images.slice(1).map((im) => (
+                <div key={im.src} className="relative aspect-[4/3] overflow-hidden rounded-2xl">
+                  <Image
+                    src={im.src}
+                    alt={im.alt}
+                    fill
+                    sizes="(min-width: 1024px) 26vw, 50vw"
+                    className="object-cover"
+                  />
+                </div>
+              ))}
+            </div>
+            <p className="text-[12px] leading-relaxed text-[#0d2270]/40">
+              The Scholars in Diaspora presentation at the Senator&rsquo;s office, where the
+              Diaspora Educational Trust Fund was announced.
+            </p>
+          </div>
+        </div>
       </section>
 
       {/* ── Prizes ── */}

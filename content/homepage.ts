@@ -166,6 +166,53 @@ export const featuredSchools = [
   },
 ] as const;
 
+/**
+ * The Background section from the Content Guide (§2.1 / §4.2), condensed for
+ * the homepage. The full text belongs on the About SAEAC page; this band is a
+ * summary that links through. Photography is from the nomination-form
+ * handover at the Senator's office — the moment the Trust Fund, and with it
+ * the Championship, was announced.
+ */
+export const origin = {
+  eyebrow: "Our Origin",
+  title: "How the Championship",
+  titleTrail: "Began",
+  body: "Scholars in Diaspora is a network of beneficiaries of the educational initiatives facilitated by Senator Asuquo Ekpenyong. Over the past three years, his interventions have enabled more than sixty scholars to study in the United Kingdom and beyond — many now qualified as doctors, lawyers, and other professionals.",
+  body2:
+    "In gratitude, those beneficiaries mobilised funds towards the Senator's nomination form and presented it at his office. There he announced a seed donation towards the Diaspora Educational Trust Fund, and encouraged them to institutionalise their efforts into a sustainable platform for vulnerable students. SAEAC is the flagship expression of that commitment.",
+  pullQuote: "A society which invests in education creates generations of leaders who, in turn, invest in others.",
+  images: [
+    { src: "/img/origin-cheque.jpg", alt: "The Scholars in Diaspora presentation at the Senator's office" },
+    { src: "/img/origin-team.jpg", alt: "Scholars in Diaspora with Senator Asuquo Ekpenyong" },
+    { src: "/img/origin-forms.jpg", alt: "The 2026 nomination and expression of interest forms presented to the Senator" },
+  ],
+  cta: { label: "Read the full story", href: "#origin" },
+} as const;
+
+/**
+ * Message from the Senator.
+ *
+ * PLACEHOLDER QUOTE. The Content Guide (§4.2) is explicit: this message must be
+ * commissioned from the Senator's office and carry his own words — it is not to
+ * be drafted speculatively. The line below is drawn from the Guide's own
+ * Background narrative purely to hold the layout, and MUST be replaced before
+ * launch.
+ */
+export const senator = {
+  eyebrow: "Message from the Patron",
+  name: "Senator Asuquo Ekpenyong",
+  role: "Cross River South Senatorial District",
+  quote:
+    "Before accepting the scholars' sacrifice, it was only right that I give back — and that we build something able to support many more students than any one of us could reach alone.",
+  quoteIsPlaceholder: true,
+  portrait: "/img/senator-avatar.jpg",
+  video: {
+    youTubeId: "9Hyxx0w4e_w",
+    title: "Senator Asuquo Ekpenyong on the Academic Championship",
+    poster: "/img/senator-video-poster.jpg",
+  },
+} as const;
+
 export const lgaNote =
   "Owing to the comparatively low number of secondary schools in Akpabuyo and Bakassi, these two LGAs are merged and jointly allocated one slot at the Local Government Qualifiers stage.";
 
@@ -296,6 +343,7 @@ export const nav = [
   { label: "Competition", href: "#stages" },
   { label: "LGAs", href: "#lgas" },
   { label: "Schools", href: "#schools" },
+  { label: "Our Story", href: "#origin" },
   { label: "Prizes", href: "#prizes" },
   { label: "News", href: "#news" },
 ] as const;
