@@ -408,7 +408,7 @@ export default function VariantD() {
           {stats.map((s) => (
             <div key={s.label} className="rounded-2xl bg-white px-6 py-8">
               <div className="font-display text-5xl font-medium tracking-[-0.03em]">
-                {s.value}
+                {s.display}
               </div>
               <div className="mt-3 text-[13px] font-medium">{s.label}</div>
               <div className="mt-0.5 text-[12px] text-[#1b1b1b]/45">{s.note}</div>

@@ -264,12 +264,12 @@ export default function VariantE() {
                 className="pointer-events-none absolute -right-3 -top-6 select-none font-display text-[7rem] font-bold leading-none text-white/[0.035]"
                 aria-hidden="true"
               >
-                {s.value}
+                {s.display}
               </span>
               <div className="relative">
                 <div className="flex items-start justify-between gap-3">
                   <span className="font-display text-4xl font-semibold tracking-[-0.03em] sm:text-5xl">
-                    {s.value}
+                    {s.display}
                   </span>
                   {i === 0 && <Chip>District</Chip>}
                 </div>

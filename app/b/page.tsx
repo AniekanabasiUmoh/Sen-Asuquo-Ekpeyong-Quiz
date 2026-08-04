@@ -184,7 +184,7 @@ export default function VariantB() {
           {stats.map((s) => (
             <div key={s.label} className="bg-[#0b0b0b] px-6 py-10 text-center">
               <div className="font-display text-5xl font-light tracking-[-0.03em] sm:text-6xl">
-                {s.value}
+                {s.display}
               </div>
               <div className="mt-3 text-[11px] uppercase tracking-[0.16em] text-white/70">
                 {s.label}

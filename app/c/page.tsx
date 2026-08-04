@@ -255,7 +255,7 @@ export default function VariantC() {
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
           {stats.map((s) => (
             <div key={s.label} className="rounded-2xl bg-white px-6 py-8 text-center">
-              <div className="font-serif text-5xl sm:text-6xl">{s.value}</div>
+              <div className="font-serif text-5xl sm:text-6xl">{s.display}</div>
               <div className="mt-3 text-[13px] font-medium">{s.label}</div>
               <div className="mt-1 text-[12px] text-[#1e2b23]/45">{s.note}</div>
             </div>

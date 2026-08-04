@@ -18,10 +18,68 @@ export const brand = {
 export const hero = {
   eyebrow: "Cross River South Senatorial District · Maiden Edition",
   headline: "Who Wins This?",
+  /** Short hero line — the full description sits in the About block below. */
+  tagline:
+    "Secondary schools from all seven Local Government Areas of Cross River South, competing for one title.",
+  /** Client-supplied description — use verbatim. */
   subhead:
-    "A district-wide academic championship for every public and private secondary school across the seven Local Government Areas of Cross River South — culminating in a televised Grand Finale.",
-  primaryCta: { label: "Register Your School", href: "#register" },
-  secondaryCta: { label: "Learn More", href: "#overview" },
+    "A district-wide educational initiative bringing together secondary schools across the seven Local Government Areas of Cross River South Senatorial District in an annual tournament designed to celebrate excellence, develop future leaders and transform academic competition into a prestigious public event.",
+  primaryCta: { label: "Register Now", href: "#register" },
+  secondaryCta: { label: "Become a Partner", href: "#sponsor" },
+  tertiaryCta: { label: "Watch Promo", href: "#patron" },
+} as const;
+
+/** Client-supplied About block. */
+export const about = {
+  eyebrow: "About SAEAC",
+  title: "Building the Future Through",
+  titleTrail: "Academic Excellence",
+  body: "SAEAC is more than an academic competition. It is a platform for discovering talent, rewarding excellence and investing in the future of education. Structured like a championship tournament, the competition provides every participating school with an opportunity to compete for recognition, scholarships, educational infrastructure and lasting legacy projects.",
+  cta: { label: "Read More", href: "#origin" },
+} as const;
+
+/**
+ * The Principals' engagement at Axari Hotel, Calabar — 16 July 2026.
+ * Real, documented SAEAC activity: 24 principals across six of the seven LGAs.
+ * Source: SAEAC Meeting Report (Academic Central Planning Committee).
+ */
+export const principalsMeeting = {
+  eyebrow: "Latest from Schools",
+  title: "Principals Across the District",
+  titleTrail: "Back the Championship",
+  date: "16 July 2026",
+  venue: "Axari Hotel, Calabar",
+  body: "The SAEAC Academic Central Planning Committee convened a Strategic Stakeholders' Meeting with principals of secondary schools from across Cross River South, to present the Championship Framework and Operational Guidelines and secure their cooperation ahead of roll-out.",
+  facts: [
+    { value: "24", label: "Principals attended" },
+    { value: "6 of 7", label: "LGAs represented" },
+    { value: "5", label: "Recommendations raised" },
+  ],
+  images: [
+    { src: "/img/meeting-group.jpg", alt: "Principals and the SAEAC Planning Committee at Axari Hotel, Calabar" },
+    { src: "/img/meeting-question.jpg", alt: "A principal raising a question during the engagement" },
+    { src: "/img/meeting-materials.jpg", alt: "SAEAC participant folders and lanyards" },
+    { src: "/img/meeting-audience.jpg", alt: "Principals seated during the presentation" },
+  ],
+} as const;
+
+/**
+ * Scholars in Diaspora — the championship's board of directors.
+ * Figures from the Scholars in Diaspora report (SD SAES).
+ */
+export const board = {
+  eyebrow: "Board of Directors",
+  name: "Scholars in Diaspora",
+  strapline: "From Beneficiaries to Changemakers: Building a Legacy of Educational Impact",
+  vision:
+    "To build a network of scholars committed to promoting educational excellence and social development across Cross River South and beyond.",
+  mission:
+    "To leverage collective resources and partnerships to provide educational support, mentorship, and opportunities for vulnerable children and deserving students.",
+  facts: [
+    { value: "₦22.1M", label: "Funds mobilised" },
+    { value: "₦25M", label: "Seed donation secured" },
+    { value: "60+", label: "Scholars supported" },
+  ],
 } as const;
 
 export const overview = {
@@ -45,11 +103,30 @@ export const countdown = {
   note: "Provisional date — to be confirmed by the Organising Committee.",
 } as const;
 
+/**
+ * Headline statistics, as supplied by the client (LIVE STATISTICS list).
+ *
+ * NOTE FOR THE COMMITTEE: these figures supersede the earlier 117-school /
+ * 585-student counts that were drawn from the Competition Structure document
+ * and the Principals' Meeting Report. The two sets do not agree — the report's
+ * updated per-LGA counts total 117 public schools. The figures below are the
+ * ones the client has approved for publication and are understood to include
+ * private schools and projected participation.
+ *
+ * `count` drives the count-up animation; `display` is the rendered string.
+ */
 export const stats = [
-  { value: "117", label: "Secondary Schools", note: "Across the district" },
-  { value: "7", label: "Local Government Areas", note: "Cross River South" },
-  { value: "7", label: "Competition Stages", note: "Registration to Grand Finale" },
-  { value: "585", label: "Students Expected", note: "Five per school at screening" },
+  { count: 7, display: "7", label: "Local Government Areas", note: "Cross River South" },
+  { count: 250, suffix: "+", display: "250+", label: "Secondary Schools", note: "Across the district" },
+  { count: 10000, suffix: "+", display: "10,000+", label: "Student Competitors", note: "Expected to take part" },
+  { count: 1, display: "1", label: "Champion", note: "One school takes the title" },
+] as const;
+
+/** Secondary figures shown as a supporting row. */
+export const statsFinancial = [
+  { display: "₦25M", label: "Seed Fund", note: "Diaspora Educational Trust Fund" },
+  { display: "₦200M", label: "Project Value", note: "Total championship investment" },
+  { display: "Annual", label: "Championship", note: "Returning every year" },
 ] as const;
 
 export const stages = [
@@ -134,36 +211,18 @@ export const lgas = [
  * full 117-school roster should come from the registration database in Phase 2.
  */
 export const featuredSchools = [
-  {
-    name: "Hope Waddell Training Institution",
-    lga: "Calabar Municipality",
-    img: "/img/school-1.jpg",
-  },
-  {
-    name: "Duke Town Secondary School",
-    lga: "Calabar South",
-    img: "/img/school-2.jpg",
-  },
-  {
-    name: "Government Secondary School, Akamkpa",
-    lga: "Akamkpa",
-    img: "/img/school-3.jpg",
-  },
-  {
-    name: "Creek Town Government Secondary School",
-    lga: "Odukpani",
-    img: "/img/school-4.jpg",
-  },
-  {
-    name: "Ikot Nakanda Secondary School",
-    lga: "Akpabuyo",
-    img: "/img/school-5.jpg",
-  },
-  {
-    name: "Uyanga Model High School",
-    lga: "Akamkpa",
-    img: "/img/school-6.jpg",
-  },
+  { name: "Hope Waddell Training Institution", lga: "Calabar Municipality" },
+  { name: "Duke Town Secondary School", lga: "Calabar South" },
+  { name: "Government Secondary School, Akamkpa", lga: "Akamkpa" },
+  { name: "Creek Town Government Secondary School", lga: "Odukpani" },
+  { name: "Ikot Nakanda Secondary School", lga: "Akpabuyo" },
+  { name: "Uyanga Model High School", lga: "Akamkpa" },
+  { name: "Ikot Ewa Comprehensive High School", lga: "Akpabuyo" },
+  { name: "Eniong Community Technical College", lga: "Odukpani" },
+  { name: "Adiabo Government Comprehensive High School", lga: "Odukpani" },
+  { name: "Big Qua Government Secondary School", lga: "Calabar Municipality" },
+  { name: "Government Secondary School, Mbukpa", lga: "Calabar South" },
+  { name: "Old Netim Comprehensive Secondary School", lga: "Akamkpa" },
 ] as const;
 
 /**
@@ -199,9 +258,9 @@ export const origin = {
  * launch.
  */
 export const senator = {
-  eyebrow: "Message from the Patron",
+  eyebrow: "Message from the Grand Patron",
   name: "Senator Asuquo Ekpenyong",
-  role: "Cross River South Senatorial District",
+  role: "Grand Patron · Cross River South Senatorial District",
   quote:
     "Before accepting the scholars' sacrifice, it was only right that I give back — and that we build something able to support many more students than any one of us could reach alone.",
   quoteIsPlaceholder: true,
@@ -245,6 +304,31 @@ export const mentorPrize = {
   body: "A cash prize of ₦1,000,000 and a Best Mentorship Certificate is presented to the Coach of the winning school, in recognition of the critical role mentors play in preparing finalists.",
 } as const;
 
+/**
+ * "What the Champions Win" — the client's summary framing, grouped by who
+ * benefits rather than by placing. Shown on the homepage; the exact prize
+ * schedule from the Content Guide (§4.15) remains on the Prizes page.
+ */
+export const championsWin = [
+  {
+    group: "Champion School",
+    items: [
+      "ICT/CBT Centre",
+      "Championship Trophy",
+      "Smart Classroom Support",
+      "Champion Recognition",
+    ],
+  },
+  {
+    group: "Champion Students",
+    items: ["Cash Awards", "Laptops", "Scholarships", "Mentorship Opportunities"],
+  },
+  {
+    group: "Teachers",
+    items: ["Excellence Awards", "Cash Recognition", "Certificates"],
+  },
+] as const;
+
 /** The Grand Finale's football metaphor — Strikers, Assists, Coach, VAR. */
 export const showdown = {
   title: "The Grand Finale Showdown",
@@ -270,28 +354,36 @@ export const showdown = {
   ],
 } as const;
 
-/** PLACEHOLDER announcements — replace with the live news feed in Phase 2. */
+/**
+ * News feed. Every item here must describe something that has actually
+ * happened — no forward-dated or speculative announcements. The three below
+ * are drawn from the Principals' Meeting Report (16 July 2026) and the
+ * Scholars in Diaspora report. Replace with a live feed in Phase 2.
+ */
 export const news = [
   {
-    category: "Announcement",
-    date: "2026-07-28",
-    title: "School registration opens across all seven LGAs",
+    category: "Stakeholder Engagement",
+    date: "2026-07-16",
+    title: "Principals across six LGAs engaged at Axari Hotel, Calabar",
     excerpt:
-      "Public and private secondary schools in Cross River South can now register for the maiden edition of the championship.",
+      "Twenty-four principals received the Championship Framework and Operational Guidelines, and raised five recommendations for the Planning Committee.",
+    img: "/img/meeting-group.jpg",
   },
   {
-    category: "Announcement",
-    date: "2026-07-21",
-    title: "Rules and Regulations document published",
+    category: "Committee",
+    date: "2026-07-16",
+    title: "Principals update public secondary school figures",
     excerpt:
-      "The official competition rulebook is now available to download from the Downloads section.",
+      "Attending principals provided revised school counts for their LGAs, superseding the provisional figures circulated in the Competition Structure document.",
+    img: "/img/meeting-audience.jpg",
   },
   {
-    category: "Stage Report",
-    date: "2026-07-14",
-    title: "Organising Committee confirms seven subject areas",
+    category: "Trust Fund",
+    date: "2026-04-29",
+    title: "₦25 million seed donation establishes the Trust Fund",
     excerpt:
-      "Questions will be drawn from Mathematics, English, Sciences, Art, Commercial, Current Affairs and Civic Education, and General Knowledge.",
+      "At the official presentation in his office, the Grand Patron announced a seed donation towards the Diaspora Educational Trust Fund.",
+    img: "/img/origin-cheque.jpg",
   },
 ] as const;
 
@@ -338,15 +430,37 @@ export const contact = {
   ],
 } as const;
 
+/**
+ * Client-specified navigation. Items marked `soon` are Phase 1–3 pages that
+ * do not exist yet; they resolve to the nearest homepage anchor for now.
+ */
 export const nav = [
-  { label: "About", href: "#overview" },
-  { label: "Competition", href: "#stages" },
-  { label: "LGAs", href: "#lgas" },
-  { label: "Schools", href: "#schools" },
-  { label: "Our Story", href: "#origin" },
-  { label: "Prizes", href: "#prizes" },
-  { label: "News", href: "#news" },
+  { label: "Home", href: "#top" },
+  { label: "About SAEAC", href: "#about" },
+  { label: "The Championship", href: "#overview" },
+  { label: "Competition Structure", href: "#stages" },
+  { label: "Schools Registration", href: "#register" },
+  { label: "Fixtures & Results", href: "#stages", soon: true },
+  { label: "Leaderboard", href: "#stages", soon: true },
+  { label: "News & Media", href: "#news" },
+  { label: "Sponsors & Partners", href: "#sponsor" },
+  { label: "Contact Us", href: "#contact" },
 ] as const;
+
+/** The two primary actions, fixed in the header per the client's brief. */
+export const navCtas = {
+  primary: { label: "Register Your School", href: "#register" },
+  secondary: { label: "Sponsor the Championship", href: "#sponsor" },
+} as const;
+
+/** Volunteer programme — the client renamed volunteers to "Change Makers". */
+export const changeMaker = {
+  eyebrow: "Get Involved",
+  title: "Become a",
+  titleTrail: "Change Maker",
+  body: "Volunteers power the championship on the ground — from LGA qualifiers to the Grand Finale. Join the team behind Cross River South's biggest academic contest.",
+  cta: { label: "Volunteer With Us", href: "#changemaker" },
+} as const;
 
 export const footerLinks = [
   "About SAEAC",

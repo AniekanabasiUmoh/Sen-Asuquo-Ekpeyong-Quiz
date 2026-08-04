@@ -84,6 +84,47 @@ export function CornerRibbon({
   );
 }
 
+/**
+ * The diagonal ribbon slash — the device used down the left edge of every
+ * page of the SAEAC Meeting Report. Red, gold and blue bars raked at a
+ * consistent angle. Purely decorative.
+ */
+export function DiagonalRibbon({
+  className = "",
+  side = "left",
+}: {
+  className?: string;
+  side?: "left" | "right";
+}) {
+  const bars = [
+    { c: "#f03018", h: 210, x: 0 },
+    { c: "#f0a800", h: 168, x: 26 },
+    { c: "#003090", h: 126, x: 52 },
+  ];
+  return (
+    <div
+      className={`pointer-events-none absolute top-0 ${
+        side === "left" ? "left-0" : "right-0 scale-x-[-1]"
+      } ${className}`}
+      aria-hidden="true"
+    >
+      <svg width="82" height="220" viewBox="0 0 82 220" fill="none">
+        {bars.map((b) => (
+          <rect
+            key={b.c}
+            x={b.x}
+            y={-30}
+            width="15"
+            height={b.h}
+            fill={b.c}
+            transform="skewY(20)"
+          />
+        ))}
+      </svg>
+    </div>
+  );
+}
+
 /** Small pill used for eyebrow labels across variants. */
 export function Pill({
   children,
