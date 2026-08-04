@@ -11,13 +11,16 @@ export const brand = {
   short: "SAEAC",
   edition: "2026 — Maiden Edition",
   tagline: "Igniting Minds. Inspiring Excellence. Building Leaders.",
-  campaignLine: "Who Wins This?",
+  campaignLine: "Who will be the Standard?",
   domain: "www.saeac.org",
 } as const;
 
 export const hero = {
   eyebrow: "Cross River South Senatorial District · Maiden Edition",
-  headline: "Who Wins This?",
+  headline: "Who will be the Standard?",
+  /** Split for the two-tone hero treatment. */
+  headlineLead: "Who will be",
+  headlineTrail: "the Standard?",
   /** Short hero line — the full description sits in the About block below. */
   tagline:
     "Secondary schools from all seven Local Government Areas of Cross River South, competing for one title.",
@@ -201,29 +204,6 @@ export const lgas = [
   },
 ] as const;
 
-/**
- * A sample of real secondary schools across the district, used for the
- * "Schools of the District" showcase. These are genuine institutions in the
- * named LGAs, shown to give the competition a local face.
- *
- * PLACEHOLDER photography — each school's own building/students photograph
- * should replace `img` once the Organising Committee supplies them, and the
- * full 117-school roster should come from the registration database in Phase 2.
- */
-export const featuredSchools = [
-  { name: "Hope Waddell Training Institution", lga: "Calabar Municipality" },
-  { name: "Duke Town Secondary School", lga: "Calabar South" },
-  { name: "Government Secondary School, Akamkpa", lga: "Akamkpa" },
-  { name: "Creek Town Government Secondary School", lga: "Odukpani" },
-  { name: "Ikot Nakanda Secondary School", lga: "Akpabuyo" },
-  { name: "Uyanga Model High School", lga: "Akamkpa" },
-  { name: "Ikot Ewa Comprehensive High School", lga: "Akpabuyo" },
-  { name: "Eniong Community Technical College", lga: "Odukpani" },
-  { name: "Adiabo Government Comprehensive High School", lga: "Odukpani" },
-  { name: "Big Qua Government Secondary School", lga: "Calabar Municipality" },
-  { name: "Government Secondary School, Mbukpa", lga: "Calabar South" },
-  { name: "Old Netim Comprehensive Secondary School", lga: "Akamkpa" },
-] as const;
 
 /**
  * The Background section from the Content Guide (§2.1 / §4.2), condensed for
@@ -312,6 +292,8 @@ export const mentorPrize = {
 export const championsWin = [
   {
     group: "Champion School",
+    img: "/img/win-school.jpg",
+    alt: "A full classroom of secondary school students",
     items: [
       "ICT/CBT Centre",
       "Championship Trophy",
@@ -321,10 +303,14 @@ export const championsWin = [
   },
   {
     group: "Champion Students",
+    img: "/img/win-students.jpg",
+    alt: "Two students working together in class",
     items: ["Cash Awards", "Laptops", "Scholarships", "Mentorship Opportunities"],
   },
   {
     group: "Teachers",
+    img: "/img/win-teachers.jpg",
+    alt: "A teacher leading a lesson with students",
     items: ["Excellence Awards", "Cash Recognition", "Certificates"],
   },
 ] as const;
@@ -431,17 +417,24 @@ export const contact = {
 } as const;
 
 /**
- * Client-specified navigation. Items marked `soon` are Phase 1–3 pages that
+ * Navigation, grouped per Content Guide §3.1 so the ten client-specified
+ * destinations fit one row. Children marked `soon` are Phase 1–3 pages that
  * do not exist yet; they resolve to the nearest homepage anchor for now.
  */
 export const nav = [
   { label: "Home", href: "#top" },
   { label: "About SAEAC", href: "#about" },
-  { label: "The Championship", href: "#overview" },
-  { label: "Competition Structure", href: "#stages" },
+  {
+    label: "Competition",
+    href: "#overview",
+    children: [
+      { label: "The Championship", href: "#overview" },
+      { label: "Competition Structure", href: "#stages" },
+      { label: "Fixtures & Results", href: "#stages", soon: true },
+      { label: "Leaderboard", href: "#stages", soon: true },
+    ],
+  },
   { label: "Schools Registration", href: "#register" },
-  { label: "Fixtures & Results", href: "#stages", soon: true },
-  { label: "Leaderboard", href: "#stages", soon: true },
   { label: "News & Media", href: "#news" },
   { label: "Sponsors & Partners", href: "#sponsor" },
   { label: "Contact Us", href: "#contact" },

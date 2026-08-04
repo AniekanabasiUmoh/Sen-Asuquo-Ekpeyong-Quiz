@@ -84,13 +84,16 @@ export function CountUp({
   value,
   prefix = "",
   suffix = "",
-  duration = 1400,
+  duration = 1800,
+  delay = 0,
   className = "",
 }: {
   value: number;
   prefix?: string;
   suffix?: string;
   duration?: number;
+  /** Stagger offset in ms, so a row of figures counts in sequence. */
+  delay?: number;
   className?: string;
 }) {
   const ref = useRef<HTMLSpanElement | null>(null);
@@ -114,9 +117,14 @@ export function CountUp({
         io.disconnect();
         setDone(true);
 
-        const start = performance.now();
+        // Stagger so the figures fire left to right rather than at once.
+        const begin = performance.now() + delay;
         const tick = (now: number) => {
-          const t = Math.min(1, (now - start) / duration);
+          if (now < begin) {
+            requestAnimationFrame(tick);
+            return;
+          }
+          const t = Math.min(1, (now - begin) / duration);
           // easeOutExpo — fast out of the gate, settles gently.
           const eased = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
           setN(Math.round(value * eased));
@@ -129,7 +137,7 @@ export function CountUp({
 
     io.observe(el);
     return () => io.disconnect();
-  }, [value, duration, done]);
+  }, [value, duration, delay, done]);
 
   return (
     <span ref={ref} className={className}>

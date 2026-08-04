@@ -1,10 +1,10 @@
 import Image from "next/image";
 import { DiagonalRibbon, Logo, Ribbon } from "@/components/brand";
 import { Countdown } from "@/components/countdown";
-import { Accordion } from "@/components/accordion";
 import { YouTubeEmbed } from "@/components/video";
 import { CountUp, Reveal } from "@/components/reveal";
 import { StrikerIllustration } from "@/components/striker";
+import { ZoomImage } from "@/components/zoom-image";
 import {
   about,
   board,
@@ -13,8 +13,6 @@ import {
   championsWin,
   contact,
   countdown,
-  faq,
-  featuredSchools,
   footerLinks,
   hero,
   lgaNote,
@@ -62,22 +60,6 @@ function Split({
     <h2 className={`font-display font-extrabold tracking-[-0.02em] ${className}`}>
       {lead} <span className={trailClass}>{trail}</span>
     </h2>
-  );
-}
-
-function Eyebrow({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <span
-      className={`inline-flex items-center rounded-full border border-black/10 bg-white px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-[#003090]/70 ${className}`}
-    >
-      {children}
-    </span>
   );
 }
 
@@ -130,21 +112,59 @@ export default function VariantA() {
                 </div>
               </div>
 
-              <nav className="mt-3 hidden flex-wrap items-center gap-x-5 gap-y-2 border-t border-white/12 pt-3 text-[12.5px] font-medium text-white/80 lg:flex">
-                {nav.map((n) => (
-                  <a
-                    key={n.label}
-                    href={n.href}
-                    className="inline-flex items-center gap-1.5 transition hover:text-white"
-                  >
-                    {n.label}
-                    {"soon" in n && n.soon && (
-                      <span className="rounded-full bg-white/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white/70">
-                        Soon
-                      </span>
-                    )}
-                  </a>
-                ))}
+              <nav className="mt-3 hidden items-center gap-x-6 border-t border-white/12 pt-3 text-[12.5px] font-medium text-white/80 lg:flex">
+                {nav.map((n) => {
+                  const kids = "children" in n ? n.children : undefined;
+                  return (
+                    <div key={n.label} className="group relative">
+                      <a
+                        href={n.href}
+                        className="inline-flex items-center gap-1.5 whitespace-nowrap py-1 transition hover:text-white"
+                      >
+                        {n.label}
+                        {kids && (
+                          <svg
+                            width="9"
+                            height="6"
+                            viewBox="0 0 9 6"
+                            fill="none"
+                            aria-hidden="true"
+                            className="opacity-60 transition group-hover:opacity-100"
+                          >
+                            <path
+                              d="M1 1l3.5 3.5L8 1"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                        )}
+                      </a>
+
+                      {kids && (
+                        <div className="invisible absolute left-0 top-full z-30 pt-2 opacity-0 transition group-hover:visible group-hover:opacity-100">
+                          <div className="min-w-56 rounded-2xl border border-white/15 bg-[#06122f]/95 p-2 backdrop-blur-xl">
+                            {kids.map((c) => (
+                              <a
+                                key={c.label}
+                                href={c.href}
+                                className="flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-white/75 transition hover:bg-white/10 hover:text-white"
+                              >
+                                {c.label}
+                                {"soon" in c && c.soon && (
+                                  <span className="rounded-full bg-white/15 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white/60">
+                                    Soon
+                                  </span>
+                                )}
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </nav>
             </div>
           </div>
@@ -152,11 +172,11 @@ export default function VariantA() {
           {/* Headline block, anchored bottom-left */}
           <div className="relative z-10 mt-auto px-6 pb-8 sm:px-10 sm:pb-10">
             <div className="max-w-4xl">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/25 px-3.5 py-1.5 text-[9px] font-bold uppercase tracking-[0.14em] text-white/85 backdrop-blur sm:text-[10px] sm:tracking-[0.18em]">
-                {hero.eyebrow}
-              </span>
-              <h1 className="mt-6 font-display text-[clamp(3rem,8.5vw,7.5rem)] font-extrabold leading-[0.92] tracking-[-0.03em] text-white">
-                Who Wins <span className="text-white/45">This?</span>
+              <h1 className="max-w-[15ch] font-display text-[clamp(2.5rem,7.2vw,6.25rem)] font-extrabold leading-[0.95] tracking-[-0.03em] text-white">
+                {hero.headlineLead}{" "}
+                <span className="whitespace-nowrap text-white/45">
+                  {hero.headlineTrail}
+                </span>
               </h1>
               <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-white/75 sm:text-base">
                 {hero.tagline}
@@ -222,7 +242,11 @@ export default function VariantA() {
                 className="font-display text-5xl font-extrabold tracking-[-0.03em] sm:text-6xl"
                 style={{ color: ["#f03018", "#fe6c03", "#2dc653", "#0006eb"][i] }}
               >
-                <CountUp value={s.count} suffix={"suffix" in s ? s.suffix : ""} />
+                <CountUp
+                  value={s.count}
+                  suffix={"suffix" in s ? s.suffix : ""}
+                  delay={i * 140}
+                />
               </div>
               <div className="mt-2 text-[13px] font-semibold">{s.label}</div>
               <div className="mt-0.5 text-[13px] text-[#003090]/45">{s.note}</div>
@@ -252,7 +276,6 @@ export default function VariantA() {
       <section id="about" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
         <Reveal className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
-            <Eyebrow>{about.eyebrow}</Eyebrow>
             <Split
               lead={about.title}
               trail={about.titleTrail}
@@ -287,11 +310,11 @@ export default function VariantA() {
             </div>
           </div>
 
-          <div className="flex flex-col justify-between gap-8 rounded-2xl bg-white p-7 md:p-9">
+          <div className="flex flex-col rounded-2xl bg-white p-7 md:p-9">
             <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#003090]/5 font-display text-lg font-extrabold">
               7
             </div>
-            <div>
+            <div className="mt-5">
               <h3 className="font-display text-xl font-bold">Seven Subject Areas</h3>
               <p className="mt-2 text-sm leading-relaxed text-[#003090]/55">
                 Every question drawn from the national curriculum, spread across the
@@ -311,28 +334,34 @@ export default function VariantA() {
           </div>
         </div>
 
-        <div className="mt-3 grid gap-3 md:grid-cols-3">
-          {showdown.mechanics.slice(0, 2).map((m) => (
-            <div key={m.name} className="rounded-2xl bg-white p-7 md:p-9">
-              <h3 className="font-display text-lg font-bold">{m.name}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#003090]/55">{m.body}</p>
+        {/* Two-up: the district reach, and the prize at the end of it */}
+        <div className="mt-3 grid gap-3 md:grid-cols-2">
+          <div className="flex flex-col justify-between gap-8 rounded-2xl bg-white p-7 md:p-9">
+            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#f03018]/10 font-display text-lg font-extrabold text-[#f03018]">
+              ★
             </div>
-          ))}
-          <div className="relative min-h-[240px] overflow-hidden rounded-2xl">
-            <Image
-              src="/img/trophy-teen.jpg"
-              alt="A student holding a trophy"
-              fill
-              sizes="(min-width: 768px) 33vw, 100vw"
-              className="object-cover transition duration-700 hover:scale-[1.03]"
-            />
+            <div>
+              <h3 className="font-display text-xl font-bold">Seven Stages, One District</h3>
+              <p className="mt-2 text-sm leading-relaxed text-[#003090]/55">
+                From school screening to the televised Grand Finale, every stage narrows
+                the field — across all seven Local Government Areas of Cross River South.
+              </p>
+            </div>
+          </div>
+
+          <ZoomImage
+            src="/img/trophy-teen.jpg"
+            alt="A student holding a trophy"
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="min-h-[260px] rounded-2xl"
+          >
             <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-6 pt-14">
               <h3 className="font-display text-lg font-bold text-white">
                 One Grand Champion
               </h3>
               <p className="mt-1 text-sm text-white/70">Crowned live on television.</p>
             </div>
-          </div>
+          </ZoomImage>
         </div>
       </section>
 
@@ -349,10 +378,6 @@ export default function VariantA() {
             </div>
 
             <div className="flex flex-col justify-center px-7 pb-10 sm:px-9 lg:py-12 lg:pl-2 lg:pr-10">
-              <span className="inline-flex w-fit items-center rounded-full border border-white/25 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/75">
-                {senator.eyebrow}
-              </span>
-
               <blockquote className="mt-6">
                 <p className="font-display text-[21px] font-medium leading-[1.35] sm:text-2xl">
                   &ldquo;{senator.quote}&rdquo;
@@ -436,14 +461,11 @@ export default function VariantA() {
           />
           <DiagonalRibbon className="opacity-90" />
           <div className="relative">
-            <span className="inline-flex items-center rounded-full border border-white/20 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/70">
-              Round 3 · Live Format
-            </span>
-            <h2 className="mt-5 max-w-3xl font-display text-[clamp(2.25rem,4.6vw,3.5rem)] font-extrabold leading-[1.03] tracking-[-0.02em]">
+            <h2 className="max-w-3xl font-display text-[clamp(2.25rem,4.6vw,3.5rem)] font-extrabold leading-[1.03] tracking-[-0.02em]">
               {showdown.title} <span className="text-white/40">Live on Stage</span>
             </h2>
             <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-white/60">
-              {showdown.intro}
+              Round 3, live on stage. {showdown.intro}
             </p>
 
             <div className="mt-12 grid gap-10 lg:grid-cols-[auto_1fr] lg:items-start">
@@ -471,7 +493,6 @@ export default function VariantA() {
       <section id="lgas" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
-            <Eyebrow>Cross River South</Eyebrow>
             <Split
               lead="Seven LGAs,"
               trail="One District"
@@ -488,12 +509,11 @@ export default function VariantA() {
               key={l.name}
               className="group relative aspect-[4/5] overflow-hidden rounded-2xl"
             >
-              <Image
+              <ZoomImage
                 src={l.img}
                 alt={`Secondary school students in ${l.name}`}
-                fill
                 sizes="(min-width: 1024px) 25vw, 50vw"
-                className="object-cover transition duration-700 group-hover:scale-105"
+                className="absolute inset-0"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/15 to-transparent" />
               {l.combined && (
@@ -531,7 +551,6 @@ export default function VariantA() {
       <section id="principals" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
         <Reveal className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-start">
           <div>
-            <Eyebrow>{principalsMeeting.eyebrow}</Eyebrow>
             <Split
               lead={principalsMeeting.title}
               trail={principalsMeeting.titleTrail}
@@ -563,12 +582,11 @@ export default function VariantA() {
                   i === 0 ? "col-span-3 aspect-[16/9]" : "aspect-[3/4]"
                 }`}
               >
-                <Image
+                <ZoomImage
                   src={im.src}
                   alt={im.alt}
-                  fill
                   sizes={i === 0 ? "(min-width: 1024px) 52vw, 100vw" : "(min-width: 1024px) 18vw, 33vw"}
-                  className="object-cover transition duration-700 hover:scale-[1.03]"
+                  className="absolute inset-0"
                 />
               </Reveal>
             ))}
@@ -576,47 +594,10 @@ export default function VariantA() {
         </Reveal>
       </section>
 
-      {/* ── Schools of the District ── */}
-      <section id="schools" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <Eyebrow>Who&rsquo;s Competing</Eyebrow>
-            <Split
-              lead="Schools of"
-              trail="the District"
-              className="mt-5 text-[clamp(2.25rem,4.6vw,3.5rem)] leading-[1.03]"
-            />
-          </div>
-          <p className="max-w-sm text-[15px] leading-relaxed text-[#003090]/55">
-            Schools across all seven LGAs line up for the maiden edition.
-          </p>
-        </div>
-
-        <div className="mt-10 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
-          {featuredSchools.map((s, i) => (
-            <Reveal
-              key={s.name}
-              delay={(i % 3) * 80}
-              className="flex items-start justify-between gap-4 rounded-2xl bg-white px-6 py-5 transition hover:shadow-md"
-            >
-              <h3 className="font-display text-[15px] font-bold leading-snug">{s.name}</h3>
-              <span className="shrink-0 rounded-full bg-[#003090]/[0.06] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#003090]/55">
-                {s.lga}
-              </span>
-            </Reveal>
-          ))}
-        </div>
-
-        <p className="mt-6 text-[13px] text-[#003090]/40">
-          A sample of eligible schools. The full roster appears here as schools register.
-        </p>
-      </section>
-
       {/* ── Origin / Background ── */}
       <section id="origin" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
         <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div>
-            <Eyebrow>{origin.eyebrow}</Eyebrow>
             <Split
               lead={origin.title}
               trail={origin.titleTrail}
@@ -641,26 +622,21 @@ export default function VariantA() {
 
           {/* Photo mosaic: the presentation, the team, the forms */}
           <div className="grid gap-3">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-              <Image
-                src={origin.images[0].src}
-                alt={origin.images[0].alt}
-                fill
-                sizes="(min-width: 1024px) 52vw, 100vw"
-                className="object-cover"
-              />
-            </div>
+            <ZoomImage
+              src={origin.images[0].src}
+              alt={origin.images[0].alt}
+              sizes="(min-width: 1024px) 52vw, 100vw"
+              className="aspect-[4/3] rounded-2xl"
+            />
             <div className="grid grid-cols-2 gap-3">
               {origin.images.slice(1).map((im) => (
-                <div key={im.src} className="relative aspect-[4/3] overflow-hidden rounded-2xl">
-                  <Image
-                    src={im.src}
-                    alt={im.alt}
-                    fill
-                    sizes="(min-width: 1024px) 26vw, 50vw"
-                    className="object-cover"
-                  />
-                </div>
+                <ZoomImage
+                  key={im.src}
+                  src={im.src}
+                  alt={im.alt}
+                  sizes="(min-width: 1024px) 26vw, 50vw"
+                  className="aspect-[4/3] rounded-2xl"
+                />
               ))}
             </div>
             <p className="text-[12px] leading-relaxed text-[#003090]/40">
@@ -674,7 +650,6 @@ export default function VariantA() {
       {/* ── Prizes ── */}
       <section id="prizes" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
         <Reveal className="text-center">
-          <Eyebrow>What&rsquo;s at Stake</Eyebrow>
           <Split
             lead="What the"
             trail="Champions Win"
@@ -682,40 +657,40 @@ export default function VariantA() {
           />
         </Reveal>
 
-        {/* School / students / teachers — the client's grouping */}
+        {/* School / students / teachers — tall image cards, text over photography */}
         <div className="mt-12 grid gap-3 lg:grid-cols-3">
           {championsWin.map((g, i) => (
-            <Reveal
-              key={g.group}
-              delay={i * 100}
-              className={`rounded-2xl p-7 sm:p-8 ${
-                i === 0 ? "bg-[#003090] text-white" : "bg-white"
-              }`}
-            >
-              <h3
-                className={`font-display text-xl font-extrabold ${
-                  i === 0 ? "text-[#f0a800]" : ""
-                }`}
+            <Reveal key={g.group} delay={i * 110}>
+              <ZoomImage
+                src={g.img}
+                alt={g.alt}
+                sizes="(min-width: 1024px) 33vw, 100vw"
+                className="aspect-[4/5] rounded-[24px]"
               >
-                {g.group}
-              </h3>
-              <ul className="mt-5 space-y-2.5">
-                {g.items.map((item) => (
-                  <li
-                    key={item}
-                    className={`flex items-start gap-2.5 text-[14px] ${
-                      i === 0 ? "text-white/85" : "text-[#003090]/70"
-                    }`}
-                  >
-                    <span
-                      className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full"
-                      style={{ background: i === 0 ? "#f0a800" : "#f03018" }}
-                      aria-hidden="true"
-                    />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+                {/* Scrim keeps the list legible over the photograph */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#06122f] via-[#06122f]/70 to-[#06122f]/10" />
+
+                <div className="absolute inset-x-0 bottom-0 p-7 sm:p-8">
+                  <ul className="space-y-2.5">
+                    {g.items.map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-start gap-2.5 text-[14px] text-white/85"
+                      >
+                        <span
+                          className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-[#f03018]"
+                          aria-hidden="true"
+                        />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <h3 className="mt-5 border-t border-white/20 pt-4 font-display text-2xl font-extrabold text-white">
+                    {g.group}
+                  </h3>
+                </div>
+              </ZoomImage>
             </Reveal>
           ))}
         </div>
@@ -786,25 +761,6 @@ export default function VariantA() {
         </div>
       </section>
 
-      {/* ── FAQ ── */}
-      <section className="mx-auto max-w-3xl px-5 py-14 sm:py-20">
-        <div className="text-center">
-          <Eyebrow>Before You Enter</Eyebrow>
-          <Split
-            lead="Your Questions,"
-            trail="Answered"
-            className="mt-5 text-[clamp(2.25rem,4.6vw,3.5rem)] leading-[1.03]"
-          />
-        </div>
-        <Accordion
-          items={faq}
-          className="mt-10 space-y-2.5"
-          itemClass="rounded-2xl bg-white px-6 py-5"
-          questionClass="text-[15px] font-semibold"
-          answerClass="pt-3 text-sm leading-relaxed text-[#003090]/55"
-        />
-      </section>
-
       {/* ── News ── */}
       <section id="news" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
         <div className="flex flex-wrap items-end justify-between gap-6">
@@ -829,15 +785,12 @@ export default function VariantA() {
               as="article"
               className="group overflow-hidden rounded-2xl bg-white"
             >
-              <div className="relative aspect-[16/10] overflow-hidden">
-                <Image
-                  src={n.img}
-                  alt=""
-                  fill
-                  sizes="(min-width: 768px) 33vw, 100vw"
-                  className="object-cover transition duration-700 group-hover:scale-105"
-                />
-              </div>
+              <ZoomImage
+                src={n.img}
+                alt=""
+                sizes="(min-width: 768px) 33vw, 100vw"
+                className="aspect-[16/10]"
+              />
               <div className="p-6">
                 <div className="flex items-center gap-3 text-[11px]">
                   <span className="font-bold uppercase tracking-wider text-[#003090]/45">
@@ -865,7 +818,6 @@ export default function VariantA() {
         <Reveal className="overflow-hidden rounded-[28px] bg-white">
           <div className="grid gap-0 lg:grid-cols-[1fr_0.9fr]">
             <div className="p-8 sm:p-12">
-              <Eyebrow>{board.eyebrow}</Eyebrow>
               <h2 className="mt-5 font-display text-[clamp(1.9rem,3.6vw,2.75rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">
                 {board.name}
               </h2>
@@ -904,15 +856,12 @@ export default function VariantA() {
               </div>
             </div>
 
-            <div className="relative min-h-[280px]">
-              <Image
-                src="/img/origin-team.jpg"
-                alt="Scholars in Diaspora with the Grand Patron"
-                fill
-                sizes="(min-width: 1024px) 45vw, 100vw"
-                className="object-cover"
-              />
-            </div>
+            <ZoomImage
+              src="/img/origin-team.jpg"
+              alt="Scholars in Diaspora with the Grand Patron"
+              sizes="(min-width: 1024px) 45vw, 100vw"
+              className="min-h-[280px]"
+            />
           </div>
         </Reveal>
       </section>
@@ -953,15 +902,12 @@ export default function VariantA() {
           />
           <div className="absolute inset-0 bg-[#06122f]/72" />
           <div className="relative">
-            <span className="inline-flex items-center rounded-full border border-white/25 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/75">
-              Entry is free
-            </span>
-            <h2 className="mx-auto mt-6 max-w-3xl font-display text-[clamp(2.5rem,5.5vw,4.5rem)] font-extrabold leading-[1] tracking-[-0.03em] text-white">
+            <h2 className="mx-auto max-w-3xl font-display text-[clamp(2.5rem,5.5vw,4.5rem)] font-extrabold leading-[1] tracking-[-0.03em] text-white">
               Register <span className="text-white/45">Your School</span>
             </h2>
             <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-white/70">
-              Open to every public and private secondary school in the seven LGAs of
-              Cross River South.
+              Entry is free, and open to every public and private secondary school in the
+              seven LGAs of Cross River South.
             </p>
             <div className="mt-9 flex flex-wrap justify-center gap-3">
               <a
