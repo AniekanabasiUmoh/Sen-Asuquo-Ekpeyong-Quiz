@@ -249,6 +249,14 @@ export const senator = {
     youTubeId: "9Hyxx0w4e_w",
     title: "Senator Asuquo Ekpenyong on the Academic Championship",
     poster: "/img/senator-video-poster.jpg",
+    /**
+     * Silent 20s b-roll cut (~750KB, 480p) used as motion behind the play
+     * button. Taken from 72–92s of the source film, the only stretch without
+     * burnt-in subtitles. Clicking hands off to YouTube for the full 6m24s
+     * with audio, so we carry almost no video bandwidth ourselves.
+     */
+    loop: "/video/patron-loop.mp4",
+    loopPoster: "/img/patron-loop-poster.jpg",
   },
 } as const;
 
@@ -324,18 +332,42 @@ export const showdown = {
     {
       name: "Strikers",
       body: "Each team fields 3 Strikers on stage for Round 3, answering 15 questions in total — five per Striker, each within a set time limit.",
+      accent: "outline",
     },
     {
-      name: "Assist",
-      body: "If a Striker cannot answer, they may call on one of their Assists seated with the audience. A correct Assist answer earns half a point.",
+      name: "Assist Option",
+      body: "If a Striker cannot answer, they may call on one of their Assists seated with the audience. A correct Assist answer earns half a point (0.5).",
+      accent: "blue",
     },
     {
       name: "Substitution",
       body: "A team's Coach may substitute an Assist in for a Striker at any point during Round 3.",
+      accent: "plain",
     },
     {
       name: "VAR",
-      body: "Questions neither a Striker nor an Assist can answer are referred to the Video Assistant Referee, who supplies the correct answer for the audience. No points awarded.",
+      body: "Video Assistant Referee. Questions neither a Striker nor an Assist can answer are referred to the VAR, who supplies the correct answer for the benefit of students and audience. No points awarded.",
+      accent: "gold",
+    },
+    {
+      name: "Scoring",
+      body: "Round 3 scores accumulate with a school's Rounds 1 and 2 scores. The bottom 3 schools by accumulated score are eliminated; 3 schools (9 students) advance to Round 4.",
+      accent: "red-outline",
+    },
+    {
+      name: "Draw or Tie",
+      body: "In the event of a draw or tie, a penalty is held to separate the affected schools. Each school competing in the penalty sends forward one Striker, who poses questions to the other competing teams.",
+      accent: "red",
+    },
+    {
+      name: "Scoring Panel",
+      body: "Student scores are input by a panel of scorers comprising two individuals nominated by the Board of Trustees and two persons from each competing school.",
+      accent: "plain",
+    },
+    {
+      name: "Side Attraction Game",
+      body: "A game played alongside the main competition, where members of the audience stand a chance to win prizes.",
+      accent: "plain",
     },
   ],
 } as const;
@@ -407,12 +439,17 @@ export const sponsors = [
 export const contact = {
   email: "Senatorasuquoekpenyongacc@gmail.com",
   phone: "08130642344",
+  /** Official channels, supplied by the PM (Anne Matthew Odey). */
   socials: [
-    { name: "X", href: "#" },
-    { name: "Instagram", href: "#" },
-    { name: "Facebook", href: "#" },
-    { name: "YouTube", href: "#" },
-    { name: "TikTok", href: "#" },
+    { name: "Instagram", href: "https://www.instagram.com/saeac_" },
+    { name: "X", href: "https://x.com/_saeac" },
+    { name: "Facebook", href: "https://www.facebook.com/share/1HkkKcApmR/" },
+    {
+      name: "YouTube",
+      href: "https://www.youtube.com/@SenatorAsuquoEkpenyongAcademic",
+    },
+    { name: "TikTok", href: "https://vt.tiktok.com/ZSCK4TePt/" },
+    { name: "Threads", href: "https://www.threads.com/@saeac_" },
   ],
 } as const;
 

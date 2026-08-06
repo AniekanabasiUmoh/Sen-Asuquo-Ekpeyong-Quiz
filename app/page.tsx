@@ -1,10 +1,13 @@
 import Image from "next/image";
 import { DiagonalRibbon, Logo, Ribbon } from "@/components/brand";
 import { Countdown } from "@/components/countdown";
-import { YouTubeEmbed } from "@/components/video";
+import { VideoHero } from "@/components/video-hero";
 import { CountUp, Reveal } from "@/components/reveal";
-import { StrikerIllustration } from "@/components/striker";
+import { MechanicGlyph } from "@/components/striker";
 import { ZoomImage } from "@/components/zoom-image";
+import { SocialIcon } from "@/components/social-icons";
+import { AnimatedLogo } from "@/components/animated-logo";
+import { HeadlineReveal } from "@/components/headline-reveal";
 import {
   about,
   board,
@@ -63,14 +66,15 @@ function Split({
   );
 }
 
+/** One frame per stage, chosen so each depicts what that stage actually is. */
 const stageThumbs = [
-  "/img/students-walking.jpg",
-  "/img/students-exam.jpg",
-  "/img/classroom-diverse.jpg",
-  "/img/students-lecture.jpg",
-  "/img/girls-classroom.jpg",
-  "/img/students-posing.jpg",
-  "/img/trophy-teen.jpg",
+  "/img/lga-bakassi.jpg", // registration — students arriving with bags
+  "/img/win-school.jpg", // school screening — a full exam hall
+  "/img/lga-akamkpa.jpg", // LGA qualifiers — students lined up
+  "/img/lga-calabar-south.jpg", // group stage — heads-down study
+  "/img/win-students.jpg", // quarterfinals — two students competing
+  "/img/lga-odukpani.jpg", // semifinals — an assembly crowd
+  "/img/trophy-teen.jpg", // grand finale — the trophy
 ];
 
 export default function VariantA() {
@@ -93,26 +97,10 @@ export default function VariantA() {
 
           {/* Floating nav — logo and actions on one row, links beneath */}
           <div className="relative z-20 px-4 pt-4 sm:px-6 sm:pt-6">
-            <div className="mx-auto max-w-6xl rounded-[26px] border border-white/15 bg-white/10 px-4 py-3 backdrop-blur-xl sm:px-5">
-              <div className="flex items-center justify-between gap-4">
-                <Logo variant="white" width={110} className="h-auto w-[78px] shrink-0 sm:w-[96px]" />
-                <div className="flex shrink-0 items-center gap-2.5">
-                  <a
-                    href={navCtas.secondary.href}
-                    className="hidden rounded-full border border-white/30 px-4 py-2.5 text-[12px] font-semibold text-white transition hover:bg-white/10 sm:inline-block"
-                  >
-                    {navCtas.secondary.label}
-                  </a>
-                  <a
-                    href={navCtas.primary.href}
-                    className="rounded-full bg-[#f0a800] px-5 py-2.5 text-[12px] font-bold text-[#003090] transition hover:bg-white"
-                  >
-                    Register Your School
-                  </a>
-                </div>
-              </div>
+            <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 rounded-full border border-white/15 bg-white/10 px-5 py-3 backdrop-blur-xl">
+              <AnimatedLogo />
 
-              <nav className="mt-3 hidden items-center gap-x-6 border-t border-white/12 pt-3 text-[12.5px] font-medium text-white/80 lg:flex">
+              <nav className="hidden items-center gap-x-6 text-[12.5px] font-medium text-white/80 lg:flex">
                 {nav.map((n) => {
                   const kids = "children" in n ? n.children : undefined;
                   return (
@@ -173,14 +161,20 @@ export default function VariantA() {
           <div className="relative z-10 mt-auto px-6 pb-8 sm:px-10 sm:pb-10">
             <div className="max-w-4xl">
               <h1 className="max-w-[15ch] font-display text-[clamp(2.5rem,7.2vw,6.25rem)] font-extrabold leading-[0.95] tracking-[-0.03em] text-white">
-                {hero.headlineLead}{" "}
-                <span className="whitespace-nowrap text-white/45">
-                  {hero.headlineTrail}
-                </span>
+                <HeadlineReveal
+                  lines={[
+                    hero.headlineLead,
+                    <span key="t" className="text-white/45">
+                      {hero.headlineTrail}
+                    </span>,
+                  ]}
+                />
               </h1>
-              <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-white/75 sm:text-base">
-                {hero.tagline}
-              </p>
+              <Reveal delay={420}>
+                <p className="mt-5 max-w-lg text-[15px] leading-relaxed text-white/75 sm:text-base">
+                  {hero.tagline}
+                </p>
+              </Reveal>
             </div>
           </div>
 
@@ -199,7 +193,9 @@ export default function VariantA() {
                   labelClass="mt-0.5 text-[10px] uppercase tracking-[0.14em] text-white/50"
                 />
               </div>
-              <div className="flex shrink-0 flex-wrap gap-3 [&>a]:flex-1 [&>a]:text-center md:[&>a]:flex-none">
+              {/* Stacked full-width on phones so nothing wraps to uneven
+                  heights; side by side from sm upward. */}
+              <div className="flex shrink-0 flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-3 [&>a]:w-full [&>a]:justify-center [&>a]:text-center sm:[&>a]:w-auto">
                 <a
                   href={hero.primaryCta.href}
                   className="rounded-full bg-[#f0a800] px-7 py-3.5 text-[13px] font-bold text-[#003090] transition hover:bg-white"
@@ -254,21 +250,37 @@ export default function VariantA() {
           ))}
         </div>
 
-        {/* Supporting financial figures */}
-        <div className="grid grid-cols-1 gap-y-8 border-b border-black/10 py-8 sm:grid-cols-3">
-          {statsFinancial.map((s, i) => (
-            <Reveal
-              key={s.label}
-              delay={i * 90}
-              className="px-2 sm:border-l sm:border-black/10 sm:first:border-l-0 sm:px-8"
+        {/* Supporting financial figures, with the moment they trace back to */}
+        <div className="grid items-stretch gap-3 border-b border-black/10 py-8 lg:grid-cols-[1fr_0.85fr]">
+          <div className="grid grid-cols-1 gap-y-8 sm:grid-cols-3">
+            {statsFinancial.map((s, i) => (
+              <Reveal
+                key={s.label}
+                delay={i * 90}
+                className="px-2 sm:border-l sm:border-black/10 sm:first:border-l-0 sm:px-6"
+              >
+                <div className="font-display text-3xl font-extrabold tracking-[-0.02em]">
+                  {s.display}
+                </div>
+                <div className="mt-1.5 text-[13px] font-semibold">{s.label}</div>
+                <div className="mt-0.5 text-[13px] text-[#003090]/45">{s.note}</div>
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal delay={140}>
+            <ZoomImage
+              src="/img/origin-cheque.jpg"
+              alt="The Scholars in Diaspora cheque presentation at the Grand Patron's office"
+              sizes="(min-width: 1024px) 40vw, 100vw"
+              className="h-full min-h-[200px] rounded-2xl"
             >
-              <div className="font-display text-3xl font-extrabold tracking-[-0.02em]">
-                {s.display}
-              </div>
-              <div className="mt-1.5 text-[13px] font-semibold">{s.label}</div>
-              <div className="mt-0.5 text-[13px] text-[#003090]/45">{s.note}</div>
-            </Reveal>
-          ))}
+              <span className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
+              <span className="absolute bottom-4 right-5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/85">
+                Where the Trust Fund began
+              </span>
+            </ZoomImage>
+          </Reveal>
         </div>
       </section>
 
@@ -311,35 +323,39 @@ export default function VariantA() {
           </div>
 
           <div className="flex flex-col rounded-2xl bg-white p-7 md:p-9">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#003090]/5 font-display text-lg font-extrabold">
-              7
-            </div>
-            <div className="mt-5">
-              <h3 className="font-display text-xl font-bold">Seven Subject Areas</h3>
-              <p className="mt-2 text-sm leading-relaxed text-[#003090]/55">
-                Every question drawn from the national curriculum, spread across the
-                sciences, the arts, commerce and civic life.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {overview.subjects.map((s) => (
-                  <span
-                    key={s}
-                    className="rounded-full border border-black/10 px-3.5 py-1.5 text-[13px] text-[#003090]/75"
-                  >
-                    {s}
-                  </span>
-                ))}
+            <div className="flex items-start gap-5">
+              <span className="font-display text-[76px] font-extrabold leading-[0.8] tracking-[-0.04em] text-[#f03018] sm:text-[92px]">
+                7
+              </span>
+              <div className="pt-1.5">
+                <h3 className="font-display text-xl font-bold leading-tight">
+                  Subject Areas
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-[#003090]/55">
+                  Every question drawn from the national curriculum, spread across the
+                  sciences, the arts, commerce and civic life.
+                </p>
               </div>
             </div>
+            <ul className="mt-7 border-t border-black/10">
+              {overview.subjects.map((s, i) => (
+                <li
+                  key={s}
+                  className="flex items-baseline gap-4 border-b border-black/[0.07] py-2.5 last:border-b-0"
+                >
+                  <span className="font-mono text-[11px] tabular-nums text-[#003090]/30">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-[14px] text-[#003090]/80">{s}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
         {/* Two-up: the district reach, and the prize at the end of it */}
         <div className="mt-3 grid gap-3 md:grid-cols-2">
-          <div className="flex flex-col justify-between gap-8 rounded-2xl bg-white p-7 md:p-9">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#f03018]/10 font-display text-lg font-extrabold text-[#f03018]">
-              ★
-            </div>
+          <div className="flex flex-col justify-center rounded-2xl bg-white p-7 md:p-9">
             <div>
               <h3 className="font-display text-xl font-bold">Seven Stages, One District</h3>
               <p className="mt-2 text-sm leading-relaxed text-[#003090]/55">
@@ -370,10 +386,13 @@ export default function VariantA() {
         <div className="overflow-hidden rounded-[28px] bg-[#003090] text-white">
           <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
             <div className="p-5 sm:p-7 lg:p-8">
-              <YouTubeEmbed
-                id={senator.video.youTubeId}
+              <VideoHero
+                loopSrc={senator.video.loop}
+                poster={senator.video.loopPoster}
+                youTubeId={senator.video.youTubeId}
                 title={senator.video.title}
-                poster={senator.video.poster}
+                caption="Watch the film"
+                className="aspect-video rounded-2xl"
               />
             </div>
 
@@ -421,7 +440,7 @@ export default function VariantA() {
           {stages.map((st, i) => (
             <li
               key={st.n}
-              className="group grid items-center gap-x-8 gap-y-4 border-t border-black/10 py-6 last:border-b md:grid-cols-[2.5rem_1.1fr_1.2fr_9.5rem]"
+              className="group grid items-center gap-x-8 gap-y-4 border-t border-black/10 py-6 last:border-b md:grid-cols-[2.5rem_1fr_1.1fr_13.5rem]"
             >
               <span className="font-mono text-[11px] text-[#003090]/35">
                 {String(st.n).padStart(2, "0")}
@@ -429,62 +448,74 @@ export default function VariantA() {
               <h3 className="font-display text-[22px] font-bold leading-tight sm:text-2xl">
                 {st.name}
               </h3>
-              <p className="text-sm leading-relaxed text-[#003090]/55">{st.summary}</p>
-              <div className="flex flex-col items-start gap-2.5 md:items-end md:justify-self-end">
-                <div className="relative h-28 w-full overflow-hidden rounded-xl md:h-[76px] md:w-[136px]">
-                  <Image
-                    src={stageThumbs[i] ?? stageThumbs[0]}
-                    alt=""
-                    fill
-                    sizes="136px"
-                    className="object-cover transition duration-700 group-hover:scale-105"
-                  />
-                </div>
-                <span className="text-[10px] font-bold uppercase leading-tight tracking-[0.1em] text-[#003090]/45 md:text-right">
+              <div>
+                <p className="text-sm leading-relaxed text-[#003090]/55">{st.summary}</p>
+                <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[#003090]/40">
                   {st.field}
-                </span>
+                </p>
               </div>
+              <ZoomImage
+                src={stageThumbs[i] ?? stageThumbs[0]}
+                alt=""
+                sizes="(min-width: 768px) 200px, 100vw"
+                className="aspect-[3/2] w-full rounded-xl md:w-[200px] md:justify-self-end"
+              />
             </li>
           ))}
         </ol>
       </section>
 
-      {/* ── Showdown: dark inset panel, the one heavy moment on the page ── */}
-      <section className="mx-auto max-w-7xl px-5 py-8">
-        <div className="relative overflow-hidden rounded-[28px] bg-[#06122f] px-6 py-16 text-white sm:px-12 sm:py-20">
-          <Image
-            src="/img/students-posing.jpg"
-            alt=""
-            fill
-            sizes="100vw"
-            className="object-cover object-top opacity-[0.14]"
-          />
+      {/* ── Showdown: the RD deck's own layout — rule-separated rows, italic
+             labels with accent strokes, colour-coded description panels ── */}
+      <section id="showdown" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+        <div className="relative overflow-hidden rounded-[28px] bg-white">
           <DiagonalRibbon className="opacity-90" />
-          <div className="relative">
-            <h2 className="max-w-3xl font-display text-[clamp(2.25rem,4.6vw,3.5rem)] font-extrabold leading-[1.03] tracking-[-0.02em]">
-              {showdown.title} <span className="text-white/40">Live on Stage</span>
-            </h2>
-            <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-white/60">
-              Round 3, live on stage. {showdown.intro}
-            </p>
 
-            <div className="mt-12 grid gap-10 lg:grid-cols-[auto_1fr] lg:items-start">
-              <Reveal className="mx-auto w-40 shrink-0 sm:w-48 lg:mx-0">
-                <StrikerIllustration className="w-full" />
-                <p className="mt-3 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-[#f0a800]">
-                  The Striker
+          {/* Deck-style intro banner */}
+          <div className="bg-[#003090] px-6 py-7 pl-24 text-white sm:px-12 sm:pl-28">
+            <p className="max-w-4xl text-[14px] leading-relaxed sm:text-[15px]">
+              In the <strong className="font-bold">Grand Finale</strong>, each team&rsquo;s
+              three on-stage players are called Strikers, its two substitutes are called
+              Assists, and its teacher/mentor is the Coach.
+            </p>
+          </div>
+
+          <div className="px-6 py-4 sm:px-12">
+            {showdown.mechanics.map((m, i) => (
+              <Reveal
+                key={m.name}
+                delay={i * 60}
+                className="grid items-center gap-x-8 gap-y-4 border-b border-black/10 py-7 last:border-b-0 md:grid-cols-[13rem_9rem_1fr]"
+              >
+                {/* Italic display label with the deck's accent underscores */}
+                <div>
+                  <h3 className="font-display text-[26px] font-extrabold italic leading-none tracking-[-0.02em] sm:text-[30px]">
+                    {m.name}
+                  </h3>
+                  <div className="mt-2 space-y-[3px]">
+                    <div className="h-[3px] w-24 bg-[#f0a800]" />
+                    <div className="h-[3px] w-16 bg-[#003090]" />
+                  </div>
+                </div>
+
+                <MechanicGlyph name={m.name} className="h-20 w-full md:h-24" />
+
+                <p
+                  className={`rounded-xl px-5 py-4 text-[13.5px] leading-relaxed ${
+                    {
+                      outline: "border border-[#003090]/25 bg-[#003090]/[0.03] text-[#003090]/75",
+                      blue: "bg-[#0006eb] text-white",
+                      gold: "bg-[#f0a800] text-[#003090]",
+                      red: "bg-[#f03018] text-white",
+                      "red-outline": "border border-[#f03018]/40 bg-[#f03018]/[0.04] text-[#003090]/75",
+                      plain: "border border-black/10 bg-black/[0.02] text-[#003090]/75",
+                    }[m.accent] ?? "border border-black/10 bg-black/[0.02] text-[#003090]/75"
+                  }`}
+                >
+                  {m.body}
                 </p>
               </Reveal>
-
-              <div className="grid gap-x-8 gap-y-9 sm:grid-cols-2">
-                {showdown.mechanics.map((m, i) => (
-                  <Reveal key={m.name} delay={i * 80} className="border-t border-white/15 pt-5">
-                    <h3 className="font-display text-lg font-bold text-[#f0a800]">{m.name}</h3>
-                    <p className="mt-2 text-sm leading-relaxed text-white/55">{m.body}</p>
-                  </Reveal>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -857,8 +888,8 @@ export default function VariantA() {
             </div>
 
             <ZoomImage
-              src="/img/origin-team.jpg"
-              alt="Scholars in Diaspora with the Grand Patron"
+              src="/img/board-scholars-uk.jpg"
+              alt="Scholars in Diaspora in the United Kingdom with the ₦20,000,000 cheque toward the nomination form"
               sizes="(min-width: 1024px) 45vw, 100vw"
               className="min-h-[280px]"
             />
@@ -973,9 +1004,11 @@ export default function VariantA() {
                       key={s.name}
                       href={s.href}
                       aria-label={s.name}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-[10px] font-bold text-white/60 transition hover:border-[#f0a800] hover:text-[#f0a800]"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/60 transition hover:border-[#f0a800] hover:text-[#f0a800]"
                     >
-                      {s.name.slice(0, 2)}
+                      <SocialIcon name={s.name} />
                     </a>
                   ))}
                 </div>
