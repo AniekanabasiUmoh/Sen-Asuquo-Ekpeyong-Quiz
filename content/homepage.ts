@@ -30,6 +30,24 @@ export const hero = {
   /** Client-supplied description — use verbatim. */
   subhead:
     "A district-wide educational initiative bringing together secondary schools across the seven Local Government Areas of Cross River South Senatorial District in an annual tournament designed to celebrate excellence, develop future leaders and transform academic competition into a prestigious public event.",
+  /**
+   * The hero cross-fades through these. Round 3 item 5: the client asked to
+   * "rotate the picture", and separately for "a video of him speaking" on
+   * entry; both described the same thing, a hero that moves rather than a
+   * single still.
+   *
+   * Stills rather than video, because five photographs cost a fraction of a
+   * video loop, need no mobile carve-out, and can show students from more
+   * than one place. None of these appear elsewhere on the page: a hero that
+   * recycles pictures the reader meets again further down looks thin.
+   */
+  images: [
+    { src: "/img/students-hero.jpg", alt: "Secondary school students in uniform", position: "center 30%" },
+    { src: "/img/hero-2.jpg", alt: "Students in uniform at a school assembly", position: "center 35%" },
+    { src: "/img/hero-3.jpg", alt: "Secondary school students together in class", position: "center 30%" },
+    { src: "/img/hero-4.jpg", alt: "Students studying outdoors in the school grounds", position: "center 40%" },
+    { src: "/img/hero-5.jpg", alt: "Students outside their school building", position: "center 35%" },
+  ],
   primaryCta: { label: "Register Now", href: "#register" },
   secondaryCta: { label: "Become a Change Maker", href: "#changemaker" },
   tertiaryCta: { label: "Watch Promo", href: "#patron" },
@@ -271,6 +289,67 @@ export const origin = {
   ],
   cta: { label: "Read the full story", href: "#origin" },
 } as const;
+
+/**
+ * The Scholars in Diaspora themselves, from the client's "THE FACES BEHIND
+ * THE VISION" cards.
+ *
+ * Round 3 item 1: the Origin copy claims sixty scholars now qualified as
+ * doctors, lawyers and other professionals, but the page showed none of them,
+ * so the claim sat there unevidenced. These are the twenty-two named on the
+ * cards. Names and institutions are transcribed from the client's own
+ * artwork, so the spellings are theirs; anything mis-transcribed should be
+ * corrected against the source cards rather than guessed at.
+ */
+export const scholars = [
+  { name: "Dr. Grace Obo", detail: "MSc Public Health, University of Bristol", img: "/img/scholars/grace-obo.jpg" },
+  { name: "Offiong Andem Bassey", detail: "Media and Public Relations, University of Leicester", img: "/img/scholars/offiong-andem-bassey.jpg" },
+  { name: "Alice Oyo-Ita", detail: "MSc Financial Technology, Coventry University", img: "/img/scholars/alice-oyo-ita.jpg" },
+  { name: "Dr. Unaowo Akpan Udodung", detail: "Coventry University", img: "/img/scholars/unaowo-akpan-udodung.jpg" },
+  { name: "Engr. Abasi Ekpenyong Ndarake", detail: "Construction Project and Cost Management, University of Coventry", img: "/img/scholars/abasi-ekpenyong-ndarake.jpg" },
+  { name: "Wisdom Umina Sumuko, Esq.", detail: "LLM International Business and Commercial Law, Anglia Ruskin University", img: "/img/scholars/wisdom-umina-sumuko.jpg" },
+  { name: "Prince Otu Ndor-Odok", detail: "MSc Global Healthcare Management", img: "/img/scholars/prince-otu-ndor-odok.jpg" },
+  { name: "Dr. Sinebari Nwilegbara", detail: "King's College Hospital, London", img: "/img/scholars/sinebari-nwilegbara.jpg" },
+  { name: "Emmanuel Effa Ojong", detail: "MSc Chemical Engineering, Teesside University", img: "/img/scholars/emmanuel-effa-ojong.jpg" },
+  { name: "Dr. Victor Eyo", detail: "MPH, University of Wolverhampton", img: "/img/scholars/victor-eyo.jpg" },
+  { name: "Akwa Archibong Eyo", detail: "Royal Bolton Hospital, UK", img: "/img/scholars/akwa-archibong-eyo.jpg" },
+  { name: "Mr. Edem Essien Edem", detail: "University of South Wales", img: "/img/scholars/edem-essien-edem.jpg" },
+  { name: "Dr. Cletus Obun", detail: "Scholars in Diaspora", img: "/img/scholars/cletus-obun.jpg" },
+  { name: "Emmanuel David Nsemo", detail: "Sheffield Hallam University", img: "/img/scholars/emmanuel-david-nsemo.jpg" },
+  { name: "Dr. Daniel Faithful", detail: "London School of Medicine", img: "/img/scholars/daniel-faithful.jpg" },
+  { name: "Solomon Offem Iyam", detail: "BSc (Unical), MSc (London), MRes (Liverpool)", img: "/img/scholars/solomon-offem-iyam.jpg" },
+  { name: "Dr. Williams Undebe", detail: "Tropical Health and Infectious Disease, Liverpool School of Tropical Medicine", img: "/img/scholars/williams-undebe.jpg" },
+  { name: "Lawrence Eko-Owai", detail: "MSc Data Science, University of Greenwich", img: "/img/scholars/lawrence-eko-owai.jpg" },
+  { name: "Dr. Ewa Anthony Obi", detail: "MSc Global Public Health, Coventry University", img: "/img/scholars/ewa-anthony-obi.jpg" },
+  { name: "Egbonyi Ntami Egbe", detail: "Oil and Gas Management, Coventry University", img: "/img/scholars/egbonyi-ntami-egbe.jpg" },
+  { name: "Fredrick Ozu", detail: "Scholars in Diaspora", img: "/img/scholars/fredrick-ozu.jpg" },
+  { name: "Blessing Banyinorim Agbo", detail: "MSc, Baze University", img: "/img/scholars/blessing-banyinorim-agbo.jpg" },
+] as const;
+
+export const scholarsIntro = {
+  eyebrow: "The Faces Behind the Vision",
+  body: "The scholars who mobilised the funds, now practising across the United Kingdom and beyond.",
+} as const;
+
+/**
+ * Trust Fund outreach in Cross River South. Real district photography from
+ * the client's own materials, which is why it is preferred over stock
+ * anywhere a Cross River classroom is being depicted (Round 3 item 2).
+ */
+export const outreach = [
+  {
+    src: "/img/outreach-books.jpg",
+    alt: "Pupils holding donated books in a Cross River SUBEC classroom",
+  },
+  {
+    src: "/img/outreach-classroom.jpg",
+    alt: "A full classroom of pupils during a Trust Fund school visit",
+  },
+  {
+    src: "/img/outreach-assembly.jpg",
+    alt: "Students raising donated materials at a school assembly under a tree",
+  },
+] as const;
 
 /**
  * Message from the Senator.

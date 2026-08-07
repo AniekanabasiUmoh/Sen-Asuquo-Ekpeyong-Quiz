@@ -1,6 +1,8 @@
 import { chromium } from "playwright";
 
-const OUT = process.env.OUT || "C:/Users/umoha/AppData/Local/Temp/claude/c--Dev-Sen-Asuquo-Ekpeyong-Quiz/0fb8e83e-dc6c-4602-8f43-823fe4df8bb2/scratchpad";
+const OUT =
+  process.env.OUT ||
+  "C:/Users/umoha/AppData/Local/Temp/claude/c--Dev-Sen-Asuquo-Ekpeyong-Quiz/0fb8e83e-dc6c-4602-8f43-823fe4df8bb2/scratchpad";
 const b = await chromium.launch();
 
 async function shot(name, w, h, fn) {
@@ -11,21 +13,24 @@ async function shot(name, w, h, fn) {
   await p.goto("http://localhost:3050/", { waitUntil: "networkidle" });
   await fn(p);
   await p.screenshot({ path: `${OUT}/${name}.png` });
-  const ow = await p.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+  const ow = await p.evaluate(
+    () => document.documentElement.scrollWidth - window.innerWidth,
+  );
   console.log(name, "overflowX=", ow, "errors=", errs.length, errs.slice(0, 3));
   await p.close();
 }
 
 const toSection = (id) => async (p) => {
   await p.evaluate((i) => document.getElementById(i)?.scrollIntoView(), id);
-  await p.waitForTimeout(1400);
+  await p.waitForTimeout(1500);
 };
 
-await shot("r3-numbers-desk", 1440, 900, toSection("numbers"));
-await shot("r3-numbers-mob", 390, 844, toSection("numbers"));
-await shot("r3-tabbar-desk", 1440, 900, toSection("stages"));
-await shot("r3-tabbar-mob", 390, 844, toSection("stages"));
-await shot("r3-changemaker", 1440, 900, toSection("changemaker"));
+await shot("r3-origin-desk", 1440, 1000, toSection("origin"));
+await shot("r3-origin-mob", 390, 844, toSection("origin"));
+await shot("r3-prizes", 1440, 900, toSection("prizes"));
+await shot("r3-about", 1440, 900, toSection("about"));
 await shot("r3-hero", 1440, 900, async (p) => p.waitForTimeout(1200));
+// Hero after two rotations, to confirm the cross-fade actually advances.
+await shot("r3-hero-rot", 1440, 900, async (p) => p.waitForTimeout(11500));
 
 await b.close();

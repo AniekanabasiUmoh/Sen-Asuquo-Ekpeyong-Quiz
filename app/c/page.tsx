@@ -205,7 +205,7 @@ export default function VariantC() {
                 note: "Three examinations, one day, top five advance.",
               },
               {
-                src: "/img/trophy-teen.jpg",
+                src: "/img/champion-certificate.jpg",
                 title: "The Grand Finale",
                 note: "Ten schools, four rounds, one champion, televised live.",
               },

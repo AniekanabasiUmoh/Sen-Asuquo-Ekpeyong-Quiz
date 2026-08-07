@@ -3,16 +3,16 @@
 Running log of issues raised during client/team review, with the identified
 problem and the proposed fix for each.
 
-**Status:** Round 3 logging in progress — **no code changed yet.** More
-comments expected. Nothing here is applied until the client says he is done.
+**Status:** all seven Round 3 items applied and deployed. Blocked list at the
+foot still needs client input.
 
 **Site under review:** https://senatorquiz.vercel.app
 
 Round 1 (13 items) applied in `bc19620`. Round 2 (12 items) applied in `9c7645f`.
 
-**Round 3 runs to six items.** The original items 5 and 6 turned out to be one
-instruction worded two ways, and have been merged into item 5; the floating tab
-menu moved up to item 6.
+**Round 3 runs to seven items.** The original items 5 and 6 turned out to be
+one instruction worded two ways and were merged into item 5, so the floating
+tab menu moved up to item 6; the statistics rebuild was then added as item 7.
 
 ---
 
@@ -34,7 +34,7 @@ menu moved up to item 6.
 - **Source:** Client, screenshot 1 — *"Can the pictures be here instead. For
   the Scholars in diaspora members?"*
 - **Area:** Our Origin / Board of Directors
-- **Status:** `open`
+- **Status:** `fixed`
 
 **Problem.** The Origin section tells the Scholars in Diaspora story in prose —
 sixty scholars, the nomination form, the cheque, the seed donation — but the
@@ -64,8 +64,11 @@ currently used on the board.
   questions ("where did this come from" vs "who is accountable for it") and
   collapsing them would blur that.
 
-**Needs from client:** names and roles to caption the portraits. Un-captioned
-faces of real people are worse than no faces. See B10.
+**Resolved on assets.** The client's own "THE FACES BEHIND THE VISION" cards
+carry all twenty-two members as captioned portraits with names and
+institutions, so no un-named faces go up. Portraits extracted from that
+artwork and set as live text beneath each. Spellings are the client's own and
+should be checked by the committee.
 
 ---
 
@@ -75,7 +78,7 @@ faces of real people are worse than no faces. See B10.
   looking person for this part instead. Especially since it's a district
   specific competition."*
 - **Area:** About SAEAC / bento grid — trophy card
-- **Status:** `open`
+- **Status:** `fixed`
 
 **Problem.** `trophy-teen.jpg` shows a student lifting a trophy who does not
 read as Nigerian. On a page about seven LGAs of Cross River South, competed in
@@ -110,7 +113,7 @@ the likely suspects.
 
 - **Source:** Client — *"Take out AI Dashes"*
 - **Area:** Global / all copy
-- **Status:** `open`
+- **Status:** `fixed`
 
 **Problem.** The copy is full of em dashes — like this one — which has become a
 recognisable tell of machine-written text. There are **24 in
@@ -141,7 +144,7 @@ While in there, check the other common tells: "moreover", "furthermore",
 
 - **Source:** Client — *"Replace Partner with become a change maker"*
 - **Area:** Hero action bar, nav, sponsor section
-- **Status:** `open`
+- **Status:** `fixed`
 
 **Problem.** The hero's secondary CTA says "Become a Partner" and points at
 `#sponsor`. But the page already has a **Become a Change Maker** section
@@ -179,7 +182,7 @@ B11.
   *"As you enter the site you should see a video of him speaking"*; scope
   confirmed by PM as cross-fading student stills, not video
 - **Area:** Hero
-- **Status:** `open`
+- **Status:** `fixed`
 
 **Merged with what was logged separately as item 6** (*"As you enter the site
 you should see a video of him speaking, similar to white house website"*).
@@ -232,7 +235,7 @@ does not arise.
 - **Source:** Offiong — *"Can we have tabs up… that we can click… because the
   home page is long."* PM Aniekanabasi — *"Floating Tab Menu. Yes we can."*
 - **Area:** Navigation
-- **Status:** `open`
+- **Status:** `fixed`
 
 **Problem.** Offiong is describing a real symptom, and he is right about the
 cause. The homepage now runs seventeen sections. Once past the hero there is
@@ -276,7 +279,7 @@ a shorter tab bar.
 
 - **Source:** Client — *"this section can and should look better"*
 - **Area:** Live statistics
-- **Status:** `open`
+- **Status:** `fixed`
 
 **Problem.** Round 2 item 2 added the cheque photograph to this block, but the
 figures themselves were never redesigned, and they are the problem. Looking at
@@ -334,5 +337,5 @@ mismatched rows.
 | B7 | Vector logo files (.ai/.svg) | Only raster PNGs supplied. Blocks proper logo animation and is needed for print. |
 | B8 | RD deck illustrations | Eight figure illustrations needed as SVG/PNG export from the deck's source file. |
 | B9 | Purpose-shot b-roll | Nice-to-have. No longer blocking anything now that the hero is stills rather than video (item 5). |
-| B10 | Scholars in Diaspora names and roles | Needed to caption the portraits in item 1. Faces of real people must not run un-named. |
+| ~~B10~~ | ~~Scholars in Diaspora names and roles~~ | **Resolved.** The client's "Faces Behind the Vision" cards carry 22 named portraits with institutions; all are now on the page. Spellings are transcribed from that artwork and should be checked by the committee. |
 | B11 | Sponsor vs Change Maker | Item 4 — merge into one section, or keep corporate sponsorship addressed separately? |

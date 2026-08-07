@@ -108,7 +108,7 @@ const fanned = [
   { src: "/img/students-exam.jpg", rot: "-rotate-3", y: "translate-y-1.5" },
   { src: "/img/students-posing.jpg", rot: "rotate-0", y: "-translate-y-2" },
   { src: "/img/girls-classroom.jpg", rot: "rotate-3", y: "translate-y-1.5" },
-  { src: "/img/trophy-teen.jpg", rot: "rotate-6", y: "translate-y-5" },
+  { src: "/img/champion-certificate.jpg", rot: "rotate-6", y: "translate-y-5" },
 ];
 
 export default function VariantD() {

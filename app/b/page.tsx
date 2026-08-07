@@ -39,7 +39,7 @@ const stripThumbs = [
   "/img/classroom-diverse.jpg",
   "/img/girls-classroom.jpg",
   "/img/students-lecture.jpg",
-  "/img/trophy-teen.jpg",
+  "/img/champion-certificate.jpg",
 ];
 
 /** Vertical micro-label pinned to the page edge — the reference's side rails. */

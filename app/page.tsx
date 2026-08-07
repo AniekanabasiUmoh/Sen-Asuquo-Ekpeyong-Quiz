@@ -9,6 +9,7 @@ import { SocialIcon } from "@/components/social-icons";
 import { AnimatedLogo } from "@/components/animated-logo";
 import { HeadlineReveal } from "@/components/headline-reveal";
 import { TabBar } from "@/components/tab-bar";
+import { HeroSlideshow } from "@/components/hero-slideshow";
 import {
   about,
   board,
@@ -30,6 +31,8 @@ import {
   portalLinks,
   principalsMeeting,
   prizes,
+  scholars,
+  scholarsIntro,
   senator,
   showdown,
   sponsors,
@@ -78,7 +81,7 @@ const stageThumbs = [
   "/img/lga-calabar-south.jpg", // group stage — heads-down study
   "/img/win-students.jpg", // quarterfinals — two students competing
   "/img/lga-odukpani.jpg", // semifinals — an assembly crowd
-  "/img/trophy-teen.jpg", // grand finale — the trophy
+  "/img/champion-certificate.jpg", // grand finale — the award moment
 ];
 
 export default function VariantA() {
@@ -89,14 +92,9 @@ export default function VariantA() {
       {/* ── Hero: full-bleed photograph, floating pill nav, headline low-left ── */}
       <section className="relative isolate min-h-[92svh] overflow-hidden px-3 pb-3 pt-3 sm:px-4 sm:pb-4 sm:pt-4">
         <div className="relative flex min-h-[calc(92svh-1.5rem)] flex-col overflow-hidden rounded-[28px]">
-          <Image
-            src="/img/students-hero.jpg"
-            alt="Secondary school students in uniform"
-            fill
-            priority
-            sizes="100vw"
-            className="-z-10 object-cover object-[center_30%]"
-          />
+          {/* Cross-fades through five student photographs; see
+              components/hero-slideshow.tsx */}
+          <HeroSlideshow />
           {/* Legibility scrim — dark at the foot where the type sits, clear at the top */}
           <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#06122f] via-[#06122f]/25 via-45% to-transparent" />
           <div className="absolute inset-x-0 top-0 -z-10 h-40 bg-gradient-to-b from-black/35 to-transparent" />
@@ -407,9 +405,13 @@ export default function VariantA() {
             </div>
           </div>
 
+          {/* Round 3 item 2: was a trophy photograph of a student who did not
+              read as Nigerian, on a page about seven Cross River South LGAs.
+              Replaced with a Nigerian secondary school student in uniform
+              receiving an award. */}
           <ZoomImage
-            src="/img/trophy-teen.jpg"
-            alt="A student holding a trophy"
+            src="/img/champion-certificate.jpg"
+            alt="A Nigerian secondary school student in uniform receiving an award"
             sizes="(min-width: 768px) 50vw, 100vw"
             className="min-h-[260px] rounded-2xl"
           >
@@ -717,6 +719,39 @@ export default function VariantA() {
               Diaspora Educational Trust Fund was announced.
             </p>
           </div>
+        </div>
+
+        {/* The scholars themselves. The copy above claims sixty scholars now
+            qualified as doctors and lawyers; without faces that is an
+            assertion, so the people who did it belong inside the story rather
+            than in a separate section. Round 3 item 1. */}
+        <div className="mt-14 border-t border-black/10 pt-10">
+          <Reveal className="flex flex-wrap items-end justify-between gap-x-8 gap-y-3">
+            <h3 className="font-display text-[clamp(1.5rem,3vw,2.25rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">
+              The Faces Behind{" "}
+              <span className="text-[#003090]/35">the Vision</span>
+            </h3>
+            <p className="max-w-md text-[14px] leading-relaxed text-[#003090]/50">
+              {scholarsIntro.body}
+            </p>
+          </Reveal>
+
+          <ul className="mt-9 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-3 lg:grid-cols-6">
+            {scholars.map((s, i) => (
+              <Reveal as="li" key={s.name} delay={(i % 6) * 70}>
+                <ZoomImage
+                  src={s.img}
+                  alt={`${s.name}, Scholars in Diaspora`}
+                  sizes="(min-width: 1024px) 15vw, (min-width: 640px) 30vw, 45vw"
+                  className="aspect-square rounded-2xl"
+                />
+                <div className="mt-3 text-[13px] font-bold leading-snug">{s.name}</div>
+                <div className="mt-1 text-[12px] leading-snug text-[#003090]/45">
+                  {s.detail}
+                </div>
+              </Reveal>
+            ))}
+          </ul>
         </div>
       </section>
 
