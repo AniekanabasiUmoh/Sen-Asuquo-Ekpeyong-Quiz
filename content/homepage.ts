@@ -9,7 +9,7 @@
 export const brand = {
   name: "Senator Asuquo Ekpenyong Academic Championship",
   short: "SAEAC",
-  edition: "2026 — Maiden Edition",
+  edition: "2026 Maiden Edition",
   tagline: "Igniting Minds. Inspiring Excellence. Building Leaders.",
   campaignLine: "Who will be the Standard?",
   domain: "www.saeac.org",
@@ -17,18 +17,21 @@ export const brand = {
 
 export const hero = {
   eyebrow: "Cross River South Senatorial District · Maiden Edition",
+  /* Secondary CTA reads "Become a Change Maker" and points at the volunteer
+     section; "Partner" was corporate-sponsor language aimed at the wrong
+     audience. Round 3 item 4. */
   headline: "Who will be the Standard?",
   /** Split for the two-tone hero treatment. */
   headlineLead: "Who will be",
   headlineTrail: "the Standard?",
-  /** Short hero line — the full description sits in the About block below. */
+  /** Short hero line. The full description sits in the About block below. */
   tagline:
     "Secondary schools from all seven Local Government Areas of Cross River South, competing for one title.",
   /** Client-supplied description — use verbatim. */
   subhead:
     "A district-wide educational initiative bringing together secondary schools across the seven Local Government Areas of Cross River South Senatorial District in an annual tournament designed to celebrate excellence, develop future leaders and transform academic competition into a prestigious public event.",
   primaryCta: { label: "Register Now", href: "#register" },
-  secondaryCta: { label: "Become a Partner", href: "#sponsor" },
+  secondaryCta: { label: "Become a Change Maker", href: "#changemaker" },
   tertiaryCta: { label: "Watch Promo", href: "#patron" },
 } as const;
 
@@ -103,7 +106,7 @@ export const overview = {
 export const countdown = {
   label: "Registration closes in",
   targetIso: "2026-10-30T23:59:59+01:00",
-  note: "Provisional date — to be confirmed by the Organising Committee.",
+  note: "Provisional date, to be confirmed by the Organising Committee.",
 } as const;
 
 /**
@@ -118,19 +121,60 @@ export const countdown = {
  *
  * `count` drives the count-up animation; `display` is the rendered string.
  */
+export const statsHeading = {
+  title: "The Championship",
+  titleTrail: "in Numbers",
+} as const;
+
+/**
+ * The lead figure. 10,000+ is the most persuasive number available, so it is
+ * set large and on its own rather than being one of four equal cells.
+ */
+export const statLead = {
+  count: 10000,
+  suffix: "+",
+  display: "10,000+",
+  label: "Student Competitors",
+  note: "Expected to take part across the district",
+} as const;
+
 export const stats = [
   { count: 7, display: "7", label: "Local Government Areas", note: "Cross River South" },
-  { count: 250, suffix: "+", display: "250+", label: "Secondary Schools", note: "Across the district" },
-  { count: 10000, suffix: "+", display: "10,000+", label: "Student Competitors", note: "Expected to take part" },
+  { count: 250, suffix: "+", display: "250+", label: "Secondary Schools", note: "Public and private" },
+] as const;
+
+/**
+ * All four figures as a flat set, for the archived Phase 0 variants at /b–/e
+ * which each render a four-cell grid. The homepage no longer uses this: it
+ * promotes 10,000+ to a lead figure and carries the champion as a closing
+ * sentence, so `statLead` + `stats` is its shape.
+ */
+export const statsAll = [
+  stats[0],
+  stats[1],
+  statLead,
   { count: 1, display: "1", label: "Champion", note: "One school takes the title" },
 ] as const;
 
-/** Secondary figures shown as a supporting row. */
+/**
+ * Secondary figures. Same type treatment as the row above, differing only in
+ * scale, so the section reads as one block rather than two.
+ */
 export const statsFinancial = [
   { display: "₦25M", label: "Seed Fund", note: "Diaspora Educational Trust Fund" },
   { display: "₦200M", label: "Project Value", note: "Total championship investment" },
   { display: "Annual", label: "Championship", note: "Returning every year" },
 ] as const;
+
+/**
+ * Closing line. This carries what used to be the "1 Champion" cell, which a
+ * lone numeral 1 could not: as a statistic it read as a placeholder, but as a
+ * sentence it is the point of the whole section.
+ */
+export const statsClose = {
+  lead: "One champion school",
+  trail: "takes the title.",
+} as const;
 
 export const stages = [
   {
@@ -216,7 +260,7 @@ export const origin = {
   eyebrow: "Our Origin",
   title: "How the Championship",
   titleTrail: "Began",
-  body: "Scholars in Diaspora is a network of beneficiaries of the educational initiatives facilitated by Senator Asuquo Ekpenyong. Over the past three years, his interventions have enabled more than sixty scholars to study in the United Kingdom and beyond — many now qualified as doctors, lawyers, and other professionals.",
+  body: "Scholars in Diaspora is a network of beneficiaries of the educational initiatives facilitated by Senator Asuquo Ekpenyong. Over the past three years, his interventions have enabled more than sixty scholars to study in the United Kingdom and beyond. Many are now qualified as doctors, lawyers, and other professionals.",
   body2:
     "In gratitude, those beneficiaries mobilised funds towards the Senator's nomination form and presented it at his office. There he announced a seed donation towards the Diaspora Educational Trust Fund, and encouraged them to institutionalise their efforts into a sustainable platform for vulnerable students. SAEAC is the flagship expression of that commitment.",
   pullQuote: "A society which invests in education creates generations of leaders who, in turn, invest in others.",
@@ -242,7 +286,7 @@ export const senator = {
   name: "Senator Asuquo Ekpenyong",
   role: "Grand Patron · Cross River South Senatorial District",
   quote:
-    "Before accepting the scholars' sacrifice, it was only right that I give back — and that we build something able to support many more students than any one of us could reach alone.",
+    "Before accepting the scholars' sacrifice, it was only right that I give back, and that we build something able to support many more students than any one of us could reach alone.",
   quoteIsPlaceholder: true,
   portrait: "/img/senator-avatar.jpg",
   video: {
@@ -331,7 +375,7 @@ export const showdown = {
   mechanics: [
     {
       name: "Strikers",
-      body: "Each team fields 3 Strikers on stage for Round 3, answering 15 questions in total — five per Striker, each within a set time limit.",
+      body: "Each team fields 3 Strikers on stage for Round 3, answering 15 questions in total: five per Striker, each within a set time limit.",
       accent: "outline",
     },
     {
@@ -420,7 +464,7 @@ export const faq = [
   },
   {
     q: "How are the five representatives chosen?",
-    a: "Each school runs three internal examinations — Science, Art and Commercial — on the same day. The five highest performers represent the school at the Local Government Qualifiers.",
+    a: "Each school runs three internal examinations on the same day: Science, Art and Commercial. The five highest performers represent the school at the Local Government Qualifiers.",
   },
   {
     q: "What do Akpabuyo and Bakassi schools do?",
@@ -477,19 +521,50 @@ export const nav = [
   { label: "Contact Us", href: "#contact" },
 ] as const;
 
+/**
+ * Tabs for the floating menu that appears once the hero scrolls away.
+ *
+ * Deliberately six, not sixteen. The page has sixteen anchors, but a tab bar
+ * listing all of them is just the problem again in a smaller box. These are
+ * the six destinations someone actually wants: what it is, how it works, who
+ * is in it, what you win, what has happened, and how to enter.
+ *
+ * `short` is used on mobile where the bar is thumb-width. `core` marks the
+ * four that survive below 390px, where six tabs plus the Register button
+ * cannot fit without truncating; the rest are still reachable by scrolling or
+ * from the footer.
+ */
+export const tabs = [
+  { label: "About", short: "About", href: "#about", core: true },
+  { label: "Format", short: "Format", href: "#stages", core: true },
+  { label: "The Draw", short: "Draw", href: "#showdown", core: false },
+  { label: "The LGAs", short: "LGAs", href: "#lgas", core: false },
+  { label: "Prizes", short: "Prizes", href: "#prizes", core: true },
+  { label: "News", short: "News", href: "#news", core: true },
+] as const;
+
 /** The two primary actions, fixed in the header per the client's brief. */
 export const navCtas = {
   primary: { label: "Register Your School", href: "#register" },
   secondary: { label: "Sponsor the Championship", href: "#sponsor" },
 } as const;
 
-/** Volunteer programme — the client renamed volunteers to "Change Makers". */
+/**
+ * Get Involved. The client renamed volunteers to "Change Makers", and this
+ * block now carries both routes into the championship: giving time, and
+ * funding it. Round 3 item 4 merged the old "Become a Partner" CTA in here,
+ * because pointing the hero at a bare sponsor logo strip asked the reader for
+ * money before it had asked them for anything else. The Sponsors strip lower
+ * down stays as a credits row rather than a call to action.
+ */
 export const changeMaker = {
   eyebrow: "Get Involved",
   title: "Become a",
   titleTrail: "Change Maker",
-  body: "Volunteers power the championship on the ground — from LGA qualifiers to the Grand Finale. Join the team behind Cross River South's biggest academic contest.",
+  body: "Change Makers power the championship, on the ground and behind it. Volunteer at the LGA qualifiers and the Grand Finale, or back the Trust Fund that puts students through school.",
   cta: { label: "Volunteer With Us", href: "#changemaker" },
+  /** Second route for organisations rather than individuals. */
+  ctaSecondary: { label: "Sponsor the Championship", href: "#sponsor" },
 } as const;
 
 export const footerLinks = [
@@ -523,7 +598,7 @@ export const variants = [
     name: "Minimal Institutional",
     reference: "Origin Studio",
     blurb:
-      "Near-black and centred, with oversized light-weight type and a thumbnail strip. Restrained and gallery-like — the most prestigious of the five.",
+      "Near-black and centred, with oversized light-weight type and a thumbnail strip. Restrained and gallery-like, the most prestigious of the five.",
     accent: "#ffffff",
   },
   {
@@ -539,7 +614,7 @@ export const variants = [
     name: "Warm Community",
     reference: "Safeer",
     blurb:
-      "A fanned row of tilted photo cards over the hero, parenthesised labels, and card-and-image mosaics. The most approachable — aimed at parents, teachers and schools.",
+      "A fanned row of tilted photo cards over the hero, parenthesised labels, and card-and-image mosaics. The most approachable of the five, aimed at parents, teachers and schools.",
     accent: "#f4a300",
   },
   {

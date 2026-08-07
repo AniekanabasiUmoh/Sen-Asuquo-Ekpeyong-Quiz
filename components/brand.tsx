@@ -22,7 +22,7 @@ export function Logo({
   return (
     <Image
       src={src}
-      alt="SÆAC — Senator Asuquo Ekpenyong Academic Championship"
+      alt="SÆAC, Senator Asuquo Ekpenyong Academic Championship"
       width={width}
       height={Math.round((width * 398) / 560)}
       className={className}

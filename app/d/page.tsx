@@ -22,7 +22,7 @@ import {
   showdown,
   sponsors,
   stages,
-  stats,
+  statsAll,
 } from "@/content/homepage";
 
 export const metadata: Metadata = { title: "Variant D · Warm Community" };
@@ -228,7 +228,7 @@ export default function VariantD() {
 
           <div>
             <p className="font-display text-[clamp(1.5rem,2.6vw,2rem)] font-medium leading-snug tracking-[-0.02em]">
-              Beyond examinations — connecting schools, celebrating teachers, and putting
+              Beyond examinations. Connecting schools, celebrating teachers, and putting
               Cross River South on a national stage.
             </p>
             <p className="mt-5 max-w-lg text-[14px] leading-relaxed text-[#1b1b1b]/55">
@@ -405,7 +405,7 @@ export default function VariantD() {
       {/* ── Stats strip ── */}
       <section className="mx-auto max-w-6xl px-5 pb-20 sm:pb-28">
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {stats.map((s) => (
+          {statsAll.map((s) => (
             <div key={s.label} className="rounded-2xl bg-white px-6 py-8">
               <div className="font-display text-5xl font-medium tracking-[-0.03em]">
                 {s.display}
@@ -663,7 +663,7 @@ export default function VariantD() {
             <span>
               © 2026 {brand.short}. {brand.edition}.
             </span>
-            <span>Phase 0 demo homepage — Variant D</span>
+            <span>Phase 0 demo homepage · Variant D</span>
           </div>
           <Ribbon className="rounded-full" />
           <div className="h-4" />

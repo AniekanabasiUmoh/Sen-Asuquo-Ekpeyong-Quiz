@@ -22,7 +22,7 @@ import {
   showdown,
   sponsors,
   stages,
-  stats,
+  statsAll,
 } from "@/content/homepage";
 
 export const metadata: Metadata = { title: "Variant E · Data-Forward" };
@@ -188,7 +188,7 @@ export default function VariantE() {
             <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
             <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
             <span className="ml-3 truncate text-[11px] text-white/35">
-              saeac.org / live — Grand Finale, Round 3
+              saeac.org / live · Grand Finale, Round 3
             </span>
             <span className="ml-auto inline-flex shrink-0 items-center gap-2 text-[11px] text-[#c6f24e]">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#c6f24e]" />
@@ -225,7 +225,7 @@ export default function VariantE() {
             ))}
           </div>
           <p className="border-t border-white/[0.07] px-5 py-3 text-[11px] text-white/25">
-            Illustrative preview — live scoring arrives with the Phase 3 competition module.
+            Illustrative preview. Live scoring arrives with the Phase 3 competition module.
           </p>
         </div>
       </section>
@@ -254,7 +254,7 @@ export default function VariantE() {
         </h2>
 
         <div className="mt-14 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {stats.map((s, i) => (
+          {statsAll.map((s, i) => (
             <div
               key={s.label}
               className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#101010] p-6"
@@ -707,7 +707,7 @@ export default function VariantE() {
             <span>
               © 2026 {brand.short}. {brand.edition}.
             </span>
-            <span>Phase 0 demo homepage — Variant E</span>
+            <span>Phase 0 demo homepage · Variant E</span>
           </div>
         </div>
         <Ribbon />

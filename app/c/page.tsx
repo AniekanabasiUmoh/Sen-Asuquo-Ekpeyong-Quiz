@@ -22,7 +22,7 @@ import {
   showdown,
   sponsors,
   stages,
-  stats,
+  statsAll,
 } from "@/content/homepage";
 
 export const metadata: Metadata = { title: "Variant C · Editorial Contrast" };
@@ -207,7 +207,7 @@ export default function VariantC() {
               {
                 src: "/img/trophy-teen.jpg",
                 title: "The Grand Finale",
-                note: "Ten schools, four rounds, one champion — televised.",
+                note: "Ten schools, four rounds, one champion, televised live.",
               },
             ].map((c) => (
               <div key={c.title} className="group relative aspect-[4/3] overflow-hidden rounded-2xl">
@@ -253,7 +253,7 @@ export default function VariantC() {
       {/* ── Stats on the cream ── */}
       <section className="mx-auto max-w-6xl px-5 py-20">
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          {stats.map((s) => (
+          {statsAll.map((s) => (
             <div key={s.label} className="rounded-2xl bg-white px-6 py-8 text-center">
               <div className="font-serif text-5xl sm:text-6xl">{s.display}</div>
               <div className="mt-3 text-[13px] font-medium">{s.label}</div>
@@ -649,7 +649,7 @@ export default function VariantC() {
           <span>
             © 2026 {brand.short}. {brand.edition}.
           </span>
-          <span>Phase 0 demo homepage — Variant C</span>
+          <span>Phase 0 demo homepage · Variant C</span>
         </div>
         <Ribbon className="rounded-full" />
       </footer>

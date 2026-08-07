@@ -38,8 +38,8 @@ export default function Index() {
           <h1 className="display text-[clamp(2.5rem,7vw,5rem)]">Pick a Direction</h1>
           <p className="mt-6 text-lg leading-relaxed text-white/70">
             Five homepage concepts for the {brand.short} website. Every variant uses the{" "}
-            <strong className="font-semibold text-white">same brand</strong> — the SÆAC logo, the
-            official colour palette, and Lama Sans — and the{" "}
+            <strong className="font-semibold text-white">same brand</strong>: the SÆAC logo, the
+            official colour palette, and Lama Sans, and the{" "}
             <strong className="font-semibold text-white">same content</strong> from the Website
             Content Guide. What differs is layout, rhythm, and tone.
           </p>
@@ -126,14 +126,14 @@ export default function Index() {
                 <div className="rounded-lg border border-white/10 p-4">
                   <p className="font-serif text-2xl">Libre Caslon</p>
                   <p className="mt-1.5 text-[11px] text-white/40">
-                    Variant C only — editorial serif, SIL OFL licensed
+                    Variant C only. Editorial serif, SIL OFL licensed
                   </p>
                 </div>
               </div>
               <p className="mt-5 text-xs leading-relaxed text-white/45">
                 Tagline: <em className="text-white/70">{brand.tagline}</em>
                 <br />
-                Wordmark uses the Æ ligature — SÆAC.
+                Wordmark uses the Æ ligature: SÆAC.
               </p>
             </div>
           </div>
@@ -149,7 +149,7 @@ export default function Index() {
             </li>
             <li>
               • The countdown targets a <strong>provisional</strong> registration deadline of 30
-              October 2026 — to be confirmed by the Organising Committee.
+              October 2026, to be confirmed by the Organising Committee.
             </li>
             <li>
               • News items, sponsor names, and the Variant E scoreboard are illustrative dummy data.
@@ -163,7 +163,7 @@ export default function Index() {
         </section>
 
         <footer className="mt-16 border-t border-white/10 pt-8 text-xs text-white/35">
-          © 2026 {brand.name}. Phase 0 design review — not for public distribution.
+          © 2026 {brand.name}. Phase 0 design review, not for public distribution.
         </footer>
       </div>
     </div>

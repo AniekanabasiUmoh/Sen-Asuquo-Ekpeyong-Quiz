@@ -22,7 +22,7 @@ import {
   showdown,
   sponsors,
   stages,
-  stats,
+  statsAll,
 } from "@/content/homepage";
 
 export const metadata: Metadata = { title: "Variant B · Minimal Institutional" };
@@ -181,7 +181,7 @@ export default function VariantB() {
       {/* ── Stats ── */}
       <section className="mx-auto max-w-6xl px-5 py-24">
         <div className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-white/10 bg-white/10 lg:grid-cols-4">
-          {stats.map((s) => (
+          {statsAll.map((s) => (
             <div key={s.label} className="bg-[#0b0b0b] px-6 py-10 text-center">
               <div className="font-display text-5xl font-light tracking-[-0.03em] sm:text-6xl">
                 {s.display}
@@ -247,7 +247,7 @@ export default function VariantB() {
 
       {/* ── Showdown: offset, overlapping cards over a photo ── */}
       <section className="relative mx-auto max-w-6xl px-5 py-24">
-        <Head lead={showdown.title} trail="— live on stage." className="max-w-3xl" />
+        <Head lead={showdown.title} trail="live on stage." className="max-w-3xl" />
         <p className="mt-6 max-w-xl text-[14px] leading-relaxed text-white/45">
           {showdown.intro}
         </p>
@@ -505,7 +505,7 @@ export default function VariantB() {
             <span>
               © 2026 {brand.short}. {brand.edition}.
             </span>
-            <span>Phase 0 demo homepage — Variant B</span>
+            <span>Phase 0 demo homepage · Variant B</span>
           </div>
         </div>
 

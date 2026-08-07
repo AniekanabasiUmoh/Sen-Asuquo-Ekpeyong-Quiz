@@ -8,6 +8,7 @@ import { ZoomImage } from "@/components/zoom-image";
 import { SocialIcon } from "@/components/social-icons";
 import { AnimatedLogo } from "@/components/animated-logo";
 import { HeadlineReveal } from "@/components/headline-reveal";
+import { TabBar } from "@/components/tab-bar";
 import {
   about,
   board,
@@ -33,8 +34,11 @@ import {
   showdown,
   sponsors,
   stages,
+  statLead,
   stats,
+  statsClose,
   statsFinancial,
+  statsHeading,
 } from "@/content/homepage";
 
 /* The SAEAC homepage. Chosen from the Phase 0 review as the site's design
@@ -80,6 +84,8 @@ const stageThumbs = [
 export default function VariantA() {
   return (
     <div className="bg-[#faf6ee] text-[#003090]">
+      {/* Appears once the hero scrolls away; see components/tab-bar.tsx */}
+      <TabBar />
       {/* ── Hero: full-bleed photograph, floating pill nav, headline low-left ── */}
       <section className="relative isolate min-h-[92svh] overflow-hidden px-3 pb-3 pt-3 sm:px-4 sm:pb-4 sm:pt-4">
         <div className="relative flex min-h-[calc(92svh-1.5rem)] flex-col overflow-hidden rounded-[28px]">
@@ -225,44 +231,71 @@ export default function VariantA() {
         </div>
       </section>
 
-      {/* ── Live statistics: counters animate as they scroll into view ── */}
-      <section className="mx-auto max-w-7xl px-5 pb-4 pt-16 sm:pt-20">
-        <div className="grid grid-cols-2 gap-y-10 border-y border-black/10 py-10 md:grid-cols-4">
-          {stats.map((s, i) => (
-            <Reveal
-              key={s.label}
-              delay={i * 90}
-              className="px-2 md:border-l md:border-black/10 md:first:border-l-0 md:px-8"
-            >
-              <div
-                className="font-display text-5xl font-extrabold tracking-[-0.03em] sm:text-6xl"
-                style={{ color: ["#f03018", "#fe6c03", "#2dc653", "#0006eb"][i] }}
+      {/* ── The Championship in Numbers ──
+          Rebuilt in Round 3 (item 7). Previously four equal figures in four
+          unrelated colours, one of which (green) was not a brand colour at
+          all, over a 2×2 grid that left a hole in the middle on desktop.
+          Now: one lead figure carries the section, the rest support it on a
+          shared rule structure, and everything is navy but the lead. */}
+      <section id="numbers" className="mx-auto max-w-7xl scroll-mt-24 px-5 pb-4 pt-16 sm:pt-20">
+        <Reveal>
+          <Split
+            lead={statsHeading.title}
+            trail={statsHeading.titleTrail}
+            className="text-[clamp(1.75rem,3.4vw,2.5rem)] leading-[1.05]"
+          />
+        </Reveal>
+
+        <div className="mt-8 grid gap-x-10 gap-y-8 border-t border-black/10 pt-9 lg:grid-cols-[1.15fr_1fr]">
+          {/* Lead figure. Red is the one accent in the block. */}
+          <Reveal>
+            <div className="font-display text-[clamp(4.5rem,12vw,8.5rem)] font-extrabold leading-[0.85] tracking-[-0.045em] text-[#f03018]">
+              <CountUp value={statLead.count} suffix={statLead.suffix} />
+            </div>
+            <div className="mt-4 font-display text-xl font-bold sm:text-2xl">
+              {statLead.label}
+            </div>
+            <div className="mt-1 text-[14px] text-[#003090]/50">{statLead.note}</div>
+          </Reveal>
+
+          {/* Supporting figures, rule-separated so they sit on a structure. */}
+          <div className="grid grid-cols-2 gap-x-8 self-end">
+            {stats.map((s, i) => (
+              <Reveal
+                key={s.label}
+                delay={140 + i * 90}
+                className="border-l border-black/10 pl-6 first:border-l-0 first:pl-0"
               >
-                <CountUp
-                  value={s.count}
-                  suffix={"suffix" in s ? s.suffix : ""}
-                  delay={i * 140}
-                />
-              </div>
-              <div className="mt-2 text-[13px] font-semibold">{s.label}</div>
-              <div className="mt-0.5 text-[13px] text-[#003090]/45">{s.note}</div>
-            </Reveal>
-          ))}
+                <div className="font-display text-[clamp(2.5rem,6vw,4rem)] font-extrabold leading-[0.9] tracking-[-0.035em]">
+                  <CountUp
+                    value={s.count}
+                    suffix={"suffix" in s ? s.suffix : ""}
+                    delay={140 + i * 140}
+                  />
+                </div>
+                <div className="mt-3 text-[14px] font-bold">{s.label}</div>
+                <div className="mt-0.5 text-[13px] text-[#003090]/45">{s.note}</div>
+              </Reveal>
+            ))}
+          </div>
         </div>
 
-        {/* Supporting financial figures, with the moment they trace back to */}
-        <div className="grid items-stretch gap-3 border-b border-black/10 py-8 lg:grid-cols-[1fr_0.85fr]">
-          <div className="grid grid-cols-1 gap-y-8 sm:grid-cols-3">
+        {/* Financial figures, sharing the type treatment above at smaller scale,
+            alongside the moment the Trust Fund actually began. */}
+        <div className="mt-10 grid items-stretch gap-6 border-t border-black/10 py-9 lg:grid-cols-[1fr_0.62fr]">
+          {/* content-start keeps the three figures at the top of their column
+              rather than stretching them down beside the photograph. */}
+          <div className="grid grid-cols-1 content-start gap-y-7 sm:grid-cols-3">
             {statsFinancial.map((s, i) => (
               <Reveal
                 key={s.label}
                 delay={i * 90}
-                className="px-2 sm:border-l sm:border-black/10 sm:first:border-l-0 sm:px-6"
+                className="sm:border-l sm:border-black/10 sm:pl-5 sm:first:border-l-0 sm:first:pl-0"
               >
-                <div className="font-display text-3xl font-extrabold tracking-[-0.02em]">
+                <div className="font-display text-[clamp(1.75rem,3.4vw,2.35rem)] font-extrabold leading-[0.95] tracking-[-0.03em]">
                   {s.display}
                 </div>
-                <div className="mt-1.5 text-[13px] font-semibold">{s.label}</div>
+                <div className="mt-2.5 text-[13px] font-bold">{s.label}</div>
                 <div className="mt-0.5 text-[13px] text-[#003090]/45">{s.note}</div>
               </Reveal>
             ))}
@@ -272,8 +305,8 @@ export default function VariantA() {
             <ZoomImage
               src="/img/origin-cheque.jpg"
               alt="The Scholars in Diaspora cheque presentation at the Grand Patron's office"
-              sizes="(min-width: 1024px) 40vw, 100vw"
-              className="h-full min-h-[200px] rounded-2xl"
+              sizes="(min-width: 1024px) 38vw, 100vw"
+              className="h-full min-h-[210px] rounded-2xl"
             >
               <span className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
               <span className="absolute bottom-4 right-5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/85">
@@ -282,10 +315,19 @@ export default function VariantA() {
             </ZoomImage>
           </Reveal>
         </div>
+
+        {/* What was the "1 Champion" cell. A lone numeral 1 read as a
+            placeholder; as a sentence it closes the section. */}
+        <Reveal className="border-b border-black/10 pb-10">
+          <p className="font-display text-[clamp(1.35rem,2.8vw,2rem)] font-extrabold leading-[1.15] tracking-[-0.02em]">
+            {statsClose.lead}{" "}
+            <span className="text-[#003090]/35">{statsClose.trail}</span>
+          </p>
+        </Reveal>
       </section>
 
       {/* ── About SAEAC + bento grid ── */}
-      <section id="about" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+      <section id="about" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-14 sm:py-20">
         <Reveal className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
             <Split
@@ -360,7 +402,7 @@ export default function VariantA() {
               <h3 className="font-display text-xl font-bold">Seven Stages, One District</h3>
               <p className="mt-2 text-sm leading-relaxed text-[#003090]/55">
                 From school screening to the televised Grand Finale, every stage narrows
-                the field — across all seven Local Government Areas of Cross River South.
+                the field, across all seven Local Government Areas of Cross River South.
               </p>
             </div>
           </div>
@@ -382,7 +424,7 @@ export default function VariantA() {
       </section>
 
       {/* ── Message from the Patron: video left, quote right ── */}
-      <section id="patron" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+      <section id="patron" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-14 sm:py-20">
         <div className="overflow-hidden rounded-[28px] bg-[#003090] text-white">
           <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
             <div className="p-5 sm:p-7 lg:p-8">
@@ -424,7 +466,7 @@ export default function VariantA() {
       </section>
 
       {/* ── Stages: thin rules, number, title, copy, thumbnail right ── */}
-      <section id="stages" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+      <section id="stages" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-14 sm:py-20">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <Split
             lead="The Road to"
@@ -467,7 +509,7 @@ export default function VariantA() {
 
       {/* ── Showdown: the RD deck's own layout — rule-separated rows, italic
              labels with accent strokes, colour-coded description panels ── */}
-      <section id="showdown" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+      <section id="showdown" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-14 sm:py-20">
         <div className="relative overflow-hidden rounded-[28px] bg-white">
           <DiagonalRibbon className="opacity-90" />
 
@@ -521,7 +563,7 @@ export default function VariantA() {
       </section>
 
       {/* ── LGAs ── */}
-      <section id="lgas" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+      <section id="lgas" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-14 sm:py-20">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div>
             <Split
@@ -579,7 +621,7 @@ export default function VariantA() {
       </section>
 
       {/* ── Latest from Schools: the principals' engagement ── */}
-      <section id="principals" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+      <section id="principals" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-14 sm:py-20">
         <Reveal className="grid gap-10 lg:grid-cols-[1fr_1.05fr] lg:items-start">
           <div>
             <Split
@@ -626,7 +668,7 @@ export default function VariantA() {
       </section>
 
       {/* ── Origin / Background ── */}
-      <section id="origin" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+      <section id="origin" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-14 sm:py-20">
         <div className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:items-start">
           <div>
             <Split
@@ -679,7 +721,7 @@ export default function VariantA() {
       </section>
 
       {/* ── Prizes ── */}
-      <section id="prizes" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+      <section id="prizes" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-14 sm:py-20">
         <Reveal className="text-center">
           <Split
             lead="What the"
@@ -793,7 +835,7 @@ export default function VariantA() {
       </section>
 
       {/* ── News ── */}
-      <section id="news" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+      <section id="news" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-14 sm:py-20">
         <div className="flex flex-wrap items-end justify-between gap-6">
           <Split
             lead="Latest from"
@@ -845,7 +887,7 @@ export default function VariantA() {
       </section>
 
       {/* ── Board of Directors: Scholars in Diaspora ── */}
-      <section id="board" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+      <section id="board" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-14 sm:py-20">
         <Reveal className="overflow-hidden rounded-[28px] bg-white">
           <div className="grid gap-0 lg:grid-cols-[1fr_0.9fr]">
             <div className="p-8 sm:p-12">
@@ -898,7 +940,7 @@ export default function VariantA() {
       </section>
 
       {/* ── Become a Change Maker ── */}
-      <section id="changemaker" className="mx-auto max-w-7xl px-5 py-14 sm:py-20">
+      <section id="changemaker" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-14 sm:py-20">
         <Reveal className="relative grid items-center gap-8 overflow-hidden rounded-[28px] bg-[#f03018] px-8 py-12 text-white sm:px-12 md:grid-cols-[1.2fr_auto]">
           <div className="relative">
             <span className="inline-flex items-center rounded-full border border-white/30 px-3.5 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] text-white/85">
@@ -912,17 +954,26 @@ export default function VariantA() {
               {changeMaker.body}
             </p>
           </div>
-          <a
-            href={changeMaker.cta.href}
-            className="shrink-0 justify-self-start rounded-full bg-white px-8 py-4 text-[13px] font-bold text-[#f03018] transition hover:bg-[#f0a800] hover:text-[#003090] md:justify-self-end"
-          >
-            {changeMaker.cta.label}
-          </a>
+          {/* Two routes in: give time, or fund it. */}
+          <div className="flex shrink-0 flex-col gap-3 justify-self-start sm:flex-row md:flex-col md:justify-self-end lg:flex-row">
+            <a
+              href={changeMaker.cta.href}
+              className="whitespace-nowrap rounded-full bg-white px-8 py-4 text-center text-[13px] font-bold text-[#f03018] transition hover:bg-[#f0a800] hover:text-[#003090]"
+            >
+              {changeMaker.cta.label}
+            </a>
+            <a
+              href={changeMaker.ctaSecondary.href}
+              className="whitespace-nowrap rounded-full border border-white/40 px-8 py-4 text-center text-[13px] font-bold text-white transition hover:bg-white/10"
+            >
+              {changeMaker.ctaSecondary.label}
+            </a>
+          </div>
         </Reveal>
       </section>
 
       {/* ── Register CTA ── */}
-      <section id="register" className="mx-auto max-w-7xl px-5 py-8">
+      <section id="register" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-8">
         <div className="relative overflow-hidden rounded-[28px] px-6 py-20 text-center sm:px-12 sm:py-28">
           <Image
             src="/img/students-walking.jpg"
@@ -962,7 +1013,7 @@ export default function VariantA() {
       </section>
 
       {/* ── Sponsors & Partners ── */}
-      <section id="sponsor" className="mx-auto max-w-7xl px-5 py-16">
+      <section id="sponsor" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-16">
         <Reveal className="text-center">
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#003090]/35">
             Sponsors &amp; Partners
@@ -974,12 +1025,14 @@ export default function VariantA() {
               </span>
             ))}
           </div>
-          <a
-            href="#sponsor"
-            className="mt-9 inline-block rounded-full border border-black/15 px-7 py-3.5 text-[13px] font-semibold transition hover:bg-white"
-          >
-            Sponsor the Championship
-          </a>
+          {/* No CTA here. The ask now lives in Become a Change Maker above,
+              so this reads as a credits row rather than a second pitch. */}
+          <p className="mt-8 text-[12px] text-[#003090]/40">
+            Interested in supporting the championship?{" "}
+            <a href="#changemaker" className="font-semibold text-[#003090]/70 underline underline-offset-4 transition hover:text-[#f03018]">
+              Become a Change Maker
+            </a>
+          </p>
         </Reveal>
       </section>
 
@@ -1047,7 +1100,7 @@ export default function VariantA() {
               <span>
                 © 2026 {brand.short}. {brand.edition}.
               </span>
-              <span>Phase 0 demo homepage — Variant A</span>
+              <span>Phase 0 demo homepage · Variant A</span>
             </div>
           </div>
 

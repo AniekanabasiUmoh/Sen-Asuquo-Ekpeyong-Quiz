@@ -37,7 +37,7 @@ export function AnimatedLogo({
   return (
     <a
       href="#top"
-      aria-label="SAEAC — home"
+      aria-label="SAEAC, home"
       className={`group relative flex shrink-0 items-center ${className}`}
     >
       <span
@@ -51,7 +51,7 @@ export function AnimatedLogo({
       >
         <Image
           src="/brand/saeac-logo-white-560.png"
-          alt="SAEAC — Senator Asuquo Ekpenyong Academic Championship"
+          alt="SAEAC, Senator Asuquo Ekpenyong Academic Championship"
           width={width}
           height={Math.round((width * 398) / 560)}
           priority

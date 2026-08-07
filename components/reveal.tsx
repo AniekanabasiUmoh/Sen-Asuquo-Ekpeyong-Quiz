@@ -127,7 +127,16 @@ export function CountUp({
           const t = Math.min(1, (now - begin) / duration);
           // easeOutExpo — fast out of the gate, settles gently.
           const eased = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
-          setN(Math.round(value * eased));
+
+          /* Quantise large figures. easeOutExpo passes 99% within the first
+             third of its run, so an un-rounded counter parks on a near-miss
+             like "9,938" for over a second — which reads as the real figure
+             to anyone glancing at it, and these numbers are the client's
+             headline claim. Snapping to a round step means every frame shows
+             a plausible round number and only the true value lands. */
+          const step = value >= 1000 ? 500 : value >= 100 ? 10 : 1;
+          const raw = value * eased;
+          setN(t === 1 ? value : Math.round(raw / step) * step);
           if (t < 1) requestAnimationFrame(tick);
         };
         requestAnimationFrame(tick);

@@ -1,14 +1,18 @@
-# Complaints & Fixes — Homepage Review, Round 2
+# Complaints & Fixes — Homepage Review, Round 3
 
 Running log of issues raised during client/team review, with the identified
 problem and the proposed fix for each.
 
-**Status:** all Round 2 items applied and deployed. Blocked list at the
-foot still needs client input.
+**Status:** Round 3 logging in progress — **no code changed yet.** More
+comments expected. Nothing here is applied until the client says he is done.
 
 **Site under review:** https://senatorquiz.vercel.app
 
-Round 1 (13 items) was applied and deployed in commit `bc19620`.
+Round 1 (13 items) applied in `bc19620`. Round 2 (12 items) applied in `9c7645f`.
+
+**Round 3 runs to six items.** The original items 5 and 6 turned out to be one
+instruction worded two ways, and have been merged into item 5; the floating tab
+menu moved up to item 6.
 
 ---
 
@@ -25,376 +29,295 @@ Round 1 (13 items) was applied and deployed in commit `bc19620`.
 
 ## Items
 
-### 1 — Add the Scholars in Diaspora organiser photograph
+### 1 — Scholars in Diaspora photographs belong in "How the Championship Began"
 
-- **Source:** Client
-- **Area:** Board of Directors
-- **Status:** `fixed`
+- **Source:** Client, screenshot 1 — *"Can the pictures be here instead. For
+  the Scholars in diaspora members?"*
+- **Area:** Our Origin / Board of Directors
+- **Status:** `open`
 
-**Problem.** The Board of Directors section currently reuses
-`origin-team.jpg` — the same photograph already used in the Our Origin
-mosaic. The section describing the organisers has no photograph of its own.
+**Problem.** The Origin section tells the Scholars in Diaspora story in prose —
+sixty scholars, the nomination form, the cheque, the seed donation — but the
+photographs of the actual people who did it sit further down the page in the
+Board of Directors section, disconnected from the narrative that explains who
+they are. On mobile especially, the reader finishes the story and has seen no
+faces.
 
-**Solution.** Use the newly supplied group photograph of Scholars in Diaspora
-in the United Kingdom, holding the ₦20,000,000 cheque toward the nomination
-form. Imported as `public/img/board-scholars-uk.jpg`. This is the organising
-body pictured as a group, which is exactly what the section needs, and it
-frees `origin-team.jpg` to sit only in Our Origin.
+The photos in the client's newly supplied Scholars folder are individual
+portraits, which is a different asset class from the single group shot
+currently used on the board.
+
+**Solution.** Move the people into the story. Specifically:
+
+- Add a **portrait row beneath the Origin copy** — the individual Scholars in
+  Diaspora members, small circular or squared portraits with name and (where
+  known) profession beneath, since the copy specifically claims "many now
+  qualified as doctors, lawyers, and other professionals". Faces make that
+  sentence real; without them it is an assertion.
+- Keep the existing three-image mosaic (cheque, team, forms) — that documents
+  the event. The portraits document the people. They do different jobs.
+- **Board of Directors then becomes the question.** If the individual
+  portraits now live in Origin, the Board section is duplicating them. Options:
+  either (a) Board keeps the UK group photograph only and becomes a short
+  governance statement, or (b) Board is folded into Origin entirely and the
+  page loses a section. **Recommend (a)** — the two sections answer different
+  questions ("where did this come from" vs "who is accountable for it") and
+  collapsing them would blur that.
+
+**Needs from client:** names and roles to caption the portraits. Un-captioned
+faces of real people are worse than no faces. See B10.
 
 ---
 
-### 2 — Statistics rows need images
+### 2 — "One Grand Champion" image must show a Nigerian student
 
-- **Source:** Client ("this could benefit from images")
+- **Source:** Client, screenshot 2 — *"I think you should use a Nigerian
+  looking person for this part instead. Especially since it's a district
+  specific competition."*
+- **Area:** About SAEAC / bento grid — trophy card
+- **Status:** `open`
+
+**Problem.** `trophy-teen.jpg` shows a student lifting a trophy who does not
+read as Nigerian. On a page about seven LGAs of Cross River South, competed in
+by Cross River South schools, the single image representing the winner shows
+someone from outside the district. The client is right, and this is the same
+class of error as the principals-in-student-tiles problem from Round 1: stock
+imagery placed without checking whether it can plausibly depict the people it
+claims to depict.
+
+It also undercuts the whole proposition. A student in Akpabuyo looking at that
+card should see themselves in it.
+
+**Solution.** Replace with a photograph of a Nigerian secondary school student
+holding a trophy or in a moment of victory. Sourcing order:
+
+1. **Client's own material first.** Check the Media Assets folder and the
+   Scholars in Diaspora report for any prize-giving or award photography. Real
+   material always beats stock.
+2. If none exists, source verified Nigerian student photography the same way
+   the seven LGA tiles were sourced in Round 1 — that set is now the standard
+   the rest of the page's imagery should be held to.
+
+**Wider action.** Audit every remaining image on the page against the same
+test: *could this plausibly be Cross River South?* Any that fail get replaced
+in the same pass, rather than waiting for the client to catch them one at a
+time. `graduates.jpg`, `classroom-diverse.jpg` and `girls-classroom.jpg` are
+the likely suspects.
+
+---
+
+### 3 — Take out the AI dashes
+
+- **Source:** Client — *"Take out AI Dashes"*
+- **Area:** Global / all copy
+- **Status:** `open`
+
+**Problem.** The copy is full of em dashes — like this one — which has become a
+recognisable tell of machine-written text. There are **24 in
+`content/homepage.ts` alone**, plus more in the JSX. Whatever one thinks of the
+stylistic merits, the client has clocked it, which means readers will too, and
+it makes the site read as generated rather than written.
+
+**Solution.** Sweep every em dash out of user-facing copy and recast the
+sentence properly in each case. This is a rewrite, not a find-and-replace —
+substituting a comma for every dash produces limp sentences. Each one gets one
+of:
+
+- **Full stop.** Usually the best answer. Two short sentences beat one dashed
+  one.
+- **Colon**, where the second half genuinely explains the first.
+- **Recast**, where the dash was hiding a weak clause that should just go.
+
+Scope: `content/homepage.ts`, all JSX string literals in `app/page.tsx`, and
+the other variant pages. **Code comments are exempt** — they are not
+user-facing and rewriting them adds risk for no reader benefit.
+
+While in there, check the other common tells: "moreover", "furthermore",
+"it's worth noting", and paired "not just X, but Y" constructions.
+
+---
+
+### 4 — "Become a Partner" should read "Become a Change Maker"
+
+- **Source:** Client — *"Replace Partner with become a change maker"*
+- **Area:** Hero action bar, nav, sponsor section
+- **Status:** `open`
+
+**Problem.** The hero's secondary CTA says "Become a Partner" and points at
+`#sponsor`. But the page already has a **Become a Change Maker** section
+(`changeMaker`, CTA "Volunteer With Us") which is the volunteering route. Two
+different labels, two different sections, and "Partner" is corporate-sponsor
+language pointed at an audience the client wants to address as change makers.
+
+This connects to a Round 2 note: the client asked for "Become a volunteer:
+Change maker" as the framing. That framing did not propagate to the hero.
+
+**Solution.** Standardise on **Become a Change Maker** as the second CTA
+everywhere, pointing at `#changemaker`.
+
+**But this needs one decision first.** Sponsorship and volunteering are not
+the same ask — a company writing a cheque and a graduate giving weekends are
+different audiences with different next steps. Three ways to resolve it:
+
+1. **Merge.** One "Become a Change Maker" section covering both, with two
+   routes inside it. Simplest page, matches the client's language, and fits the
+   "fewer words, minimalist" direction. **Recommended.**
+2. **Keep both sections**, rename the hero CTA to "Become a Change Maker", and
+   let Sponsors sit lower as a corporate-facing block with its own CTA.
+3. Rename the Sponsor section itself to Change Maker and drop the volunteer
+   section.
+
+Recommend option 1 unless the client wants corporate sponsors addressed
+separately, which he may, given the ₦200M target. Flagging for his call — see
+B11.
+
+---
+
+### 5 — Hero picture should cross-fade through student photographs
+
+- **Source:** Client — *"Rotate the picture on who will be the standard"* and
+  *"As you enter the site you should see a video of him speaking"*; scope
+  confirmed by PM as cross-fading student stills, not video
+- **Area:** Hero
+- **Status:** `open`
+
+**Merged with what was logged separately as item 6** (*"As you enter the site
+you should see a video of him speaking, similar to white house website"*).
+Confirmed by the PM: both comments describe the same thing. The client is not
+asking for video on entry. He is asking for the **hero picture to cross-fade
+through student photographs**. "Rotate" and "video" were two wordings of one
+instruction.
+
+**Problem.** The hero photograph is static. One image carries the entire first
+impression, it shows students from one place only, and the first screen has no
+motion on it at all — which is what prompted both the "rotate" and the
+"video on entry" comments.
+
+**Solution.** Cross-fade the hero through **five student photographs**, roughly
+five seconds each.
+
+- **New images only.** Not the seven LGA tiles, not the stage thumbnails, not
+  anything already placed elsewhere on the page. A hero that recycles pictures
+  the reader meets again three sections down looks thin.
+- **Nigerian secondary school students**, held to the same verification
+  standard as the Round 1 LGA tile sourcing — uniformed students, classroom and
+  school-grounds settings, plausibly Cross River South. This is the same test
+  item 2 applies to the trophy image.
+- **First frame is a priority image**, remaining four lazy. The hero paints as
+  fast as it does today; there is no load penalty and no layout shift.
+- Fixed crop across all five so nothing shifts on transition. Cross-fade only,
+  no slide or zoom, so it cannot fight the headline reveal.
+- **Frozen on the first frame under `prefers-reduced-motion`.** Pauses on tab
+  blur so it is not burning cycles in a background tab.
+
+**This is a better answer than the video hero, not a lesser one.** Five stills
+cost a fraction of a 754KB loop, behave identically on mobile with no
+breakpoint carve-out, and show five different sets of students rather than one
+wide shot of a speech. The mobile-data concern that shaped the Round 2 decision
+does not arise.
+
+**Consequences of dropping the video hero.**
+
+- The Round 2 item 11 decision **stands unchanged**: hero is photography, the
+  Grand Patron clip stays as the one deliberate video moment in its own
+  section with the click-to-YouTube handoff. Nothing about that section
+  changes.
+- **B9 drops back to a nice-to-have.** Purpose-shot b-roll is no longer
+  blocking hero quality. Still worth having, no longer urgent.
+
+---
+
+### 6 — Floating tab menu: the homepage is too long
+
+- **Source:** Offiong — *"Can we have tabs up… that we can click… because the
+  home page is long."* PM Aniekanabasi — *"Floating Tab Menu. Yes we can."*
+- **Area:** Navigation
+- **Status:** `open`
+
+**Problem.** Offiong is describing a real symptom, and he is right about the
+cause. The homepage now runs seventeen sections. Once past the hero there is
+no persistent way to jump anywhere: the nav panel scrolls away with the hero
+and never comes back. On mobile, reaching Register means scrolling past
+everything.
+
+Note this is the natural consequence of Round 2 item 6, which stripped the
+header to one row with no buttons and no sticky behaviour. That was the right
+call for the hero; it left the rest of the page unnavigable.
+
+**Solution.** A **floating tab menu** that appears once the hero scrolls out of
+view and stays pinned thereafter.
+
+- **Desktop:** a slim centred pill bar, floating clear of the content with a
+  translucent blurred backing. Section tabs (About · Format · The Draw ·
+  LGAs · Prizes · News), plus one solid **Register** button on the right —
+  restoring the persistent CTA in the pattern already proposed in Round 2 item
+  6, which is exactly the "appears after the hero" behaviour described there.
+- **Active-section tracking.** An `IntersectionObserver` highlights whichever
+  section is in view, so the bar doubles as a progress indicator. This is the
+  part that actually answers "the home page is long" — you always know where
+  you are.
+- **Mobile:** the same bar pinned to the **bottom** of the viewport, thumb
+  reachable, reduced to four or five icon-plus-label tabs with Register
+  emphasised. Bottom placement on mobile is both easier to reach and avoids
+  fighting the browser chrome at the top.
+- Smooth scroll to anchors with `scroll-margin-top` so headings do not land
+  under the bar. Hidden on print. Respects `prefers-reduced-motion` for the
+  entrance.
+
+**Worth pairing with a second change.** A floating menu treats the symptom;
+the page is still seventeen sections. The section count should be reviewed
+separately, and item 1's Origin/Board consolidation and item 4's
+Sponsor/Change Maker merge would each remove one. That is a shorter page *and*
+a shorter tab bar.
+
+---
+
+### 7 — Live statistics block still looks weak
+
+- **Source:** Client — *"this section can and should look better"*
 - **Area:** Live statistics
-- **Status:** `fixed`
-
-**Problem.** Both statistics rows are pure type on the flat cream ground —
-four large figures, then three financial figures. Across two rows and seven
-figures it is a lot of unbroken text, and the section reads as a spreadsheet
-rather than as part of a designed page.
-
-**Solution.** Keep the figures dominant but introduce photography so the block
-has some texture. Options, in order of preference:
-
-1. **Preferred.** Turn the second (financial) row into a two-up: the three
-   financial figures stay as type on the left, and a single wide photograph
-   fills the right — the ₦20m cheque presentation would tie the ₦25M seed
-   fund figure to the moment it was announced.
-2. Insert a full-width photographic band between the two rows, cropped
-   shallow (roughly 21:9) so it separates them without adding much height.
-
-Either way the four headline figures stay as they are — the client already
-approved that row's colour treatment and it should not be disturbed.
-
----
-
-### 3 — "Seven Subject Areas" card still looks weak
-
-- **Source:** Client ("look at that 7 seven subjects that stuff could look
-  better")
-- **Area:** About SAEAC / bento grid
-- **Status:** `fixed`
-
-**Problem.** Round 1 closed the dead vertical gap, but the card is still the
-weakest thing on the page. The "7" sits in a small pale rounded square that
-reads as a placeholder icon, and the seven subject pills wrap awkwardly into
-5 + 2, leaving a ragged second line.
-
-**Solution.** Rebuild the card so the number and the list do the work:
-
-- Drop the pale badge. Set the "7" as a large display numeral in the brand
-  red, bled to the top-left of the card, with "Subject Areas" set beside or
-  beneath it — the figure becomes the graphic rather than sitting inside a box.
-- Replace the pill cloud with a clean numbered list (01–07), one per line,
-  rule-separated. Seven short items in a column reads far better than seven
-  pills wrapping unevenly, and it echoes the numbered stage list further down
-  the page.
-
----
-
-### 4 — Remove the star badge from the "Seven Stages" card
-
-- **Source:** Client ("remove star from seven stages")
-- **Area:** About SAEAC / bento grid
-- **Status:** `fixed`
-
-**Problem.** I put a red ★ in that card during Round 1, purely to stop it
-duplicating the "7" badge next to it. It carries no meaning and looks like
-leftover placeholder art.
-
-**Solution.** Remove the badge entirely. The heading and body carry the card;
-it does not need an icon. Same applies to any other decorative badge left in
-the bento grid.
-
----
-
-### 5 — Stage thumbnails could look better
-
-- **Source:** Client ("could those images look better?")
-- **Area:** The Road to the Finale
-- **Status:** `fixed`
-
-**Problem.** Each of the seven stage rows carries a small thumbnail — roughly
-136×76px — with its caption beneath. At that size the photographs are
-illegible: the subject cannot be read, and they end up as grey-green smudges
-in the right column. They also still use the older generic stock rather than
-the newer verified student photography.
-
-**Solution.** Two changes:
-
-- **Bigger, and a consistent shape.** Take the thumbnails to roughly
-  200×130px on desktop and give them a fixed 3:2 crop so the seven rows align
-  cleanly. Move the field label ("5 students per school") beside the
-  thumbnail rather than beneath it, so the row does not grow taller.
-- **Better source images.** Replace the remaining generic stock with frames
-  from the verified student set, chosen so each one actually depicts its
-  stage — registration, screening, qualifiers, and so on.
-
-Alternative if the client prefers a lighter treatment: drop the thumbnails
-entirely and let the numbered list stand alone. Cleaner, and consistent with
-"minimalist, fewer words" — but loses the photography he has asked for
-elsewhere. **Recommend the bigger-thumbnail option.**
-
----
-
-### 6 — Remove the header buttons; menu needs work
-
-- **Source:** Client ("remove the buttons at the top right, the menu can look
-  better")
-- **Area:** Header
-- **Status:** `fixed`
-
-**Problem.** The floating nav panel carries two buttons top-right — "Sponsor
-the Championship" and "Register Your School" — above a row of seven links.
-The panel is doing too much: two rows, two buttons, a dropdown, and a logo.
-
-Note this reverses part of the original brief, which specified both buttons
-fixed in the header. Removing them is the client's call and is recorded as
-such.
-
-**Solution.** Strip the header back to one row: logo left, links right, no
-buttons. The nav panel becomes a single slim bar, which is both calmer and
-lets the hero headline sit higher.
-
-The two calls to action do not disappear — they already exist in the hero
-action bar directly beneath ("Register Now", "Become a Partner"), plus the
-dedicated Register and Sponsor sections further down. Nothing is lost.
-
-If the client later wants a persistent CTA, the better pattern is a single
-button that appears in a sticky bar only after the hero scrolls out of view,
-rather than two competing buttons in the panel from the start.
-
----
-
-### 7 — Hero CTA buttons look wrong on mobile
-
-- **Source:** Client ("Register Now / Become a Partner — those buttons don't
-  look very good on mobile")
-- **Area:** Hero action bar
-- **Status:** `fixed`
-
-**Problem.** On a 390px viewport the two buttons sit side by side, each taking
-half the width. "Become a Partner" is too long for its half, so it wraps onto
-two lines while "Register Now" stays on one — leaving buttons of unequal
-height sitting next to each other. "Watch Promo" then sits alone on a third
-row, centred, which looks accidental.
-
-**Solution.** Stack them full-width on mobile, one per row, in priority
-order: Register Now (solid), Become a Partner (outline), Watch Promo (text
-with play icon). Equal width, equal height, no wrapping. Revert to the
-side-by-side row at the `sm` breakpoint upward where there is room.
-
-Also reduce the countdown's four units slightly on the narrowest widths so
-the action bar as a whole is less crowded.
-
----
-
-### 8 — Animate the SAEAC logo
-
-- **Source:** Client
-- **Area:** Global / brand
-- **Status:** `fixed` (Option A) — Option B still blocked on B7
-
-**Problem.** The logo is a static PNG. The client wants it animated.
-
-**Solution.** The constraint here is that we only have raster PNGs — 3264px
-artwork, no vector. A PNG cannot be animated meaningfully beyond moving the
-whole image. So there are two paths:
-
-**Option A — works with what we have, today.** Treat the logo as one object
-and animate it as a whole on page load: a brief scale-and-fade entrance, with
-the four-colour ribbon device sweeping in behind it. Modest, and it does not
-need new assets.
-
-**Option B — the better result, needs an asset.** Get the vector `.ai`/`.svg`
-from the designer (already outstanding as blocker B7). With SVG paths we can
-animate the parts: the two human figures rising into their celebration
-stance, the diamond star drawing itself, the ribbons sweeping through. That
-is the animation the brand actually implies, and it would double as the
-site's loading state.
-
-**Recommend Option A now, Option B when the vector arrives.** Flagging that
-chasing the vector logo unlocks this properly — worth pushing the designer.
-
----
-
-### 9 — Other "cool effects" for the site
-
-- **Source:** Client ("some other cool effects on the site. Ideas?")
-- **Area:** Global
-- **Status:** `fixed` — headline reveal + zoom shipped; others available on request
-
-Suggestions, ordered by impact-per-risk. All would respect
-`prefers-reduced-motion` and none would slow the page down:
-
-1. **Headline reveal.** The hero headline rises line by line on load, each
-   line masked so it appears to slide up from behind an invisible edge. This
-   is the single most effective effect available and every one of the five
-   reference templates used it.
-2. **Sticky stage list.** As the seven stages scroll, the section heading
-   pins and the active stage number highlights — turns a static list into a
-   sense of progression down the funnel.
-3. **Ribbon draw-on.** The four-colour ribbon device draws itself left to
-   right as each dark panel enters view.
-4. **Counter underline wipe.** A thin accent rule wipes in beneath each
-   statistic as its number finishes counting.
-5. **Card lift on hover.** Desktop only — cards raise slightly with a soft
-   shadow. Cheap, and makes the grid feel responsive.
-6. **Marquee sponsor strip.** The sponsor names scroll slowly and
-   continuously rather than sitting still.
-
-**Deliberately not suggesting:** parallax backgrounds, cursor followers, or
-scroll-hijacking. They read as dated, hurt mobile performance, and fight the
-"organised, simple" direction the client asked for.
-
----
-
-### 10 — Showdown section must match the RD deck's design
-
-- **Source:** Client (screenshot of RD deck pp.16–18) — "this image of the
-  Strikers is what we need, the design and the style"
-- **Area:** Grand Finale Showdown
-- **Status:** `fixed` — interim glyphs; deck artwork still wanted (B8)
-
-**Problem.** Two separate failures here.
-
-**First, the design is wrong.** The RD deck has a fully realised layout for
-these mechanics that I had not seen until now: white cards on a light ground,
-each row being `[italic display label] + [illustration] + [coloured
-description box]`, rule-separated, with the label underscored by short
-red/gold/blue accent strokes and the diagonal ribbon device in the corners.
-The description boxes are colour-coded per mechanic. My version is a dark
-navy panel with a single home-made SVG striker and four plain text columns —
-it shares almost nothing with the client's own material.
-
-**Second, and worse: three mechanics are missing entirely.** The deck defines
-**eight**, the site shows four. Missing:
-
-| Mechanic | Substance |
-|---|---|
-| Scoring | Round 3 scores accumulate with Rounds 1 and 2. Bottom 3 schools by accumulated score are eliminated; 3 schools (9 students) advance to Round 4. |
-| Draw or Tie | A penalty is held to separate tied schools. Each school sends forward one Striker to pose questions to the other teams. |
-| Scoring Panel | Scores are input by a panel of two individuals nominated by the Board of Trustees plus two persons from each competing school. |
-| Side Attraction Game | Audience members stand a chance to win prizes. |
-
-Also note the deck names it **"Assist Option"**, not "Assist", and gives the
-Assist value as 0.5 points — consistent with what the site says.
-
-**Solution.**
-
-- Add the four missing mechanics to `showdown.mechanics` in
-  `content/homepage.ts`, taking the substance from the deck. Rename "Assist"
-  to "Assist Option".
-- Rebuild the section in the deck's own idiom: light ground, rule-separated
-  rows, italic display labels with the accent underscore strokes, and
-  colour-coded description panels. This replaces the dark navy treatment.
-- Note this changes the page rhythm — the Showdown stops being the one dark
-  panel. Champions Win (Round 1, item 12) is now the image-card section, so
-  the balance still works, but check the whole scroll after the change.
-
-**On the illustrations — this needs a decision.** The deck's figures are
-footballer silhouettes, a referee, a ball, a handshake, a scoreboard, a
-crowd. I can produce these three ways:
-
-1. **Inline SVG, drawn by me.** No dependency, scales cleanly, matches brand
-   colours exactly. But eight bespoke figure illustrations is a lot of hand
-   drawing and the quality will be decent-not-great — my current single
-   striker is honestly mediocre.
-2. **Source equivalents from a free icon/illustration library** (undraw,
-   Streamline, Noun Project with attribution). Consistent quality, fast, and
-   licensing is clean. Risk is they will not match the deck's specific look.
-3. **Ask the client's designer** ("FURSIX" Emmanuel, who made the logo) to
-   export the eight illustrations from the deck as SVG or transparent PNG.
-
-**Recommend option 3 — the artwork already exists.** These illustrations are
-sitting in the source file for that deck. Asking for an export is far better
-than me approximating them, and it guarantees the site matches the deck. The
-client asked "do you need me to have an agent design it or something?" — the
-answer is that no new design work is needed, just an export of existing
-assets. Option 1 as the interim so the section is not blocked.
-
----
-
----
-
-### 11 — White House reference: motion and "feeling alive"
-
-- **Source:** Client (sends this site repeatedly; "the animation is what blows
-  his mind")
-- **Area:** Global
-- **Status:** `fixed`
-
-**What the reference actually does.** Examined the saved copy. There is no
-animation library — no GSAP, no Lenis, no scroll-jacking. The effect comes
-from three cheap ingredients:
-
-1. **Full-bleed autoplaying video**, six clips, muted / looping / playsinline,
-   each filling the viewport with a small corner caption ("SECURE THE
-   BORDER"). The motion is *footage*, not CSS.
-2. **`position: sticky`** — sections pin while the next slides over them, so
-   the page assembles rather than scrolls.
-3. **One `IntersectionObserver`** to play only the visible clip.
-
-He is responding to production value, not code. The technique is easy; the
-asset requirement is the whole problem. Their six clips total ~80MB.
-
-**What we can do with the single video we have.**
-
-- **Hero stays a still photograph** — it loads instantly, which matters most
-  on the first screen over Nigerian mobile data.
-- **The Grand Patron clip becomes one deliberate full-bleed moment** in its
-  existing section: sticky-pinned, muted, looping, corner caption in the
-  reference's manner. One video used well beats six used badly.
-- **Sticky pinning on the seven stages** — heading pins, stages slide past.
-  Pure CSS, no assets, and the closest thing to the reference's feel.
-- Corner section captions, small and tracked-out, as they use.
-
-**Blocker.** The clip is on YouTube. A YouTube iframe cannot serve as a clean
-background video — their chrome, their branding, no reliable muted autoplay.
-Need the **original MP4** from whoever shot it. See B9.
-
-**Not recommended from that reference:** the announcement ticker, and the
-email-capture modal covering a third of the screen. The modal in particular
-would hurt registrations on mobile, which is our primary medium.
-
----
-
-### 12 — Hosting / CDN for video
-
-- **Source:** Client ("can we host on Cloudflare, would that make it faster?")
-- **Area:** Infrastructure
-- **Status:** `decided — no change for now`
-
-**The question.** Would Cloudflare speed up video delivery?
-
-**Findings.** Vercel already serves static assets from a global edge cache, so
-fronting the current site with Cloudflare adds a hop rather than removing
-one. And the real constraint on Nigerian mobile is **bytes, not geography** —
-an 80MB file from a fast edge is still 80MB.
-
-Where Cloudflare would genuinely win, if we ever go to multiple clips:
-
-- **Cloudflare Stream** (~$5/mo per 1000 min stored) transcodes uploads and
-  serves HLS adaptive bitrate, so a phone on 3G gets 360p while desktop gets
-  1080p. Also keeps large binaries out of the git repo — Vercel and GitHub
-  both dislike committed video.
-- **Cloudflare R2** — zero egress fees, cheaper, but no adaptive bitrate and
-  we would compress by hand.
-
-**Decision: no Cloudflare for now.** We have exactly one video. Compress it
-(H.264, ~1.5 Mbps, 1280×720, no audio track ≈ 2–3 MB for 15s), put it in
-`public/`, let Vercel serve it. No new vendor, no monthly cost. Revisit if the
-multi-clip idea proceeds.
-
-**Non-negotiables whenever video ships:** `preload="metadata"` not `auto`; a
-real poster frame so something appears instantly; `IntersectionObserver` so
-only the visible clip plays; and **no background video on mobile** — serve the
-still image below a breakpoint and let desktop have the motion.
-
-**Worth confirming with the client:** whether infrastructure is funded or
-expected to run on free tiers. Vercel's free-tier bandwidth will not survive
-heavy video, and that is a better conversation now than after a bill.
+- **Status:** `open`
+
+**Problem.** Round 2 item 2 added the cheque photograph to this block, but the
+figures themselves were never redesigned, and they are the problem. Looking at
+it now:
+
+- **The four figures use four unrelated colours** — red, orange, green, blue.
+  Green in particular is not a brand colour at all; it appears nowhere else on
+  the site. The row reads as a chart legend rather than a designed statement.
+- **Nothing establishes hierarchy.** "7 Local Government Areas" and "10,000+
+  Student Competitors" are set at identical weight, but 10,000+ is by far the
+  most impressive number we have and should dominate.
+- **A 2×2 grid on desktop wastes the width** and leaves a large empty gap
+  between the two columns. The figures float in space with no structure
+  holding them.
+- **The financial row is a different design entirely** — navy, smaller,
+  rule-separated into three columns. Two rows in one section that share no
+  visual language.
+- **"1 Champion" is the weakest cell.** A large numeral 1 carries almost no
+  visual weight and reads as an error or a placeholder.
+
+**Solution.** Rebuild the whole block as one coherent statement rather than two
+mismatched rows.
+
+- **Discipline the colour.** Drop green entirely. Use navy as the base for the
+  figures with a *single* accent colour carrying the hero statistic. This also
+  starts to answer B6 — if the client dislikes gold, red is the alternative
+  accent and this is a good place to test that.
+- **Give 10,000+ the lead.** Promote it to a large feature figure occupying its
+  own column or spanning the top, with the remaining figures set smaller
+  beneath it. One number should dominate; the rest support.
+- **Put the numbers on a structure.** Rule-separated cells with consistent
+  gutters, so the block reads as a designed table rather than four floating
+  items. This matches the numbered-list idiom already used in the Seven Subject
+  Areas card and the stage list.
+- **Unify the two rows.** The financial figures should share the type
+  treatment of the headline figures, differing only in scale, so the section
+  reads as one block.
+- **Reconsider "1 Champion".** Either set it as words rather than a numeral, or
+  fold it into the closing line of the section. A lone "1" is not a statistic.
+- Keep the cheque photograph and keep the count-up animation, both of which
+  are working.
 
 ---
 
@@ -408,5 +331,8 @@ heavy video, and that is a better conversation now than after a bill.
 | B4 | Venue addresses per LGA + Grand Finale | Not supplied. |
 | B5 | Real registration deadline | Countdown runs to a provisional 30 Oct 2026. |
 | B6 | Gold usage site-wide | Client dislikes gold in the statistics row. Gold also carries the Register button, Champion card, Combined badges. Is the dislike general? |
-| B7 | Vector logo files (.ai/.svg) | Only raster PNGs supplied. Blocks proper logo animation (item 8) and is needed for print. |
-| B8 | RD deck illustrations | Eight figure illustrations needed as SVG/PNG export from the deck's source file — see item 10. |
+| B7 | Vector logo files (.ai/.svg) | Only raster PNGs supplied. Blocks proper logo animation and is needed for print. |
+| B8 | RD deck illustrations | Eight figure illustrations needed as SVG/PNG export from the deck's source file. |
+| B9 | Purpose-shot b-roll | Nice-to-have. No longer blocking anything now that the hero is stills rather than video (item 5). |
+| B10 | Scholars in Diaspora names and roles | Needed to caption the portraits in item 1. Faces of real people must not run un-named. |
+| B11 | Sponsor vs Change Maker | Item 4 — merge into one section, or keep corporate sponsorship addressed separately? |
