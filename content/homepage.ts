@@ -383,6 +383,51 @@ export const senator = {
   },
 } as const;
 
+
+/**
+ * Eligibility, per Content Guide §4.4, verbatim in substance.
+ *
+ * Note the guide's own school totals do not agree: §4.4 says 88 registered
+ * schools "at the time of writing", §4.5's per-LGA table totals 117 public
+ * schools, and the client's approved figure is 250+ including private
+ * schools. This page therefore states no total at all and points at the LGA
+ * pages for counts, which is the only honest option until the registration
+ * database settles it.
+ *
+ * `pending` items are the conditions §4.4 says must be confirmed with the
+ * Organising Committee before publication. They are listed as outstanding
+ * rather than invented.
+ */
+export const eligibility = {
+  intro:
+    "SAEAC is open to secondary schools across the seven Local Government Areas of the Cross River South Senatorial District. There is no entry fee.",
+  criteria: [
+    {
+      title: "Eligible schools",
+      body: "All public and private secondary schools located within the seven Local Government Areas of the Cross River South Senatorial District: Akpabuyo, Biase, Odukpani, Akamkpa, Bakassi, Calabar Municipality and Calabar South.",
+    },
+    {
+      title: "Eligible students",
+      body: "Students enrolled in the Science, Art or Commercial streams at a registered participating school, selected through the internal School-Level Screening examination.",
+    },
+    {
+      title: "Registration requirement",
+      body: "Schools must register via the official SAEAC website within the published registration window.",
+    },
+    {
+      title: "Team composition",
+      body: "Each school is represented by its five highest performers at School-Level Screening: three Strikers who answer on stage, two Assists on the bench, and a teacher or mentor acting as Coach.",
+    },
+  ],
+  pending: [
+    "Minimum enrolment size, if any",
+    "Age restrictions, if any",
+    "Documentation requirements, such as proof of enrolment",
+  ],
+  pendingNote:
+    "These conditions are with the Organising Committee for confirmation and will be published here once agreed.",
+} as const;
+
 export const lgaNote =
   "Owing to the comparatively low number of secondary schools in Akpabuyo and Bakassi, these two LGAs are merged and jointly allocated one slot at the Local Government Qualifiers stage.";
 
@@ -581,51 +626,52 @@ export const contact = {
  * destinations fit one row. Children marked `soon` are Phase 1–3 pages that
  * do not exist yet; they resolve to the nearest homepage anchor for now.
  */
+/**
+ * Primary header navigation, per Content Guide §3.1.
+ *
+ * These are real routes now, not homepage anchors. The site was a single long
+ * page until the Phase 1 split; the guide always specified seven items with
+ * four dropdowns, and that structure only works once the pages behind it
+ * exist.
+ *
+ * `soon` marks destinations that need competition data we do not have yet
+ * (results, scoreboard, gallery, hall of fame). They are deliberately absent
+ * from the nav rather than present and empty: a Results Portal showing
+ * nothing, before a single question has been asked, reads as broken. They
+ * join the nav as the competition produces them.
+ */
 export const nav = [
-  { label: "Home", href: "#top" },
-  { label: "About SAEAC", href: "#about" },
+  { label: "Home", href: "/" },
+  { label: "About SAEAC", href: "/about" },
   {
     label: "Competition",
-    href: "#overview",
+    href: "/competition",
     children: [
-      { label: "The Championship", href: "#overview" },
-      { label: "Competition Structure", href: "#stages" },
-      { label: "Fixtures & Results", href: "#stages", soon: true },
-      { label: "Leaderboard", href: "#stages", soon: true },
+      { label: "Competition Structure", href: "/competition" },
+      { label: "The Grand Finale Showdown", href: "/competition#showdown" },
+      { label: "Eligibility", href: "/eligibility" },
+      { label: "Participating LGAs", href: "/lgas" },
     ],
   },
-  { label: "Schools Registration", href: "#register" },
-  { label: "News & Media", href: "#news" },
-  { label: "Sponsors & Partners", href: "#sponsor" },
-  { label: "Contact Us", href: "#contact" },
+  { label: "Prizes", href: "/prizes" },
+  { label: "News", href: "/news" },
+  {
+    label: "Get Involved",
+    href: "/get-involved",
+    children: [
+      { label: "School Registration", href: "/register" },
+      { label: "Become a Change Maker", href: "/get-involved" },
+      { label: "Sponsors & Partners", href: "/get-involved#sponsors" },
+    ],
+  },
+  { label: "Contact", href: "/contact" },
 ] as const;
 
-/**
- * Tabs for the floating menu that appears once the hero scrolls away.
- *
- * Deliberately six, not sixteen. The page has sixteen anchors, but a tab bar
- * listing all of them is just the problem again in a smaller box. These are
- * the six destinations someone actually wants: what it is, how it works, who
- * is in it, what you win, what has happened, and how to enter.
- *
- * `short` is used on mobile where the bar is thumb-width. `core` marks the
- * four that survive below 390px, where six tabs plus the Register button
- * cannot fit without truncating; the rest are still reachable by scrolling or
- * from the footer.
- */
-export const tabs = [
-  { label: "About", short: "About", href: "#about", core: true },
-  { label: "Format", short: "Format", href: "#stages", core: true },
-  { label: "The Draw", short: "Draw", href: "#showdown", core: false },
-  { label: "The LGAs", short: "LGAs", href: "#lgas", core: false },
-  { label: "Prizes", short: "Prizes", href: "#prizes", core: true },
-  { label: "News", short: "News", href: "#news", core: true },
-] as const;
 
 /** The two primary actions, fixed in the header per the client's brief. */
 export const navCtas = {
-  primary: { label: "Register Your School", href: "#register" },
-  secondary: { label: "Sponsor the Championship", href: "#sponsor" },
+  primary: { label: "Register Your School", href: "/register" },
+  secondary: { label: "Sponsor the Championship", href: "/get-involved#sponsors" },
 } as const;
 
 /**
@@ -646,20 +692,30 @@ export const changeMaker = {
   ctaSecondary: { label: "Sponsor the Championship", href: "#sponsor" },
 } as const;
 
+/** Footer navigation, per Content Guide §3.2. */
 export const footerLinks = [
-  "About SAEAC",
-  "Competition Structure",
-  "Downloads",
-  "FAQs",
-  "Contact",
-  "Sponsors & Partners",
+  { label: "About SAEAC", href: "/about" },
+  { label: "Competition Structure", href: "/competition" },
+  { label: "Eligibility", href: "/eligibility" },
+  { label: "Participating LGAs", href: "/lgas" },
+  { label: "Prizes", href: "/prizes" },
+  { label: "FAQs", href: "/faq" },
+  { label: "Contact", href: "/contact" },
+  { label: "Sponsors & Partners", href: "/get-involved#sponsors" },
 ] as const;
 
+/**
+ * Portal quick links (§3.2). The guide recommends one unified login gateway
+ * with role-based redirection rather than four separate login pages (§2.2),
+ * so these all point at the same route and it works out where to send you.
+ * Phase 2 builds it; until then the route does not exist and these are
+ * marked pending.
+ */
 export const portalLinks = [
-  "School Login",
-  "Volunteer Login",
-  "Judge Login",
-  "Admin Login",
+  { label: "School Login", href: "/login", soon: true },
+  { label: "Volunteer Login", href: "/login", soon: true },
+  { label: "Judge Login", href: "/login", soon: true },
+  { label: "Admin Login", href: "/login", soon: true },
 ] as const;
 
 /** Variant registry — powers the comparison index and the variant switcher. */

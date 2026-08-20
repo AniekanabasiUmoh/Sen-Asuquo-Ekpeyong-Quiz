@@ -19,9 +19,12 @@ import { useEffect, useState } from "react";
 export function AnimatedLogo({
   width = 110,
   className = "",
+  variant = "white",
 }: {
   width?: number;
   className?: string;
+  /** White lockup over photography, blue over the cream page ground. */
+  variant?: "white" | "blue";
 }) {
   const [shown, setShown] = useState(false);
 
@@ -36,7 +39,7 @@ export function AnimatedLogo({
 
   return (
     <a
-      href="#top"
+      href="/"
       aria-label="SAEAC, home"
       className={`group relative flex shrink-0 items-center ${className}`}
     >
@@ -50,7 +53,7 @@ export function AnimatedLogo({
         }}
       >
         <Image
-          src="/brand/saeac-logo-white-560.png"
+          src={`/brand/saeac-logo-${variant}-560.png`}
           alt="SAEAC, Senator Asuquo Ekpenyong Academic Championship"
           width={width}
           height={Math.round((width * 398) / 560)}

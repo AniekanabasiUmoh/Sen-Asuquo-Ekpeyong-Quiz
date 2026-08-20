@@ -479,9 +479,9 @@ export default function VariantB() {
               <p className="text-[9px] uppercase tracking-[0.22em] text-white/25">Explore</p>
               <ul className="mt-5 space-y-3 text-[13px]">
                 {footerLinks.map((l) => (
-                  <li key={l}>
+                  <li key={l.label}>
                     <a href="#" className="text-white/50 transition hover:text-white">
-                      {l}
+                      {l.label}
                     </a>
                   </li>
                 ))}
@@ -491,9 +491,9 @@ export default function VariantB() {
               <p className="text-[9px] uppercase tracking-[0.22em] text-white/25">Portals</p>
               <ul className="mt-5 space-y-3 text-[13px]">
                 {portalLinks.map((l) => (
-                  <li key={l}>
+                  <li key={l.label}>
                     <a href="#" className="text-white/50 transition hover:text-white">
-                      {l}
+                      {l.label}
                     </a>
                   </li>
                 ))}

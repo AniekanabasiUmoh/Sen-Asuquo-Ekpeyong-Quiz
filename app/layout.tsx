@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { SiteShell } from "@/components/site-shell";
 
 export const metadata: Metadata = {
   title: {
@@ -30,7 +31,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en-NG" className="h-full antialiased">
-      <body className="flex min-h-full flex-col">{children}</body>
+      <body className="flex min-h-full flex-col bg-[#faf6ee] text-[#003090]">
+        <SiteShell>{children}</SiteShell>
+      </body>
     </html>
   );
 }

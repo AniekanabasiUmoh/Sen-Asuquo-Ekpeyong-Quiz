@@ -621,9 +621,9 @@ export default function VariantC() {
             </p>
             <ul className="mt-5 space-y-3 text-[13px]">
               {footerLinks.map((l) => (
-                <li key={l}>
+                <li key={l.label}>
                   <a href="#" className="text-[#1e2b23]/60 transition hover:text-[#1e2b23]">
-                    {l}
+                    {l.label}
                   </a>
                 </li>
               ))}
@@ -635,9 +635,9 @@ export default function VariantC() {
             </p>
             <ul className="mt-5 space-y-3 text-[13px]">
               {portalLinks.map((l) => (
-                <li key={l}>
+                <li key={l.label}>
                   <a href="#" className="text-[#1e2b23]/60 transition hover:text-[#1e2b23]">
-                    {l}
+                    {l.label}
                   </a>
                 </li>
               ))}

@@ -68,7 +68,7 @@ export function HeroSlideshow() {
             fill
             priority={i === 0}
             sizes="100vw"
-            className="-z-10 object-cover transition-opacity duration-[1400ms] ease-in-out motion-reduce:transition-none"
+            className="-z-10 object-cover brightness-[1.06] transition-opacity duration-[1400ms] ease-in-out motion-reduce:transition-none"
             style={{ objectPosition: im.position, opacity: i === index ? 1 : 0 }}
           />
         );
