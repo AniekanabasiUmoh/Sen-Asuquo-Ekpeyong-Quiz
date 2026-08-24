@@ -22,21 +22,25 @@ export const metadata: Metadata = {
  * around these dates and a silently amended time is worse than a late one.
  */
 export default async function SchedulePage() {
+  // Null when Supabase is not configured; the page renders its "schedule is
+  // being finalised" state rather than failing the build. See
+  // createPublicClient().
   const supabase = createPublicClient();
 
-  const [{ data: fixtures }, { data: stages }, { data: venues }, { data: changes }] =
-    await Promise.all([
-      supabase
-        .from("fixtures")
-        .select("id, name, stage_id, venue_id, scheduled_at, qualifier_group")
-        .order("scheduled_at", { ascending: true, nullsFirst: false }),
-      supabase.from("stages").select("*").order("ordinal"),
-      supabase.from("venues").select("id, name, address"),
-      supabase
-        .from("fixture_changes")
-        .select("fixture_id, field, new_value, reason, created_at")
-        .order("created_at", { ascending: false }),
-    ]);
+  const [{ data: fixtures }, { data: stages }, { data: venues }, { data: changes }] = supabase
+    ? await Promise.all([
+        supabase
+          .from("fixtures")
+          .select("id, name, stage_id, venue_id, scheduled_at, qualifier_group")
+          .order("scheduled_at", { ascending: true, nullsFirst: false }),
+        supabase.from("stages").select("*").order("ordinal"),
+        supabase.from("venues").select("id, name, address"),
+        supabase
+          .from("fixture_changes")
+          .select("fixture_id, field, new_value, reason, created_at")
+          .order("created_at", { ascending: false }),
+      ])
+    : [{ data: null }, { data: null }, { data: null }, { data: null }];
 
   const rows = fixtures ?? [];
   const stageName = new Map((stages ?? []).map((s) => [s.id, s.name]));

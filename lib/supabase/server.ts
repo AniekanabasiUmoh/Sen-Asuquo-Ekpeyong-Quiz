@@ -80,14 +80,30 @@ export function createAdminClient() {
  *
  * Never use this where the answer should depend on who is signed in: with no
  * session it is always the anonymous view.
+ *
+ * Returns null rather than throwing when the environment is not configured.
+ * Three public pages (/get-involved, /hall-of-fame, /schedule) are statically
+ * prerendered at build time, and createServerClient() throws on a missing URL
+ * or key — so an unconfigured environment took down the whole build rather
+ * than the one dropdown or list that needed the data. A marketing page whose
+ * only Supabase content is a list should render without it, not fail to
+ * deploy. Callers handle null by rendering their empty state; see
+ * app/get-involved/page.tsx for the pattern.
  */
 export function createPublicClient() {
-  return createServerClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: { getAll: () => [], setAll: () => {} },
-      auth: { persistSession: false, autoRefreshToken: false },
-    },
-  );
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!url || !key) {
+    console.warn(
+      "[supabase] NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY is not set. " +
+        "Public pages will render without their Supabase-backed content.",
+    );
+    return null;
+  }
+
+  return createServerClient<Database>(url, key, {
+    cookies: { getAll: () => [], setAll: () => {} },
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
 }

@@ -30,15 +30,18 @@ const KIND_LABEL: Record<string, string> = {
  * editions rather than a page that is overwritten each year.
  */
 export default async function HallOfFamePage() {
+  // Null when Supabase is not configured; the page renders its empty state
+  // rather than failing the build. See createPublicClient().
   const supabase = createPublicClient();
 
-  const [{ data: seasons }, { data: awards }, { data: schools }, { data: legacy }] =
-    await Promise.all([
-      supabase.from("seasons").select("*").order("year", { ascending: false }),
-      supabase.from("awards").select("*"),
-      supabase.from("schools").select("id, name"),
-      supabase.from("legacy_projects").select("*"),
-    ]);
+  const [{ data: seasons }, { data: awards }, { data: schools }, { data: legacy }] = supabase
+    ? await Promise.all([
+        supabase.from("seasons").select("*").order("year", { ascending: false }),
+        supabase.from("awards").select("*"),
+        supabase.from("schools").select("id, name"),
+        supabase.from("legacy_projects").select("*"),
+      ])
+    : [{ data: null }, { data: null }, { data: null }, { data: null }];
 
   const schoolName = new Map((schools ?? []).map((s) => [s.id, s.name]));
   const bySeason = new Map<string, typeof awards>();

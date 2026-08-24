@@ -18,7 +18,12 @@ import { createPublicClient } from "@/lib/supabase/server";
  * registration count an hour stale costs nothing.
  */
 export async function LiveCounts() {
+  // Null when Supabase is not configured. This block already renders nothing
+  // when there are no approved schools, so an unconfigured environment simply
+  // takes the same path rather than failing the homepage build.
   const supabase = createPublicClient();
+  if (!supabase) return null;
+
   const { data } = await supabase.rpc("public_counts");
   const counts = data?.[0];
 

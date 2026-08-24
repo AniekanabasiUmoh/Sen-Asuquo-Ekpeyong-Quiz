@@ -30,12 +30,17 @@ export default async function OverlayPage({
 }) {
   const { id } = await params;
   const { top } = await searchParams;
+  // Null when Supabase is not configured. Falling through to notFound() is
+  // right here: an OBS browser source pointing at an overlay that cannot load
+  // its scores should 404 loudly, not render empty chrome over the broadcast.
   const supabase = createPublicClient();
 
-  const [{ data: match }, { data: rows }] = await Promise.all([
-    supabase.from("matches").select("id, name").eq("id", id).maybeSingle(),
-    supabase.rpc("live_scoreboard", { target_match: id }),
-  ]);
+  const [{ data: match }, { data: rows }] = supabase
+    ? await Promise.all([
+        supabase.from("matches").select("id, name").eq("id", id).maybeSingle(),
+        supabase.rpc("live_scoreboard", { target_match: id }),
+      ])
+    : [{ data: null }, { data: null }];
 
   if (!match) notFound();
 

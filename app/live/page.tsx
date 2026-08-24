@@ -24,15 +24,19 @@ export const metadata: Metadata = {
 };
 
 export default async function LiveIndexPage() {
+  // Null when Supabase is not configured; the page renders its "nothing is
+  // live" state rather than erroring. See createPublicClient().
   const supabase = createPublicClient();
 
-  const [{ data: matches }, { data: broadcasts }] = await Promise.all([
-    supabase
-      .from("matches")
-      .select("id, name, status, publish")
-      .order("created_at", { ascending: false }),
-    supabase.from("broadcasts").select("*").order("starts_at", { ascending: true }),
-  ]);
+  const [{ data: matches }, { data: broadcasts }] = supabase
+    ? await Promise.all([
+        supabase
+          .from("matches")
+          .select("id, name, status, publish")
+          .order("created_at", { ascending: false }),
+        supabase.from("broadcasts").select("*").order("starts_at", { ascending: true }),
+      ])
+    : [{ data: null }, { data: null }];
 
   const rows = matches ?? [];
   const liveNow = rows.filter((m) => m.status === "live");

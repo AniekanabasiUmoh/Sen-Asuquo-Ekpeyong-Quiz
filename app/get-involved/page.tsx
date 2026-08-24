@@ -13,8 +13,12 @@ export const metadata: Metadata = {
 
 /** Get Involved, per Content Guide §3.1 and §4.17. */
 export default async function GetInvolvedPage() {
+  // Null when Supabase is not configured: the LGA dropdown loses its options
+  // but the page still builds and renders. See createPublicClient().
   const supabase = createPublicClient();
-  const { data: lgas } = await supabase.from("lgas").select("id, name").order("sort_order");
+  const { data: lgas } = supabase
+    ? await supabase.from("lgas").select("id, name").order("sort_order")
+    : { data: null };
 
   return (
     <>

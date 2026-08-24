@@ -26,18 +26,21 @@ export default async function ResultsPage({
   searchParams: Promise<{ q?: string; stage?: string }>;
 }) {
   const { q, stage } = await searchParams;
+  // Null when Supabase is not configured; the page renders its empty state
+  // rather than erroring. See createPublicClient().
   const supabase = createPublicClient();
 
-  const [{ data: results }, { data: stages }, { data: fixtures }, { data: schools }] =
-    await Promise.all([
-      supabase
-        .from("results")
-        .select("id, fixture_id, school_id, score, position, advanced, published_at")
-        .order("position"),
-      supabase.from("stages").select("*").order("ordinal"),
-      supabase.from("fixtures").select("id, name, stage_id"),
-      supabase.from("schools").select("id, name, lga_id"),
-    ]);
+  const [{ data: results }, { data: stages }, { data: fixtures }, { data: schools }] = supabase
+    ? await Promise.all([
+        supabase
+          .from("results")
+          .select("id, fixture_id, school_id, score, position, advanced, published_at")
+          .order("position"),
+        supabase.from("stages").select("*").order("ordinal"),
+        supabase.from("fixtures").select("id, name, stage_id"),
+        supabase.from("schools").select("id, name, lga_id"),
+      ])
+    : [{ data: null }, { data: null }, { data: null }, { data: null }];
 
   const schoolName = new Map((schools ?? []).map((s) => [s.id, s.name]));
   const fixture = new Map((fixtures ?? []).map((f) => [f.id, f]));
