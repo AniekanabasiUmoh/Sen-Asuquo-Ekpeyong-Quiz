@@ -12,11 +12,11 @@ export const metadata: Metadata = {
 /**
  * Participating LGAs, per Content Guide §4.5.
  *
- * The guide asks for a dedicated page per LGA carrying registered schools,
- * venue, schedule, results and gallery. Four of those five need competition
- * data that does not exist yet, so the individual pages wait for Phase 2/3
- * rather than shipping as four empty panels each. This index is the landing
- * view; the per-LGA pages follow once there is something to put on them.
+ * This is the landing view; each tile links through to /lgas/[slug]. Those
+ * pages lead with the area itself — geography, headquarters, its place in the
+ * qualifying structure — and carry live panels for registered schools,
+ * fixtures and results that fill in as the competition runs, each stating
+ * plainly when it has nothing yet rather than rendering an empty box.
  */
 export default function LgasPage() {
   return (

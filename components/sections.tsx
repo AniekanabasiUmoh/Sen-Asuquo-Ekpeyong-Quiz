@@ -4,6 +4,7 @@ import { DiagonalRibbon } from "@/components/brand";
 import { VideoHero } from "@/components/video-hero";
 import { CountUp, Reveal } from "@/components/reveal";
 import { MechanicGlyph } from "@/components/striker";
+import { lgaSlug } from "@/content/lgas";
 import { Carousel } from "@/components/carousel";
 import { FannedCards } from "@/components/fanned-cards";
 import { ZoomImage } from "@/components/zoom-image";
@@ -450,8 +451,10 @@ export function LgasSection() {
       {/* Photo tiles — each LGA gets a face, not just a row in a table */}
       <div className="mt-10 grid grid-cols-2 gap-3 lg:grid-cols-4">
         {lgas.map((l) => (
-          <div
+          <Link
             key={l.name}
+            href={`/lgas/${lgaSlug(l.name)}`}
+            aria-label={`${l.name} Local Government Area`}
             className="group relative aspect-[4/5] overflow-hidden rounded-2xl"
           >
             <ZoomImage
@@ -471,8 +474,11 @@ export function LgasSection() {
                 {l.name}
               </h3>
               <p className="mt-1 text-[13px] text-white/70">{l.schools} schools</p>
+              <span className="mt-2 inline-block text-[12px] font-bold text-gold opacity-0 transition group-hover:opacity-100 group-focus-visible:opacity-100">
+                View LGA →
+              </span>
             </div>
-          </div>
+          </Link>
         ))}
 
         {/* Eighth tile completes the 4-up grid and carries the total */}

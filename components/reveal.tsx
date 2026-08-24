@@ -54,7 +54,32 @@ export function Reveal({
     );
 
     io.observe(el);
-    return () => io.disconnect();
+
+    // The -18% bottom margin shrinks the observer's viewport, which creates a
+    // dead zone on a SHORT page: an element sitting in the last 18% of a
+    // document that cannot scroll any further never intersects, so it would
+    // stay at opacity 0 permanently — invisible content, not a missed
+    // animation. Caught on the per-LGA pages, where the closing sections did
+    // exactly that. A second observer with no margin is the backstop: if the
+    // element is genuinely on screen, it reveals regardless.
+    const fallback = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            setShown(true);
+            fallback.disconnect();
+            io.disconnect();
+          }
+        }
+      },
+      { threshold: 0 },
+    );
+    fallback.observe(el);
+
+    return () => {
+      io.disconnect();
+      fallback.disconnect();
+    };
   }, []);
 
   return (

@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 
+import { lgaContent } from "@/content/lgas";
+
 const BASE = "https://www.saeac.org";
 
 /**
@@ -45,7 +47,15 @@ const pages: Entry[] = [
 export default function sitemap(): MetadataRoute.Sitemap {
   const lastModified = new Date();
 
-  return pages.map(({ path, priority, changeFrequency }) => ({
+  // The seven per-LGA pages, derived from the content so a new LGA cannot be
+  // added to the site and forgotten here.
+  const lgaPages: Entry[] = lgaContent.map((l) => ({
+    path: `lgas/${l.slug}`,
+    priority: 0.6,
+    changeFrequency: "monthly",
+  }));
+
+  return [...pages, ...lgaPages].map(({ path, priority, changeFrequency }) => ({
     url: path ? `${BASE}/${path}` : BASE,
     lastModified,
     changeFrequency,
