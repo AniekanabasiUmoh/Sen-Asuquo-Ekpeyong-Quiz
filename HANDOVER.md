@@ -21,7 +21,7 @@ admin tools, and the live match/scoreboard experience.
 | What | Where | Notes |
 |---|---|---|
 | Supabase project | `lmohoeikidbsiioabmsz`, region `eu-west-1` | Dashboard login needed for: personal access tokens (`supabase link`), physical backups/PITR, and anything under Project Settings. The service-role key alone does **not** grant this — it authenticates to the *data* API, not the *management* API. |
-| Vercel | Project deploy target | Connect the GitHub repo; env vars below must be set there too, Vercel does not read `.env.local`. |
+| Vercel | Project `sen-asuquo-ekpeyong-quiz`, live at senatorquiz.vercel.app | Env vars below **must** be set in Vercel — it does not read `.env.local`. `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY` are set for Production and Development; **Preview is still unset**, so preview deployments will run without a session refresh until someone adds them. |
 | Resend | Transactional email | **Key supplied and verified working** (root `.env`, `RESEND_KEY`; send-only restricted key). Still blocked: `saeac.org` is not a verified sender domain, and the key must be set as a Supabase Edge Function secret. See "Email" below. |
 | Domain (saeac.org) | Registrar | **Blocking email.** Resend returns 403 for `saeac.org` until the domain is added at resend.com/domains and its SPF/DKIM records are published. Also needed to serve the site at the real domain. |
 
