@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Countdown } from "@/components/countdown";
+import { LiveCounts } from "@/components/live-counts";
 import { HeadlineReveal } from "@/components/headline-reveal";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { Reveal } from "@/components/reveal";
@@ -121,6 +122,7 @@ export default function HomePage() {
       </section>
 
       <NumbersSection />
+      <LiveCounts />
 
       <Teaser
         eyebrow="About SAEAC"

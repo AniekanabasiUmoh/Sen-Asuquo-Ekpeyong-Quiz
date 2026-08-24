@@ -30,8 +30,16 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files. NEVER commit these: they carry the Supabase service-role key,
+# which bypasses Row Level Security entirely. .env.example is the one
+# exception, and it holds names only, never values.
+.env
+.env.*
+!.env.example
+
+# Supabase CLI local state
+.branches
+.temp
 
 # vercel
 .vercel

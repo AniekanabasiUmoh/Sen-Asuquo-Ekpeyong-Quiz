@@ -13,15 +13,10 @@ export const metadata: Metadata = {
 /**
  * School Registration, per Content Guide §4.6.
  *
- * The real five-step wizard (school details, LGA and streams, contact person,
- * review, confirmation) needs accounts, file upload and an approval queue,
- * which is Phase 2 sprint 2.2. Until then this page does the honest thing: it
- * sets out the five steps so a principal knows what will be asked, shows the
- * deadline, and gives a route that works today, which is emailing the
- * committee.
- *
- * It exists now because the header CTA points here on every page, and a
- * primary call to action that 404s is worse than one that explains itself.
+ * The public explainer. It sets out what will be asked before a principal
+ * commits to creating an account, then hands off to the live wizard at
+ * /portal/school/register (Phase 2 sprint 2.2), which saves progress to the
+ * database on every step.
  */
 const steps = [
   {
@@ -102,20 +97,30 @@ export default function RegisterPage() {
 
               <div className="mt-8 border-t border-white/15 pt-7">
                 <h3 className="font-display text-lg font-bold">
-                  The online portal opens shortly
+                  Register your school online
                 </h3>
                 <p className="mt-2.5 text-[14px] leading-relaxed text-white/65">
-                  Registration is being finalised with the Organising Committee. To
-                  register your school now, or to be told the moment the portal opens,
-                  email the committee directly.
+                  Create an account, then complete the form. Your answers are saved
+                  as you go, so you can stop and come back to it at any point before
+                  submitting.
                 </p>
-                <a
-                  href={`mailto:${contact.email}?subject=SAEAC%20School%20Registration`}
+                <Link
+                  href="/signup"
                   className="mt-6 block rounded-full bg-[#f0a800] px-6 py-3.5 text-center text-[13px] font-bold text-[#003090] transition hover:bg-white"
                 >
-                  Email the Committee
-                </a>
+                  Create an account
+                </Link>
                 <p className="mt-4 text-center text-[13px] text-white/45">
+                  Already registered?{" "}
+                  <Link href="/login" className="font-semibold text-white/75 underline-offset-4 hover:underline">
+                    Sign in
+                  </Link>
+                </p>
+                <p className="mt-5 border-t border-white/10 pt-5 text-center text-[13px] text-white/45">
+                  Need help? Email{" "}
+                  <a href={`mailto:${contact.email}`} className="font-semibold text-white/75">
+                    {contact.email}
+                  </a>{" "}
                   or call{" "}
                   <a href={`tel:${contact.phone}`} className="font-semibold text-white/75">
                     {contact.phone}

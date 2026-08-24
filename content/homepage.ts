@@ -651,6 +651,10 @@ export const nav = [
       { label: "The Grand Finale Showdown", href: "/competition#showdown" },
       { label: "Eligibility", href: "/eligibility" },
       { label: "Participating LGAs", href: "/lgas" },
+      { label: "Schedule", href: "/schedule" },
+      { label: "Results", href: "/results" },
+      { label: "Live", href: "/live" },
+      { label: "Hall of Fame", href: "/hall-of-fame" },
     ],
   },
   { label: "Prizes", href: "/prizes" },
@@ -702,20 +706,22 @@ export const footerLinks = [
   { label: "FAQs", href: "/faq" },
   { label: "Contact", href: "/contact" },
   { label: "Sponsors & Partners", href: "/get-involved#sponsors" },
+  { label: "Privacy & Data Protection", href: "/privacy" },
+  { label: "Copyright & Terms", href: "/copyright" },
 ] as const;
 
 /**
  * Portal quick links (§3.2). The guide recommends one unified login gateway
  * with role-based redirection rather than four separate login pages (§2.2),
  * so these all point at the same route and it works out where to send you.
- * Phase 2 builds it; until then the route does not exist and these are
- * marked pending.
+ * Built in Phase 2: /login is live, and landingPathFor() decides where each
+ * role lands after signing in.
  */
 export const portalLinks = [
-  { label: "School Login", href: "/login", soon: true },
-  { label: "Volunteer Login", href: "/login", soon: true },
-  { label: "Judge Login", href: "/login", soon: true },
-  { label: "Admin Login", href: "/login", soon: true },
+  { label: "School Login", href: "/login" },
+  { label: "Change Maker Login", href: "/login" },
+  { label: "Judge Login", href: "/login" },
+  { label: "Admin Login", href: "/login" },
 ] as const;
 
 /** Variant registry — powers the comparison index and the variant switcher. */
