@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { getSessionUser, requireRole, requireUser, writeAudit } from "@/lib/auth";
+import { requireRole, requireUser, writeAudit } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 /**

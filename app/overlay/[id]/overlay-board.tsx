@@ -73,7 +73,7 @@ export function OverlayBoard({
         {shown.map((r) => (
           <li
             key={r.school_id}
-            className="flex items-center gap-6 rounded-2xl bg-[#003090]/95 px-8 py-5 text-white shadow-2xl"
+            className="flex items-center gap-6 rounded-2xl bg-primary/95 px-8 py-5 text-white shadow-2xl"
           >
             <span className="font-mono text-2xl font-bold tabular-nums text-white/40">
               {String(r.rank).padStart(2, "0")}
@@ -81,7 +81,7 @@ export function OverlayBoard({
             <span className="flex-1 truncate font-display text-3xl font-extrabold tracking-[-0.01em]">
               {r.school_name}
             </span>
-            <span className="font-display text-4xl font-extrabold tabular-nums text-[#f0a800]">
+            <span className="font-display text-4xl font-extrabold tabular-nums text-gold">
               {Number(r.score).toFixed(1)}
             </span>
           </li>

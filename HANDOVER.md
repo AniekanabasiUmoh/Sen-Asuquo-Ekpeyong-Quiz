@@ -22,8 +22,8 @@ admin tools, and the live match/scoreboard experience.
 |---|---|---|
 | Supabase project | `lmohoeikidbsiioabmsz`, region `eu-west-1` | Dashboard login needed for: personal access tokens (`supabase link`), physical backups/PITR, and anything under Project Settings. The service-role key alone does **not** grant this — it authenticates to the *data* API, not the *management* API. |
 | Vercel | Project deploy target | Connect the GitHub repo; env vars below must be set there too, Vercel does not read `.env.local`. |
-| Resend | Transactional email | **Not yet set up.** See "Email" below — the code is finished and waiting, only the account and key are missing. |
-| Domain (saeac.org) | Registrar | Needed for Resend's SPF/DKIM verification before real email delivery works, and for the site itself once ready to go live at the real domain. |
+| Resend | Transactional email | **Key supplied and verified working** (root `.env`, `RESEND_KEY`; send-only restricted key). Still blocked: `saeac.org` is not a verified sender domain, and the key must be set as a Supabase Edge Function secret. See "Email" below. |
+| Domain (saeac.org) | Registrar | **Blocking email.** Resend returns 403 for `saeac.org` until the domain is added at resend.com/domains and its SPF/DKIM records are published. Also needed to serve the site at the real domain. |
 
 ## Environment variables
 
@@ -71,25 +71,42 @@ Next.js layer. Every table has RLS enabled *and forced* — check
 `supabase/migrations/20260823000200_rls.sql` onward for the pattern before
 adding a new table without it.
 
-## Email (not yet live)
+## Email — key supplied, blocked on domain verification
 
 Registration confirmations and schedule-change notices are fully coded —
-templates, an Edge Function, and every call site — but nothing sends yet,
-because there is no Resend account or API key. This was a deliberate,
-explicitly-flagged gap, not an oversight.
+templates, an Edge Function, and every call site. A Resend API key now exists
+(workspace-root `.env`, as `RESEND_KEY`). It has been tested directly against
+the Resend API and **the key itself works**: it is a send-only restricted key,
+which is the right least-privilege choice, and a test send through Resend's
+own verified domain returned 200.
 
-To activate:
+**Two things still stand between that and a school receiving an email:**
+
+1. **`saeac.org` is not a verified sender domain.** Sending from
+   `registrations@saeac.org` today returns:
+   `403 — The saeac.org domain is not verified.` Add the domain at
+   <https://resend.com/domains> and publish the SPF/DKIM records it issues at
+   the registrar. Until that is done, nothing sends no matter what else is
+   configured. (To test before the DNS propagates, temporarily set the from
+   address to `onboarding@resend.dev`, which is verified by Resend.)
+2. **The key must be set as a Supabase Edge Function secret and the function
+   deployed.** It is not read from `.env` — the function runs on Supabase, not
+   in the Next.js process. This needs a Supabase CLI login this build did not
+   have (see the personal-access-token note above).
 
 ```bash
 cd calabar-quiz-demo
-npx supabase secrets set RESEND_API_KEY=re_xxxxxxxx
+npx supabase secrets set RESEND_API_KEY=re_xxxxxxxx      # value from root .env
 npx supabase secrets set RESEND_FROM_ADDRESS="SAEAC <registrations@saeac.org>"
 npx supabase functions deploy send-email
 ```
 
+Until both steps are done the function keeps its current safe behaviour: it
+logs what it would have sent and returns `{ ok: true, skipped: true }`, so
+approving a school still succeeds and nothing in the app breaks.
+
 See [`supabase/functions/send-email/index.ts`](supabase/functions/send-email/index.ts)
-for the full explanation, including the DNS (SPF/DKIM) step Resend requires
-before it will deliver from `saeac.org`.
+for the full explanation.
 
 ## Event-day operations
 

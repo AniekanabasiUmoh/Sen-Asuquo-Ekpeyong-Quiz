@@ -44,13 +44,13 @@ export function Teaser({
         }`}
       >
         <Reveal className={reverse ? "lg:order-2" : ""}>
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#003090]/35">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/35">
             {eyebrow}
           </p>
           <h2 className="mt-4 font-display text-[clamp(1.85rem,3.8vw,2.85rem)] font-extrabold leading-[1.04] tracking-[-0.025em]">
-            {title} {titleTrail && <span className="text-[#003090]/35">{titleTrail}</span>}
+            {title} {titleTrail && <span className="text-primary/35">{titleTrail}</span>}
           </h2>
-          <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-[#003090]/55">
+          <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-primary/55">
             {body}
           </p>
 
@@ -61,7 +61,7 @@ export function Teaser({
                   <div className="font-display text-2xl font-extrabold tracking-[-0.02em]">
                     {f.value}
                   </div>
-                  <div className="mt-0.5 text-[12px] text-[#003090]/45">{f.label}</div>
+                  <div className="mt-0.5 text-[12px] text-primary/45">{f.label}</div>
                 </div>
               ))}
             </div>
@@ -69,7 +69,7 @@ export function Teaser({
 
           <Link
             href={href}
-            className="mt-8 inline-flex items-center gap-2 rounded-full border border-black/15 px-6 py-3 text-[13px] font-semibold transition hover:border-[#f03018] hover:text-[#f03018]"
+            className="mt-8 inline-flex items-center gap-2 rounded-full border border-black/15 px-6 py-3 text-[13px] font-semibold transition hover:border-red hover:text-red"
           >
             {cta}
             <span aria-hidden="true">→</span>

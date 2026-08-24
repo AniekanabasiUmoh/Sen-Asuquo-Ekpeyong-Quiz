@@ -18,13 +18,13 @@ export default async function SignUpPage() {
 
   return (
     <>
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#003090]/50">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary/50">
         SAEAC Portal
       </p>
       <h1 className="mt-3 font-display text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">
         Create an account
       </h1>
-      <p className="mt-3 text-[15px] leading-relaxed text-[#003090]/60">
+      <p className="mt-3 text-[15px] leading-relaxed text-primary/60">
         One account per school. You will complete the registration form after
         signing in, and you can save it and return to it at any point.
       </p>

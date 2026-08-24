@@ -11,9 +11,11 @@
  * are not the real illustrations.
  */
 
-const NAVY = "#003090";
-const RED = "#f03018";
-const GOLD = "#f0a800";
+// Resolved from the theme tokens in globals.css so the glyphs cannot drift
+// from the rest of the system. SVG fill/stroke accept var() directly.
+const NAVY = "var(--color-primary)";
+const RED = "var(--color-red)";
+const GOLD = "var(--color-gold)";
 
 /** A single striker silhouette, mid-strike. Shared by several glyphs. */
 function StrikerFigure({

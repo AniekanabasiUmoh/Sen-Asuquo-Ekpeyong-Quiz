@@ -4,7 +4,6 @@ import { useActionState } from "react";
 
 import {
   FormError,
-  FormNotice,
   Input,
   Select,
   SubmitButton,
@@ -28,7 +27,7 @@ export function VolunteerForm({ lgas }: { lgas: { id: string; name: string }[] }
     return (
       <div className="rounded-[28px] bg-white p-8 sm:p-9">
         <h3 className="font-display text-xl font-bold">Thank you</h3>
-        <p className="mt-3 text-[15px] leading-relaxed text-[#003090]/65">
+        <p className="mt-3 text-[15px] leading-relaxed text-primary/65">
           {state.notice}
         </p>
       </div>
@@ -38,7 +37,7 @@ export function VolunteerForm({ lgas }: { lgas: { id: string; name: string }[] }
   return (
     <form action={action} className="rounded-[28px] bg-white p-8 sm:p-9">
       <h3 className="font-display text-xl font-bold">Volunteer with us</h3>
-      <p className="mt-2 text-[14px] leading-relaxed text-[#003090]/55">
+      <p className="mt-2 text-[14px] leading-relaxed text-primary/55">
         Change Makers steward the LGA qualifiers and the Grand Finale. Tell us
         where you are and how you would like to help.
       </p>

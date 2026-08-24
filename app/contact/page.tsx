@@ -37,13 +37,13 @@ export default function ContactPage() {
 
             <dl className="mt-8 space-y-7">
               <div className="border-t border-black/10 pt-5">
-                <dt className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#003090]/35">
+                <dt className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary/35">
                   Email
                 </dt>
                 <dd className="mt-2">
                   <a
                     href={`mailto:${contact.email}`}
-                    className="break-all font-display text-lg font-bold transition hover:text-[#f03018]"
+                    className="break-all font-display text-lg font-bold transition hover:text-red"
                   >
                     {contact.email}
                   </a>
@@ -51,13 +51,13 @@ export default function ContactPage() {
               </div>
 
               <div className="border-t border-black/10 pt-5">
-                <dt className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#003090]/35">
+                <dt className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary/35">
                   Phone
                 </dt>
                 <dd className="mt-2">
                   <a
                     href={`tel:${contact.phone}`}
-                    className="font-display text-lg font-bold transition hover:text-[#f03018]"
+                    className="font-display text-lg font-bold transition hover:text-red"
                   >
                     {contact.phone}
                   </a>
@@ -65,7 +65,7 @@ export default function ContactPage() {
               </div>
 
               <div className="border-t border-black/10 pt-5">
-                <dt className="text-[10px] font-bold uppercase tracking-[0.18em] text-[#003090]/35">
+                <dt className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary/35">
                   Follow the championship
                 </dt>
                 <dd className="mt-3 flex flex-wrap gap-2.5">
@@ -76,7 +76,7 @@ export default function ContactPage() {
                       aria-label={s.name}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex h-10 w-10 items-center justify-center rounded-full border border-black/12 text-[#003090]/55 transition hover:border-[#f03018] hover:text-[#f03018]"
+                      className="flex h-10 w-10 items-center justify-center rounded-full border border-black/12 text-primary/55 transition hover:border-red hover:text-red"
                     >
                       <SocialIcon name={s.name} />
                     </a>
@@ -86,7 +86,7 @@ export default function ContactPage() {
             </dl>
           </Reveal>
 
-          <Reveal delay={120} className="rounded-[28px] bg-[#003090] p-8 text-white sm:p-10">
+          <Reveal delay={120} className="rounded-[28px] bg-primary p-8 text-white sm:p-10">
             <h2 className="font-display text-2xl font-extrabold tracking-[-0.02em]">
               Registering a school?
             </h2>
@@ -98,7 +98,7 @@ export default function ContactPage() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 href="/register"
-                className="rounded-full bg-[#f0a800] px-7 py-3.5 text-[13px] font-bold text-[#003090] transition hover:bg-white"
+                className="rounded-full bg-gold px-7 py-3.5 text-[13px] font-bold text-primary transition hover:bg-white"
               >
                 Register Your School
               </Link>

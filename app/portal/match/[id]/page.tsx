@@ -64,13 +64,13 @@ export default async function MatchConsolePage({
 
   return (
     <div>
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#003090]/50">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary/50">
         Match console
       </p>
       <h1 className="mt-3 font-display text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">
         {match.name}
       </h1>
-      <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#003090]/60">
+      <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-primary/60">
         A Striker scores 1 point, an Assist half a point, and a VAR answer
         nothing. Every entry is recorded in the log, and the standings are the
         sum of that log rather than a total anyone types.

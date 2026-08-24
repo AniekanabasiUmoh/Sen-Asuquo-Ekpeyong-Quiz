@@ -21,7 +21,7 @@ export default async function SchoolRegisterPage() {
 
   return (
     <div className="max-w-3xl">
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#003090]/50">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary/50">
         School Registration
       </p>
       <h1 className="mt-3 font-display text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">

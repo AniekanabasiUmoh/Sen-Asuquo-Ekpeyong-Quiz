@@ -47,7 +47,7 @@ export function PageHero({
             className="-z-10 object-cover"
             style={{ objectPosition: imagePosition }}
           />
-          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#06122f] via-[#06122f]/55 to-[#06122f]/25" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/55 to-ink/25" />
 
           <div className="mx-auto max-w-7xl px-6 py-20 sm:px-10 sm:py-28">
             {breadcrumb && (
@@ -83,21 +83,21 @@ export function PageHero({
         {breadcrumb && (
           <Link
             href={breadcrumb.href}
-            className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-[#003090]/40 transition hover:text-[#f03018]"
+            className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-primary/40 transition hover:text-red"
           >
             <span aria-hidden="true">←</span> {breadcrumb.label}
           </Link>
         )}
         {eyebrow && !breadcrumb && (
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[#003090]/35">
+          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/35">
             {eyebrow}
           </p>
         )}
         <h1 className="mt-4 max-w-4xl font-display text-[clamp(2.25rem,5.6vw,4.25rem)] font-extrabold leading-[1] tracking-[-0.03em]">
-          {title} {titleTrail && <span className="text-[#003090]/35">{titleTrail}</span>}
+          {title} {titleTrail && <span className="text-primary/35">{titleTrail}</span>}
         </h1>
         {intro && (
-          <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-[#003090]/55 sm:text-base">
+          <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-primary/55 sm:text-base">
             {intro}
           </p>
         )}

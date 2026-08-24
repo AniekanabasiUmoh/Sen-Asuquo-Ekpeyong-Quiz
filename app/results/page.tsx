@@ -78,22 +78,22 @@ export default async function ResultsPage({
 
       <section className="mx-auto max-w-7xl px-5 py-14 sm:py-16">
         <form className="flex flex-wrap items-end gap-4">
-          <label className="min-w-[14rem] flex-1 text-[13px] font-semibold text-[#003090]">
+          <label className="min-w-[14rem] flex-1 text-[13px] font-semibold text-primary">
             Search by school
             <input
               type="search"
               name="q"
               defaultValue={q ?? ""}
               placeholder="School name"
-              className="mt-2 w-full rounded-2xl border border-black/15 bg-white px-4 py-3 text-[14px] outline-none focus:border-[#003090]"
+              className="mt-2 w-full rounded-2xl border border-black/15 bg-white px-4 py-3 text-[14px] outline-none focus:border-primary"
             />
           </label>
-          <label className="text-[13px] font-semibold text-[#003090]">
+          <label className="text-[13px] font-semibold text-primary">
             Stage
             <select
               name="stage"
               defaultValue={stage ?? ""}
-              className="mt-2 block rounded-2xl border border-black/15 bg-white px-4 py-3 text-[14px] outline-none focus:border-[#003090]"
+              className="mt-2 block rounded-2xl border border-black/15 bg-white px-4 py-3 text-[14px] outline-none focus:border-primary"
             >
               <option value="">All stages</option>
               {(stages ?? []).map((s) => (
@@ -105,7 +105,7 @@ export default async function ResultsPage({
           </label>
           <button
             type="submit"
-            className="rounded-full bg-[#f0a800] px-7 py-3.5 text-[13px] font-bold text-[#003090] transition hover:bg-[#003090] hover:text-white"
+            className="rounded-full bg-gold px-7 py-3.5 text-[13px] font-bold text-primary transition hover:bg-primary hover:text-white"
           >
             Search
           </button>
@@ -120,7 +120,7 @@ export default async function ResultsPage({
                     ? "Nothing matched that search"
                     : "No results published yet"}
                 </h2>
-                <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-[#003090]/60">
+                <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-primary/60">
                   {rows.length === 0 && (q || stage)
                     ? "Try a different school name or stage."
                     : "Results appear here as each stage is completed and verified by the Organising Committee."}
@@ -133,13 +133,13 @@ export default async function ResultsPage({
               return (
                 <div key={fixtureId} className="mb-10 last:mb-0">
                   <h2 className="font-display text-xl font-bold">{f?.name}</h2>
-                  <p className="mt-1 text-[13px] text-[#003090]/50">
+                  <p className="mt-1 text-[13px] text-primary/50">
                     {f ? stageName.get(f.stage_id) : ""}
                   </p>
                   <div className="mt-4 overflow-x-auto">
                     <table className="w-full min-w-[34rem] border-collapse text-left text-[14px]">
                       <thead>
-                        <tr className="border-b border-black/10 text-[11px] uppercase tracking-[0.12em] text-[#003090]/45">
+                        <tr className="border-b border-black/10 text-[11px] uppercase tracking-[0.12em] text-primary/45">
                           <th className="py-3 pr-4 font-bold">Position</th>
                           <th className="py-3 pr-4 font-bold">School</th>
                           <th className="py-3 pr-4 font-bold">Score</th>
@@ -149,7 +149,7 @@ export default async function ResultsPage({
                       <tbody>
                         {list.map((r) => (
                           <tr key={r.id} className="border-b border-black/[0.06]">
-                            <td className="py-3 pr-4 font-mono tabular-nums text-[#003090]/60">
+                            <td className="py-3 pr-4 font-mono tabular-nums text-primary/60">
                               {r.position ?? "-"}
                             </td>
                             <td className="py-3 pr-4 font-semibold">
@@ -158,7 +158,7 @@ export default async function ResultsPage({
                             <td className="py-3 pr-4 font-mono tabular-nums">
                               {Number(r.score).toFixed(1)}
                             </td>
-                            <td className="py-3 pr-4 text-[#003090]/60">
+                            <td className="py-3 pr-4 text-primary/60">
                               {r.advanced ? "Yes" : "-"}
                             </td>
                           </tr>

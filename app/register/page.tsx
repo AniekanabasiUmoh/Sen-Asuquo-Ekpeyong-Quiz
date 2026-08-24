@@ -65,12 +65,12 @@ export default function RegisterPage() {
                   key={s.title}
                   className="grid grid-cols-[auto_1fr] gap-x-5 border-t border-black/10 py-6"
                 >
-                  <span className="font-mono text-[11px] tabular-nums text-[#003090]/30">
+                  <span className="font-mono text-[11px] tabular-nums text-primary/30">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <div>
                     <h3 className="font-display text-lg font-bold">{s.title}</h3>
-                    <p className="mt-1.5 text-[14px] leading-relaxed text-[#003090]/55">
+                    <p className="mt-1.5 text-[14px] leading-relaxed text-primary/55">
                       {s.body}
                     </p>
                   </div>
@@ -80,7 +80,7 @@ export default function RegisterPage() {
           </Reveal>
 
           <div className="lg:sticky lg:top-28 lg:self-start">
-            <Reveal delay={120} className="rounded-[28px] bg-[#003090] p-8 text-white sm:p-9">
+            <Reveal delay={120} className="rounded-[28px] bg-primary p-8 text-white sm:p-9">
               <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/55">
                 {countdown.label}
               </p>
@@ -106,7 +106,7 @@ export default function RegisterPage() {
                 </p>
                 <Link
                   href="/signup"
-                  className="mt-6 block rounded-full bg-[#f0a800] px-6 py-3.5 text-center text-[13px] font-bold text-[#003090] transition hover:bg-white"
+                  className="mt-6 block rounded-full bg-gold px-6 py-3.5 text-center text-[13px] font-bold text-primary transition hover:bg-white"
                 >
                   Create an account
                 </Link>
@@ -131,13 +131,13 @@ export default function RegisterPage() {
 
             <Reveal delay={200} className="mt-4 rounded-[24px] bg-white p-7">
               <h3 className="font-display text-base font-bold">Before you register</h3>
-              <p className="mt-2 text-[14px] leading-relaxed text-[#003090]/55">
+              <p className="mt-2 text-[14px] leading-relaxed text-primary/55">
                 Check that your school meets the eligibility criteria and confirm which
                 streams you intend to enter.
               </p>
               <Link
                 href="/eligibility"
-                className="mt-5 inline-block rounded-full border border-black/15 px-6 py-3 text-[13px] font-semibold transition hover:bg-[#faf6ee]"
+                className="mt-5 inline-block rounded-full border border-black/15 px-6 py-3 text-[13px] font-semibold transition hover:bg-cream"
               >
                 Read the eligibility criteria
               </Link>

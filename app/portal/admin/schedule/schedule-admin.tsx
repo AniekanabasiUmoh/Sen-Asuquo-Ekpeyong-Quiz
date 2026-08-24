@@ -90,7 +90,7 @@ export function ScheduleAdmin({
             Fixtures ({fixtures.length})
           </h2>
           {fixtures.length === 0 ? (
-            <p className="mt-5 rounded-2xl border border-dashed border-black/15 px-5 py-8 text-center text-[13px] text-[#003090]/45">
+            <p className="mt-5 rounded-2xl border border-dashed border-black/15 px-5 py-8 text-center text-[13px] text-primary/45">
               No fixtures yet. Add one on the right.
             </p>
           ) : (
@@ -194,11 +194,11 @@ function FixtureCard({
     <li className="rounded-[24px] bg-white p-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#003090]/45">
+          <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary/45">
             {stageName}
           </p>
           <h3 className="mt-1.5 font-display text-lg font-bold">{fixture.name}</h3>
-          <p className="mt-1 text-[13px] text-[#003090]/55">
+          <p className="mt-1 text-[13px] text-primary/55">
             {whenLabel(fixture.scheduled_at)}
             {venueName ? ` · ${venueName}` : ""}
           </p>
@@ -207,8 +207,8 @@ function FixtureCard({
           className={
             "rounded-full px-3.5 py-1.5 text-[11px] font-bold " +
             (published
-              ? "bg-[#2dc653]/20 text-[#155d27]"
-              : "bg-black/[0.06] text-[#003090]/60")
+              ? "bg-grass/20 text-forest"
+              : "bg-black/[0.06] text-primary/60")
           }
         >
           {published ? "Published" : "Draft"}
@@ -219,13 +219,13 @@ function FixtureCard({
       <FormNotice message={pubState.notice ?? reState.notice} />
 
       {changes.length > 0 ? (
-        <div className="mt-4 rounded-2xl bg-[#f0a800]/10 px-4 py-3">
-          <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#7a5300]">
+        <div className="mt-4 rounded-2xl bg-gold/10 px-4 py-3">
+          <p className="text-[11px] font-bold uppercase tracking-[0.12em] text-gold-ink">
             Changed {changes.length} time{changes.length > 1 ? "s" : ""}
           </p>
           <ul className="mt-1.5 space-y-1">
             {changes.slice(0, 3).map((ch) => (
-              <li key={ch.id} className="text-[12px] leading-relaxed text-[#7a5300]">
+              <li key={ch.id} className="text-[12px] leading-relaxed text-gold-ink">
                 {ch.field === "scheduled_at" ? "Time" : "Venue"}:{" "}
                 {ch.old_value ?? "not set"} to {ch.new_value ?? "not set"}
                 {ch.reason ? ` (${ch.reason})` : ""}
@@ -242,7 +242,7 @@ function FixtureCard({
           <button
             type="submit"
             disabled={pubPending}
-            className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-[#faf6ee] disabled:opacity-55"
+            className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-cream disabled:opacity-55"
           >
             {published ? "Unpublish" : "Publish"}
           </button>
@@ -251,7 +251,7 @@ function FixtureCard({
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
-          className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-[#faf6ee]"
+          className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-cream"
         >
           {open ? "Cancel" : "Reschedule"}
         </button>

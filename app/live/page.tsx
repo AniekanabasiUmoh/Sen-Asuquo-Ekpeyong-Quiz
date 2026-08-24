@@ -63,18 +63,18 @@ export default async function LiveIndexPage() {
                 <li key={m.id}>
                   <Link
                     href={`/live/${m.id}`}
-                    className="flex flex-wrap items-center justify-between gap-4 rounded-[24px] bg-[#003090] p-7 text-white transition hover:bg-[#0d2270]"
+                    className="flex flex-wrap items-center justify-between gap-4 rounded-[24px] bg-primary p-7 text-white transition hover:bg-navy-deep"
                   >
                     <div>
                       <span className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.16em] text-white/70">
-                        <span className="h-2 w-2 animate-pulse rounded-full bg-[#f0a800]" />
+                        <span className="h-2 w-2 animate-pulse rounded-full bg-gold" />
                         Live
                       </span>
                       <h3 className="mt-2 font-display text-xl font-extrabold">
                         {m.name}
                       </h3>
                     </div>
-                    <span className="rounded-full bg-[#f0a800] px-6 py-3 text-[13px] font-bold text-[#003090]">
+                    <span className="rounded-full bg-gold px-6 py-3 text-[13px] font-bold text-primary">
                       Watch the scoreboard
                     </span>
                   </Link>
@@ -91,7 +91,7 @@ export default async function LiveIndexPage() {
               {upcoming.map((b) => {
                 const links = (b.simulcast_links as SimulcastLink[] | null) ?? [];
                 return (
-                  <li key={b.id} className="overflow-hidden rounded-[28px] bg-[#003090] text-white">
+                  <li key={b.id} className="overflow-hidden rounded-[28px] bg-primary text-white">
                     <div className="p-8 sm:p-9">
                       <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-white/55">
                         Holding for broadcast
@@ -149,7 +149,7 @@ export default async function LiveIndexPage() {
                       {b.match_id ? (
                         <Link
                           href={`/live/${b.match_id}`}
-                          className="mt-7 inline-block rounded-full bg-[#f0a800] px-6 py-3 text-[13px] font-bold text-[#003090] transition hover:bg-white"
+                          className="mt-7 inline-block rounded-full bg-gold px-6 py-3 text-[13px] font-bold text-primary transition hover:bg-white"
                         >
                           Go to the match centre
                         </Link>
@@ -173,7 +173,7 @@ export default async function LiveIndexPage() {
                     className="block rounded-[24px] bg-white p-6 transition hover:bg-white/70"
                   >
                     <h3 className="font-display text-base font-bold">{m.name}</h3>
-                    <p className="mt-1 text-[13px] text-[#003090]/50">
+                    <p className="mt-1 text-[13px] text-primary/50">
                       {m.status === "completed" ? "Final score" : "Not started"}
                     </p>
                   </Link>
@@ -188,7 +188,7 @@ export default async function LiveIndexPage() {
             <h2 className="font-display text-xl font-bold">
               Nothing is live at the moment
             </h2>
-            <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-[#003090]/60">
+            <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-primary/60">
               Scores appear here as each stage is played, and the Grand Finale is
               broadcast in full.
             </p>

@@ -71,7 +71,7 @@ export default async function HallOfFamePage() {
               <h2 className="font-display text-xl font-bold">
                 The first champions are yet to be crowned
               </h2>
-              <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-[#003090]/60">
+              <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-primary/60">
                 The maiden edition is under way. This page will carry the
                 champion school, the top student and the best mentor, and will
                 keep them for every edition that follows.
@@ -87,19 +87,19 @@ export default async function HallOfFamePage() {
                 <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   {(bySeason.get(season.id) ?? []).map((a) => (
                     <li key={a.id} className="rounded-[24px] bg-white p-7">
-                      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#003090]/45">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary/45">
                         {KIND_LABEL[a.kind] ?? a.kind}
                       </p>
                       <h3 className="mt-2 font-display text-lg font-bold">
                         {a.school_id ? schoolName.get(a.school_id) ?? a.title : a.title}
                       </h3>
                       {a.description ? (
-                        <p className="mt-2 text-[13px] leading-relaxed text-[#003090]/55">
+                        <p className="mt-2 text-[13px] leading-relaxed text-primary/55">
                           {a.description}
                         </p>
                       ) : null}
                       {a.prize_note ? (
-                        <p className="mt-3 border-t border-black/10 pt-3 text-[12px] font-semibold text-[#003090]/60">
+                        <p className="mt-3 border-t border-black/10 pt-3 text-[12px] font-semibold text-primary/60">
                           {a.prize_note}
                         </p>
                       ) : null}
@@ -113,7 +113,7 @@ export default async function HallOfFamePage() {
         {(legacy ?? []).length > 0 ? (
           <div className="mt-16">
             <h2 className="font-display text-2xl font-extrabold">Legacy projects</h2>
-            <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-[#003090]/60">
+            <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-primary/60">
               What the championship leaves behind in the district.
             </p>
             <ul className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -121,11 +121,11 @@ export default async function HallOfFamePage() {
                 <li key={p.id} className="rounded-[24px] bg-white p-7">
                   <h3 className="font-display text-lg font-bold">{p.title}</h3>
                   {p.description ? (
-                    <p className="mt-2 text-[14px] leading-relaxed text-[#003090]/60">
+                    <p className="mt-2 text-[14px] leading-relaxed text-primary/60">
                       {p.description}
                     </p>
                   ) : null}
-                  <p className="mt-3 text-[12px] font-semibold text-[#003090]/50">
+                  <p className="mt-3 text-[12px] font-semibold text-primary/50">
                     {p.status.charAt(0).toUpperCase() + p.status.slice(1)}
                   </p>
                 </li>

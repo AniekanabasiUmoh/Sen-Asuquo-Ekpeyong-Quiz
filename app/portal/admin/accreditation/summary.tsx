@@ -48,7 +48,7 @@ export function AccreditationSummary({
         {Object.entries(byType).map(([type, count]) => (
           <span
             key={type}
-            className="rounded-full bg-white px-4 py-2 text-[12px] font-semibold text-[#003090]/70"
+            className="rounded-full bg-white px-4 py-2 text-[12px] font-semibold text-primary/70"
           >
             {HOLDER_LABEL[type as AccreditationHolder] ?? type}: {count}
           </span>
@@ -61,7 +61,7 @@ export function AccreditationSummary({
         <SubmitButton pending={issuePending} className="mt-3 !px-6 !py-3">
           Issue accreditation for everyone newly eligible
         </SubmitButton>
-        <p className="mt-2 text-[12px] text-[#003090]/45">
+        <p className="mt-2 text-[12px] text-primary/45">
           Safe to run any time: existing accreditations and check-in status are
           never touched, only new ones are added.
         </p>
@@ -72,7 +72,7 @@ export function AccreditationSummary({
         <FormError message={revokeState.error} />
         <FormNotice message={revokeState.notice} />
         {accreditations.length === 0 ? (
-          <p className="mt-5 rounded-2xl border border-dashed border-black/15 px-5 py-8 text-center text-[13px] text-[#003090]/45">
+          <p className="mt-5 rounded-2xl border border-dashed border-black/15 px-5 py-8 text-center text-[13px] text-primary/45">
             Nothing issued yet.
           </p>
         ) : (
@@ -94,7 +94,7 @@ export function AccreditationSummary({
                     <p className="truncate text-[13px] font-semibold">
                       {names[`${a.holder_type}:${a.holder_id}`] ?? "Unknown"}
                     </p>
-                    <p className="text-[11px] text-[#003090]/45">
+                    <p className="text-[11px] text-primary/45">
                       {HOLDER_LABEL[a.holder_type]}
                       {a.checked_in_at
                         ? ` · checked in ${new Date(a.checked_in_at).toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}`
@@ -107,7 +107,7 @@ export function AccreditationSummary({
                       <input type="hidden" name="accreditation_id" value={a.id} />
                       <button
                         type="submit"
-                        className="flex-none text-[11px] font-semibold text-[#003090]/40 hover:text-[#c1300f]"
+                        className="flex-none text-[11px] font-semibold text-primary/40 hover:text-red-ink"
                       >
                         Revoke
                       </button>
@@ -125,7 +125,7 @@ export function AccreditationSummary({
 function Stat({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-[22px] bg-white p-6">
-      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#003090]/45">
+      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary/45">
         {label}
       </p>
       <p className="mt-2 font-display text-3xl font-extrabold tabular-nums">{value}</p>

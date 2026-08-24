@@ -25,12 +25,12 @@ export default function EligibilityPage() {
           {eligibility.criteria.map((c, i) => (
             <Reveal key={c.title} delay={i * 80}>
               <dt className="flex items-baseline gap-4">
-                <span className="font-mono text-[11px] tabular-nums text-[#003090]/30">
+                <span className="font-mono text-[11px] tabular-nums text-primary/30">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span className="font-display text-xl font-bold">{c.title}</span>
               </dt>
-              <dd className="mt-3 pl-[2.1rem] text-[15px] leading-relaxed text-[#003090]/60">
+              <dd className="mt-3 pl-[2.1rem] text-[15px] leading-relaxed text-primary/60">
                 {c.body}
               </dd>
             </Reveal>
@@ -50,11 +50,11 @@ export default function EligibilityPage() {
               <li key={l.name}>
                 <Link
                   href="/lgas"
-                  className="inline-flex items-center gap-2 rounded-full border border-black/10 px-4 py-2 text-[13px] font-semibold transition hover:border-[#f03018] hover:text-[#f03018]"
+                  className="inline-flex items-center gap-2 rounded-full border border-black/10 px-4 py-2 text-[13px] font-semibold transition hover:border-red hover:text-red"
                 >
                   {l.name}
                   {l.combined && (
-                    <span className="rounded-full bg-[#f0a800]/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-[#8a6200]">
+                    <span className="rounded-full bg-gold/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gold-ink">
                       Combined
                     </span>
                   )}
@@ -62,7 +62,7 @@ export default function EligibilityPage() {
               </li>
             ))}
           </ul>
-          <p className="mt-6 max-w-3xl text-[14px] leading-relaxed text-[#003090]/55">
+          <p className="mt-6 max-w-3xl text-[14px] leading-relaxed text-primary/55">
             {lgaNote}
           </p>
         </Reveal>
@@ -75,16 +75,16 @@ export default function EligibilityPage() {
           <h2 className="font-display text-xl font-bold">
             Still to be confirmed
           </h2>
-          <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-[#003090]/55">
+          <p className="mt-2 max-w-2xl text-[14px] leading-relaxed text-primary/55">
             {eligibility.pendingNote}
           </p>
           <ul className="mt-5 space-y-2">
             {eligibility.pending.map((x) => (
               <li
                 key={x}
-                className="flex items-baseline gap-3 text-[14px] text-[#003090]/50"
+                className="flex items-baseline gap-3 text-[14px] text-primary/50"
               >
-                <span aria-hidden="true" className="text-[#f0a800]">
+                <span aria-hidden="true" className="text-gold">
                   •
                 </span>
                 {x}
@@ -94,7 +94,7 @@ export default function EligibilityPage() {
 
           <Link
             href="/register"
-            className="mt-9 inline-block rounded-full bg-[#f03018] px-7 py-3.5 text-[13px] font-bold text-white transition hover:bg-[#003090]"
+            className="mt-9 inline-block rounded-full bg-red px-7 py-3.5 text-[13px] font-bold text-white transition hover:bg-primary"
           >
             Register Your School
           </Link>

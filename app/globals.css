@@ -98,25 +98,73 @@
   --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
   --font-serif: "Libre Caslon Cond", ui-serif, Georgia, serif;
 
-  /* Core */
-  --color-ink: #000513;
-  --color-brand: #0006eb;
-  --color-navy: #14339f;
-  --color-navy-deep: #0d2270;
-  --color-cyan: #01daeb;
+  /* -------------------------------------------------------------
+     THE SHIPPED SYSTEM — five colours.
 
-  /* Accents */
-  --color-flame: #f44423;
+     These are the values the homepage actually renders, and the
+     homepage is the agreed design system. They are deliberately NOT
+     the raw swatches from the brand PDF: the printed guide's #0006EB
+     is a saturated screen blue that vibrates against cream at body
+     size, so the built site settled on the deeper #003090 and the
+     whole palette was tuned around it. Where this file and the PDF
+     disagree, this file is right and the PDF is the ancestor.
+
+     Contrast, measured against the cream ground:
+       primary   10.67  AAA
+       ink       17.16  AAA
+       red-ink    5.27  AA          (body-size red — see below)
+       red        3.79  large/UI only
+       gold       1.89  never as text on cream
+  ------------------------------------------------------------- */
+
+  /* Primary — nearly all type, and the solid-fill blue. */
+  --color-primary: #003090;
+
+  /* Deep navy — dropdown panels, footer, dark section grounds and
+     every gradient stop that goes dark. */
+  --color-ink: #06122f;
+
+  /* Cream — the page ground. */
+  --color-cream: #faf6ee;
+
+  /* Action red — CTA buttons and accent rules. Fails AA as body text
+     on cream (3.79), so it is for fills, borders and large display
+     type only; use red-ink when the red must carry small text. */
+  --color-red: #f03018;
+
+  /* The same red darkened to clear AA at body size (5.27). This pair
+     is intentional: red is the fill, red-ink is the text. */
+  --color-red-ink: #c1300f;
+
+  /* Gold accent — fills, rules, and figures on dark grounds. At 1.89
+     on cream it must never be small text on the page ground. */
+  --color-gold: #f0a800;
+
+  /* -------------------------------------------------------------
+     Secondary palette — retained from the brand guide for the
+     status and data colours the portal needs (success, warning and
+     category chips). Not part of the homepage's five.
+  ------------------------------------------------------------- */
+  --color-cyan: #01daeb;
   --color-orange: #fe6c03;
-  --color-gold: #ffe169;
   --color-grass: #2dc653;
   --color-forest: #155d27;
   --color-plum: #3c096c;
   --color-violet: #9d4edd;
-
-  /* Tints */
   --color-violet-light: #e0aaff;
   --color-mint: #b7efc5;
+
+  /* Gold darkened far enough to carry small text on cream (gold itself is
+     1.89 there). Same fill/text split as red / red-ink above. */
+  --color-gold-ink: #7a5300;
+
+  /* Navy one step deeper than primary — solid panel grounds in the portal
+     where a block needs to sit back from the primary blue around it. */
+  --color-navy-deep: #0d2270;
+
+  /* Near-black with a blue cast, from the brand guide. Overlay scrims and
+     the few places that need to read as black without being flat #000. */
+  --color-black-blue: #000513;
 }
 
 html {

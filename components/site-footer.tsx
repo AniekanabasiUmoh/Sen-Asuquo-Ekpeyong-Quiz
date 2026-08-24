@@ -13,7 +13,7 @@ import { brand, contact, footerLinks, portalLinks } from "@/content/homepage";
 export function SiteFooter() {
   return (
     <footer id="contact" className="px-3 pb-3 sm:px-4 sm:pb-4">
-      <div className="relative overflow-hidden rounded-[28px] bg-[#06122f] pt-14 text-white">
+      <div className="relative overflow-hidden rounded-[28px] bg-ink pt-14 text-white">
         <div className="mx-auto max-w-7xl px-6 sm:px-10">
           <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr]">
             <div>
@@ -34,7 +34,7 @@ export function SiteFooter() {
                     aria-label={s.name}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/60 transition hover:border-[#f0a800] hover:text-[#f0a800]"
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/60 transition hover:border-gold hover:text-gold"
                   >
                     <SocialIcon name={s.name} />
                   </a>

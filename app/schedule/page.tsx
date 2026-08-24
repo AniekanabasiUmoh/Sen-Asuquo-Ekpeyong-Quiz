@@ -77,7 +77,7 @@ export default async function SchedulePage() {
               <h2 className="font-display text-xl font-bold">
                 The schedule is being finalised
               </h2>
-              <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-[#003090]/60">
+              <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-primary/60">
                 Fixtures are published here as the Organising Committee confirms
                 them with each Local Government Area. Registered schools are
                 notified directly.
@@ -90,7 +90,7 @@ export default async function SchedulePage() {
             .map((s) => (
               <div key={s.id} className="mb-12 last:mb-0">
                 <h2 className="font-display text-xl font-bold">
-                  <span className="font-mono text-[13px] tabular-nums text-[#003090]/30">
+                  <span className="font-mono text-[13px] tabular-nums text-primary/30">
                     {String(s.ordinal).padStart(2, "0")}
                   </span>
                   <span className="ml-3">{stageName.get(s.id)}</span>
@@ -104,7 +104,7 @@ export default async function SchedulePage() {
                         <div className="flex flex-wrap items-start justify-between gap-4">
                           <div>
                             <h3 className="font-display text-lg font-bold">{f.name}</h3>
-                            <p className="mt-1 text-[13px] text-[#003090]/55">
+                            <p className="mt-1 text-[13px] text-primary/55">
                               {f.scheduled_at
                                 ? new Date(f.scheduled_at).toLocaleString("en-GB", {
                                     weekday: "long",
@@ -117,20 +117,20 @@ export default async function SchedulePage() {
                                 : "Date to be confirmed"}
                             </p>
                             {v ? (
-                              <p className="mt-0.5 text-[13px] text-[#003090]/45">
+                              <p className="mt-0.5 text-[13px] text-primary/45">
                                 {v.name}
                                 {v.address ? `, ${v.address}` : ""}
                               </p>
                             ) : null}
                           </div>
                           {changed ? (
-                            <span className="rounded-full bg-[#f0a800]/25 px-3.5 py-1.5 text-[11px] font-bold text-[#7a5300]">
+                            <span className="rounded-full bg-gold/25 px-3.5 py-1.5 text-[11px] font-bold text-gold-ink">
                               Changed
                             </span>
                           ) : null}
                         </div>
                         {changed?.reason ? (
-                          <p className="mt-3 border-t border-black/10 pt-3 text-[13px] leading-relaxed text-[#003090]/55">
+                          <p className="mt-3 border-t border-black/10 pt-3 text-[13px] leading-relaxed text-primary/55">
                             <strong className="font-semibold">Note: </strong>
                             {changed.reason}
                           </p>

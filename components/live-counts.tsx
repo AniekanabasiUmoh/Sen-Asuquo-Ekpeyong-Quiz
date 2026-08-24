@@ -37,7 +37,7 @@ export async function LiveCounts() {
 
   return (
     <section className="mx-auto max-w-7xl px-5 py-14 sm:py-16">
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#003090]/50">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary/50">
         Registration so far
       </p>
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
@@ -46,7 +46,7 @@ export async function LiveCounts() {
             <p className="font-display text-[clamp(2rem,4vw,2.75rem)] font-extrabold leading-none tabular-nums">
               {c.value.toLocaleString("en-GB")}
             </p>
-            <p className="mt-2.5 text-[13px] font-semibold text-[#003090]/55">
+            <p className="mt-2.5 text-[13px] font-semibold text-primary/55">
               {c.label}
             </p>
           </div>

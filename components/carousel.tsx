@@ -112,7 +112,7 @@ export function Carousel({
                   sizes="(min-width: 640px) 62vw, 86vw"
                   className="object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#06122f]/85 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/85 via-transparent to-transparent" />
 
                 {it.badge && (
                   <span className="absolute left-5 top-5 rounded-full bg-white/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-white backdrop-blur-md">
@@ -136,7 +136,7 @@ export function Carousel({
           type="button"
           onClick={() => go(-1)}
           aria-label="Previous"
-          className="absolute left-1 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#06122f] text-white transition hover:bg-[#f03018] sm:left-8 sm:h-12 sm:w-12"
+          className="absolute left-1 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-ink text-white transition hover:bg-red sm:left-8 sm:h-12 sm:w-12"
         >
           <svg width="17" height="12" viewBox="0 0 17 12" fill="none" aria-hidden="true">
             <path
@@ -152,7 +152,7 @@ export function Carousel({
           type="button"
           onClick={() => go(1)}
           aria-label="Next"
-          className="absolute right-1 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-[#06122f] text-white transition hover:bg-[#f03018] sm:right-8 sm:h-12 sm:w-12"
+          className="absolute right-1 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-ink text-white transition hover:bg-red sm:right-8 sm:h-12 sm:w-12"
         >
           <svg width="17" height="12" viewBox="0 0 17 12" fill="none" aria-hidden="true">
             <path
@@ -179,7 +179,7 @@ export function Carousel({
             aria-label={it.name}
             aria-current={i === index ? "true" : undefined}
             className={`h-2 rounded-full transition-all ${
-              i === index ? "w-7 bg-[#f03018]" : "w-2 bg-[#003090]/20 hover:bg-[#003090]/40"
+              i === index ? "w-7 bg-red" : "w-2 bg-primary/20 hover:bg-primary/40"
             }`}
           />
         ))}

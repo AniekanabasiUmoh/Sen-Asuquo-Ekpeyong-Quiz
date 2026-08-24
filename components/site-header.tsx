@@ -62,7 +62,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
           // treatment; translucent-over-nothing would lose the logo.
           light && !open
             ? "border border-white/15 bg-white/10"
-            : "border border-black/10 bg-[#faf6ee]/92 shadow-[0_8px_30px_rgba(6,18,47,0.08)]"
+            : "border border-black/10 bg-cream/92 shadow-[0_8px_30px_rgba(6,18,47,0.08)]"
         }`}
       >
         <AnimatedLogo variant={light ? "white" : "blue"} />
@@ -70,7 +70,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
         <nav
           aria-label="Primary"
           className={`hidden items-center gap-x-6 text-[12.5px] font-medium lg:flex ${
-            light ? "text-white/80" : "text-[#003090]/70"
+            light ? "text-white/80" : "text-primary/70"
           }`}
         >
           {nav.map((n) => {
@@ -82,8 +82,8 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
                   href={n.href}
                   aria-current={active ? "page" : undefined}
                   className={`inline-flex items-center gap-1.5 whitespace-nowrap py-1 transition ${
-                    light ? "hover:text-white" : "hover:text-[#003090]"
-                  } ${active ? (light ? "text-white" : "text-[#003090]") : ""}`}
+                    light ? "hover:text-white" : "hover:text-primary"
+                  } ${active ? (light ? "text-white" : "text-primary") : ""}`}
                 >
                   {n.label}
                   {kids && (
@@ -110,14 +110,14 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
                 {active && (
                   <span
                     className={`absolute -bottom-0.5 left-0 h-[2px] w-full rounded-full ${
-                      light ? "bg-white" : "bg-[#f03018]"
+                      light ? "bg-white" : "bg-red"
                     }`}
                   />
                 )}
 
                 {kids && (
                   <div className="invisible absolute left-0 top-full z-30 pt-3 opacity-0 transition group-hover:visible group-hover:opacity-100">
-                    <div className="min-w-60 rounded-2xl border border-black/10 bg-[#06122f] p-2 shadow-[0_16px_40px_rgba(6,18,47,0.22)]">
+                    <div className="min-w-60 rounded-2xl border border-black/10 bg-ink p-2 shadow-[0_16px_40px_rgba(6,18,47,0.22)]">
                       {kids.map((c) => (
                         <Link
                           key={c.label}
@@ -139,7 +139,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
           {/* §3.1: fixed in the header, separate from the nav. */}
           <Link
             href={navCtas.primary.href}
-            className="hidden rounded-full bg-[#f03018] px-5 py-2.5 text-[12.5px] font-bold text-white transition hover:bg-[#003090] sm:inline-block"
+            className="hidden rounded-full bg-red px-5 py-2.5 text-[12.5px] font-bold text-white transition hover:bg-primary sm:inline-block"
           >
             {navCtas.primary.label}
           </Link>
@@ -150,7 +150,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
             aria-expanded={open}
             aria-label={open ? "Close menu" : "Open menu"}
             className={`flex h-10 w-10 items-center justify-center rounded-full border transition lg:hidden ${
-              light ? "border-white/25 text-white" : "border-black/15 text-[#003090]"
+              light ? "border-white/25 text-white" : "border-black/15 text-primary"
             }`}
           >
             <svg width="18" height="12" viewBox="0 0 18 12" fill="none" aria-hidden="true">
@@ -178,7 +178,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
           A rounded card hanging under the pill rather than a full-bleed
           panel, so the sheet belongs to the same object as the bar. */}
       {open && (
-        <div className="mx-auto mt-2 max-h-[calc(100svh-7rem)] max-w-6xl overflow-y-auto rounded-[24px] border border-black/10 bg-[#faf6ee] px-5 pb-8 pt-3 shadow-[0_16px_40px_rgba(6,18,47,0.14)] lg:hidden">
+        <div className="mx-auto mt-2 max-h-[calc(100svh-7rem)] max-w-6xl overflow-y-auto rounded-[24px] border border-black/10 bg-cream px-5 pb-8 pt-3 shadow-[0_16px_40px_rgba(6,18,47,0.14)] lg:hidden">
           <nav aria-label="Primary mobile">
             {nav.map((n) => {
               const kids = "children" in n ? n.children : undefined;
@@ -186,7 +186,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
                 <div key={n.label} className="border-b border-black/[0.08] py-1">
                   <Link
                     href={n.href}
-                    className="block py-3 font-display text-lg font-bold text-[#003090]"
+                    className="block py-3 font-display text-lg font-bold text-primary"
                   >
                     {n.label}
                   </Link>
@@ -196,7 +196,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
                         <li key={c.label}>
                           <Link
                             href={c.href}
-                            className="block py-2 text-[14px] text-[#003090]/55"
+                            className="block py-2 text-[14px] text-primary/55"
                           >
                             {c.label}
                           </Link>
@@ -210,7 +210,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
           </nav>
           <Link
             href={navCtas.primary.href}
-            className="mt-6 block rounded-full bg-[#f03018] px-6 py-4 text-center text-[14px] font-bold text-white"
+            className="mt-6 block rounded-full bg-red px-6 py-4 text-center text-[14px] font-bold text-white"
           >
             {navCtas.primary.label}
           </Link>

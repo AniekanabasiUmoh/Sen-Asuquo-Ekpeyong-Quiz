@@ -54,17 +54,17 @@ export function UserList({ users }: { users: UserRow[] }) {
                 <h3 className="font-display text-base font-bold">
                   {u.fullName ?? "No name given"}
                 </h3>
-                <p className="mt-0.5 truncate text-[13px] text-[#003090]/55">
+                <p className="mt-0.5 truncate text-[13px] text-primary/55">
                   {u.email}
                 </p>
                 {u.school ? (
-                  <p className="mt-1 text-[12px] text-[#003090]/45">{u.school}</p>
+                  <p className="mt-1 text-[12px] text-primary/45">{u.school}</p>
                 ) : null}
               </div>
 
               <div className="flex flex-wrap items-center gap-2">
                 {u.roles.length === 0 ? (
-                  <span className="text-[12px] text-[#003090]/40">No roles</span>
+                  <span className="text-[12px] text-primary/40">No roles</span>
                 ) : (
                   u.roles.map((r) => (
                     <form key={r} action={revokeAction} className="inline">
@@ -76,8 +76,8 @@ export function UserList({ users }: { users: UserRow[] }) {
                         className={
                           "rounded-full px-3.5 py-1.5 text-[11px] font-bold transition " +
                           (r === "super_admin" || r === "committee"
-                            ? "bg-[#003090] text-white hover:bg-[#c1300f]"
-                            : "bg-[#003090]/10 text-[#003090] hover:bg-[#f44423]/15 hover:text-[#c1300f]")
+                            ? "bg-primary text-white hover:bg-red-ink"
+                            : "bg-primary/10 text-primary hover:bg-red/15 hover:text-red-ink")
                         }
                       >
                         {ROLE_LABEL[r]}
@@ -97,14 +97,14 @@ export function UserList({ users }: { users: UserRow[] }) {
               <input type="hidden" name="user_id" value={u.id} />
               <label
                 htmlFor={`role-${u.id}`}
-                className="text-[12px] font-semibold text-[#003090]/55"
+                className="text-[12px] font-semibold text-primary/55"
               >
                 Grant a role
               </label>
               <select
                 id={`role-${u.id}`}
                 name="role"
-                className="rounded-full border border-black/15 bg-white px-4 py-2 text-[12px] outline-none focus:border-[#003090]"
+                className="rounded-full border border-black/15 bg-white px-4 py-2 text-[12px] outline-none focus:border-primary"
                 defaultValue="committee"
               >
                 {GRANTABLE.filter((r) => !u.roles.includes(r)).map((r) => (
@@ -115,7 +115,7 @@ export function UserList({ users }: { users: UserRow[] }) {
               </select>
               <button
                 type="submit"
-                className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-[#faf6ee]"
+                className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-cream"
               >
                 Grant
               </button>

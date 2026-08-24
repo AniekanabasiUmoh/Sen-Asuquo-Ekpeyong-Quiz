@@ -26,7 +26,7 @@ export function FannedCards({
         {left.map((src, i) => (
           <div
             key={src}
-            className="absolute overflow-hidden rounded-2xl border-4 border-[#faf6ee] shadow-[0_18px_40px_rgba(6,18,47,0.16)]"
+            className="absolute overflow-hidden rounded-2xl border-4 border-cream shadow-[0_18px_40px_rgba(6,18,47,0.16)]"
             style={{
               width: 210,
               height: 150,
@@ -45,7 +45,7 @@ export function FannedCards({
         {right.map((src, i) => (
           <div
             key={src}
-            className="absolute overflow-hidden rounded-2xl border-4 border-[#faf6ee] shadow-[0_18px_40px_rgba(6,18,47,0.16)]"
+            className="absolute overflow-hidden rounded-2xl border-4 border-cream shadow-[0_18px_40px_rgba(6,18,47,0.16)]"
             style={{
               width: 210,
               height: 150,

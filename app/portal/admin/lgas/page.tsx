@@ -52,13 +52,13 @@ export default async function AdminLgasPage() {
 
   return (
     <div>
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#003090]/50">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary/50">
         Organising Committee
       </p>
       <h1 className="mt-3 font-display text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">
         LGA groupings
       </h1>
-      <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#003090]/60">
+      <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-primary/60">
         Akpabuyo and Bakassi jointly contest one qualifying slot, so the seven
         Local Government Areas form six qualifying groups. Five schools advance
         from each, which is what produces the thirty school Group Stage field.
@@ -82,7 +82,7 @@ export default async function AdminLgasPage() {
                   {g.names.join(" + ")}
                 </h3>
                 {g.names.length > 1 ? (
-                  <span className="rounded-full bg-[#f0a800]/25 px-3 py-1 text-[11px] font-bold text-[#7a5300]">
+                  <span className="rounded-full bg-gold/25 px-3 py-1 text-[11px] font-bold text-gold-ink">
                     Combined
                   </span>
                 ) : null}
@@ -92,7 +92,7 @@ export default async function AdminLgasPage() {
                 <Cell k="Pending" v={g.pending} />
                 <Cell k="Eligible" v={g.schools} />
               </dl>
-              <p className="mt-4 border-t border-black/10 pt-3 text-[12px] text-[#003090]/50">
+              <p className="mt-4 border-t border-black/10 pt-3 text-[12px] text-primary/50">
                 5 schools advance to the Group Stage
               </p>
             </li>
@@ -105,7 +105,7 @@ export default async function AdminLgasPage() {
         <div className="mt-5 overflow-x-auto">
           <table className="w-full min-w-[38rem] border-collapse text-left text-[13px]">
             <thead>
-              <tr className="border-b border-black/10 text-[11px] uppercase tracking-[0.12em] text-[#003090]/45">
+              <tr className="border-b border-black/10 text-[11px] uppercase tracking-[0.12em] text-primary/45">
                 <th className="py-3 pr-4 font-bold">LGA</th>
                 <th className="py-3 pr-4 font-bold">Qualifying group</th>
                 <th className="py-3 pr-4 font-bold">Eligible schools</th>
@@ -119,16 +119,16 @@ export default async function AdminLgasPage() {
                 return (
                   <tr key={l.id} className="border-b border-black/[0.06]">
                     <td className="py-3 pr-4 font-semibold">{l.name}</td>
-                    <td className="py-3 pr-4 text-[#003090]/60">
+                    <td className="py-3 pr-4 text-primary/60">
                       {l.qualifier_group.replace(/-/g, " + ")}
                     </td>
-                    <td className="py-3 pr-4 tabular-nums text-[#003090]/60">
+                    <td className="py-3 pr-4 tabular-nums text-primary/60">
                       {l.school_count}
                     </td>
-                    <td className="py-3 pr-4 tabular-nums text-[#003090]/60">
+                    <td className="py-3 pr-4 tabular-nums text-primary/60">
                       {c?.approved ?? 0}
                     </td>
-                    <td className="py-3 pr-4 tabular-nums text-[#003090]/60">
+                    <td className="py-3 pr-4 tabular-nums text-primary/60">
                       {c?.pending ?? 0}
                     </td>
                   </tr>
@@ -137,7 +137,7 @@ export default async function AdminLgasPage() {
             </tbody>
           </table>
         </div>
-        <p className="mt-4 max-w-2xl text-[12px] leading-relaxed text-[#003090]/45">
+        <p className="mt-4 max-w-2xl text-[12px] leading-relaxed text-primary/45">
           Eligible school counts are the provisional public school figures from
           the Principals&rsquo; Meeting Report and total 117. The published
           &ldquo;250+ schools&rdquo; figure includes private schools and
@@ -151,7 +151,7 @@ export default async function AdminLgasPage() {
 function Stat({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-[22px] bg-white p-6">
-      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#003090]/45">
+      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary/45">
         {label}
       </p>
       <p className="mt-2 font-display text-3xl font-extrabold tabular-nums">
@@ -163,8 +163,8 @@ function Stat({ label, value }: { label: string; value: number }) {
 
 function Cell({ k, v }: { k: string; v: number }) {
   return (
-    <div className="rounded-2xl bg-[#faf6ee] py-3">
-      <dt className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#003090]/45">
+    <div className="rounded-2xl bg-cream py-3">
+      <dt className="text-[10px] font-bold uppercase tracking-[0.12em] text-primary/45">
         {k}
       </dt>
       <dd className="mt-1 font-display text-xl font-extrabold tabular-nums">{v}</dd>

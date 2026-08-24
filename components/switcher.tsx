@@ -15,7 +15,7 @@ export function VariantSwitcher() {
   const current = pathname === "/" ? "a" : pathname?.replace("/", "") || "";
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/15 bg-[#000513]/95 backdrop-blur print:hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/15 bg-black-blue/95 backdrop-blur print:hidden">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-2 gap-y-1 px-3 py-2 text-xs">
         <Link
           href="/directions"
@@ -31,7 +31,7 @@ export function VariantSwitcher() {
               href={variantHref(v.id)}
               className={`rounded px-2.5 py-1 font-medium transition ${
                 active
-                  ? "bg-white text-[#000513]"
+                  ? "bg-white text-black-blue"
                   : "text-white/70 hover:bg-white/10 hover:text-white"
               }`}
             >

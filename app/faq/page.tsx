@@ -34,12 +34,12 @@ export default function FaqPage() {
 
         <Reveal className="mt-12 rounded-[24px] bg-white p-8 text-center">
           <h2 className="font-display text-xl font-bold">Still need an answer?</h2>
-          <p className="mx-auto mt-2 max-w-md text-[14px] leading-relaxed text-[#003090]/55">
+          <p className="mx-auto mt-2 max-w-md text-[14px] leading-relaxed text-primary/55">
             The Organising Committee responds to schools directly.
           </p>
           <Link
             href="/contact"
-            className="mt-6 inline-block rounded-full bg-[#003090] px-7 py-3.5 text-[13px] font-bold text-white transition hover:bg-[#f03018]"
+            className="mt-6 inline-block rounded-full bg-primary px-7 py-3.5 text-[13px] font-bold text-white transition hover:bg-red"
           >
             Contact the Committee
           </Link>

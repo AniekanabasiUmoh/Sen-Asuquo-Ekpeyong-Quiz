@@ -28,13 +28,13 @@ export default async function AdminVolunteersPage() {
 
   return (
     <div>
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#003090]/50">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary/50">
         Organising Committee
       </p>
       <h1 className="mt-3 font-display text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">
         Change Makers
       </h1>
-      <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#003090]/60">
+      <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-primary/60">
         People who have offered to help at the qualifiers and the Grand Finale.
         {applied.length > 0
           ? ` ${applied.length} awaiting a decision.`
@@ -51,7 +51,7 @@ export default async function AdminVolunteersPage() {
 
       <section className="mt-14 border-t border-black/10 pt-10">
         <h2 className="font-display text-xl font-bold">Shifts &amp; briefings</h2>
-        <p className="mt-1.5 max-w-2xl text-[14px] leading-relaxed text-[#003090]/55">
+        <p className="mt-1.5 max-w-2xl text-[14px] leading-relaxed text-primary/55">
           What accepted Change Makers see on their own dashboard once assigned.
         </p>
         <div className="mt-7">

@@ -71,9 +71,9 @@ export default async function LiveMatchPage({
   );
 
   return (
-    <main className="min-h-screen bg-[#faf6ee]">
+    <main className="min-h-screen bg-cream">
       <div className="mx-auto max-w-5xl px-5 py-14 sm:py-20">
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#003090]/50">
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary/50">
           {broadcast?.status === "ended" ? "Watch again" : "Live"}
         </p>
         <h1 className="mt-3 font-display text-[clamp(2rem,5vw,3.25rem)] font-extrabold leading-[1.02] tracking-[-0.02em]">
@@ -97,7 +97,7 @@ export default async function LiveMatchPage({
 
         {broadcast && ((broadcast.simulcast_links as SimulcastLink[] | null)?.length ?? 0) > 0 ? (
           <div className="mt-5 flex flex-wrap items-center gap-2.5">
-            <span className="text-[12px] font-semibold text-[#003090]/50">Also live on</span>
+            <span className="text-[12px] font-semibold text-primary/50">Also live on</span>
             {(broadcast.simulcast_links as SimulcastLink[]).map((l, i) => (
               <a
                 key={`${l.platform}-${i}`}

@@ -25,13 +25,13 @@ export default async function PortalPage({
 
   return (
     <div className="max-w-2xl">
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#003090]/50">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary/50">
         SAEAC Portal
       </p>
       <h1 className="mt-3 font-display text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">
         {denied ? "You do not have access to that page" : "Portal"}
       </h1>
-      <p className="mt-4 text-[15px] leading-relaxed text-[#003090]/60">
+      <p className="mt-4 text-[15px] leading-relaxed text-primary/60">
         {denied
           ? "Your account does not carry the role that page requires. If you believe that is wrong, contact the Organising Committee."
           : "Sign in to manage your school's registration, or create an account to register a school for the championship."}
@@ -41,7 +41,7 @@ export default async function PortalPage({
         <div className="mt-8 flex flex-wrap gap-4">
           <Link
             href="/login"
-            className="rounded-full bg-[#f0a800] px-7 py-3.5 text-[13px] font-bold text-[#003090] transition hover:bg-[#003090] hover:text-white"
+            className="rounded-full bg-gold px-7 py-3.5 text-[13px] font-bold text-primary transition hover:bg-primary hover:text-white"
           >
             Sign in
           </Link>

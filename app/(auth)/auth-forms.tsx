@@ -37,15 +37,15 @@ export function SignInForm({ next }: { next?: string }) {
         <SubmitButton pending={pending}>Sign in</SubmitButton>
         <Link
           href="/forgot-password"
-          className="text-[13px] font-semibold text-[#003090]/60 underline-offset-4 hover:underline"
+          className="text-[13px] font-semibold text-primary/60 underline-offset-4 hover:underline"
         >
           Forgotten your password?
         </Link>
       </div>
 
-      <p className="pt-2 text-[14px] text-[#003090]/60">
+      <p className="pt-2 text-[14px] text-primary/60">
         Registering a school for the first time?{" "}
-        <Link href="/signup" className="font-semibold text-[#003090] underline-offset-4 hover:underline">
+        <Link href="/signup" className="font-semibold text-primary underline-offset-4 hover:underline">
           Create an account
         </Link>
       </p>
@@ -97,9 +97,9 @@ export function SignUpForm() {
         <SubmitButton pending={pending}>Create account</SubmitButton>
       </div>
 
-      <p className="pt-2 text-[14px] text-[#003090]/60">
+      <p className="pt-2 text-[14px] text-primary/60">
         Already have an account?{" "}
-        <Link href="/login" className="font-semibold text-[#003090] underline-offset-4 hover:underline">
+        <Link href="/login" className="font-semibold text-primary underline-offset-4 hover:underline">
           Sign in
         </Link>
       </p>
@@ -127,8 +127,8 @@ export function ForgotPasswordForm() {
         <SubmitButton pending={pending}>Send reset link</SubmitButton>
       </div>
 
-      <p className="pt-2 text-[14px] text-[#003090]/60">
-        <Link href="/login" className="font-semibold text-[#003090] underline-offset-4 hover:underline">
+      <p className="pt-2 text-[14px] text-primary/60">
+        <Link href="/login" className="font-semibold text-primary underline-offset-4 hover:underline">
           Back to sign in
         </Link>
       </p>

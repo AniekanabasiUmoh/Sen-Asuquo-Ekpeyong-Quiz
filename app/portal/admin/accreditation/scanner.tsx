@@ -116,7 +116,7 @@ export function AccreditationScanner() {
               <button
                 type="button"
                 onClick={() => void start()}
-                className="rounded-full bg-[#f0a800] px-7 py-3.5 text-[13px] font-bold text-[#003090] transition hover:bg-white"
+                className="rounded-full bg-gold px-7 py-3.5 text-[13px] font-bold text-primary transition hover:bg-white"
               >
                 Start scanning
               </button>
@@ -140,7 +140,7 @@ export function AccreditationScanner() {
       </div>
 
       {cameraError ? (
-        <p className="mt-4 text-[13px] font-semibold text-[#c1300f]">{cameraError}</p>
+        <p className="mt-4 text-[13px] font-semibold text-red-ink">{cameraError}</p>
       ) : null}
 
       {state.result ? (
@@ -149,8 +149,8 @@ export function AccreditationScanner() {
           className={
             "mt-5 rounded-[24px] p-6 " +
             (state.result.ok
-              ? "bg-[#2dc653]/12 text-[#155d27]"
-              : "bg-[#f44423]/10 text-[#c1300f]")
+              ? "bg-grass/12 text-forest"
+              : "bg-red/10 text-red-ink")
           }
         >
           <p className="text-[11px] font-bold uppercase tracking-[0.14em] opacity-70">
@@ -166,7 +166,7 @@ export function AccreditationScanner() {
           </p>
         </div>
       ) : state.error ? (
-        <p className="mt-5 rounded-[24px] bg-[#f44423]/10 p-6 text-[13px] font-semibold text-[#c1300f]">
+        <p className="mt-5 rounded-[24px] bg-red/10 p-6 text-[13px] font-semibold text-red-ink">
           {state.error}
         </p>
       ) : null}

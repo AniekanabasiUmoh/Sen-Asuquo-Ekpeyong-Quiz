@@ -42,13 +42,13 @@ export default async function AdminSchedulePage() {
 
   return (
     <div>
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#003090]/50">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary/50">
         Organising Committee
       </p>
       <h1 className="mt-3 font-display text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">
         Schedule
       </h1>
-      <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#003090]/60">
+      <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-primary/60">
         Fixtures, venues and dates. Nothing appears on the public schedule until
         it is published, and every change to a time or venue is logged and shown
         to schools, who plan travel around these dates.

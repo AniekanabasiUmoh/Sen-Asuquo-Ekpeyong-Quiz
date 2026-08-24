@@ -61,20 +61,20 @@ export default async function AccreditationPage() {
 
   return (
     <div>
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#003090]/50">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary/50">
         Organising Committee
       </p>
       <h1 className="mt-3 font-display text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">
         Accreditation
       </h1>
-      <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#003090]/60">
+      <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-primary/60">
         Check students, Coaches, Change Makers and judges in at the gate by
         scanning their accreditation code, and see who has arrived.
       </p>
 
       <Link
         href="/portal/admin/accreditation/badges"
-        className="mt-5 inline-block text-[13px] font-semibold text-[#003090] underline-offset-4 hover:underline"
+        className="mt-5 inline-block text-[13px] font-semibold text-primary underline-offset-4 hover:underline"
       >
         View and print badges &rarr;
       </Link>

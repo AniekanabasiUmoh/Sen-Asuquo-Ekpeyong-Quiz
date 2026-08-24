@@ -63,7 +63,7 @@ export function Roster({
       {counts.is_valid ? (
         <p
           role="status"
-          className="mt-5 rounded-2xl border border-[#2dc653]/30 bg-[#2dc653]/8 px-5 py-3.5 text-[13px] font-semibold text-[#155d27]"
+          className="mt-5 rounded-2xl border border-grass/30 bg-grass/8 px-5 py-3.5 text-[13px] font-semibold text-forest"
         >
           The team is complete: 3 Strikers and 2 Assists.
         </p>
@@ -133,12 +133,12 @@ function Count({ label, value, of }: { label: string; value: number; of: number 
   const done = value >= of;
   return (
     <div className="rounded-[22px] bg-white p-6">
-      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#003090]/45">
+      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary/45">
         {label}
       </p>
       <p className="mt-2 font-display text-3xl font-extrabold tabular-nums">
-        <span className={done ? "text-[#155d27]" : undefined}>{value}</span>
-        <span className="text-[#003090]/30"> / {of}</span>
+        <span className={done ? "text-forest" : undefined}>{value}</span>
+        <span className="text-primary/30"> / {of}</span>
       </p>
     </div>
   );
@@ -160,9 +160,9 @@ function Group({
   return (
     <section>
       <h3 className="font-display text-xl font-bold">{title}</h3>
-      <p className="mt-1.5 text-[14px] leading-relaxed text-[#003090]/55">{note}</p>
+      <p className="mt-1.5 text-[14px] leading-relaxed text-primary/55">{note}</p>
       {students.length === 0 ? (
-        <p className="mt-5 rounded-2xl border border-dashed border-black/15 px-5 py-6 text-center text-[13px] text-[#003090]/45">
+        <p className="mt-5 rounded-2xl border border-dashed border-black/15 px-5 py-6 text-center text-[13px] text-primary/45">
           None added yet.
         </p>
       ) : (
@@ -206,7 +206,7 @@ function StudentCard({
   return (
     <li className="rounded-[24px] bg-white p-6">
       <div className="flex flex-wrap items-start gap-5">
-        <div className="h-16 w-16 flex-none overflow-hidden rounded-2xl bg-[#003090]/8">
+        <div className="h-16 w-16 flex-none overflow-hidden rounded-2xl bg-primary/8">
           {photoUrl ? (
             // Signed URL from a private bucket, so next/image cannot optimise it.
             // eslint-disable-next-line @next/next/no-img-element
@@ -216,7 +216,7 @@ function StudentCard({
               className="h-full w-full object-cover"
             />
           ) : (
-            <span className="flex h-full w-full items-center justify-center font-display text-lg font-bold text-[#003090]/25">
+            <span className="flex h-full w-full items-center justify-center font-display text-lg font-bold text-primary/25">
               {student.full_name.charAt(0)}
             </span>
           )}
@@ -224,15 +224,15 @@ function StudentCard({
 
         <div className="min-w-0 flex-1">
           <h4 className="font-display text-base font-bold">{student.full_name}</h4>
-          <p className="mt-1 text-[13px] text-[#003090]/55">
+          <p className="mt-1 text-[13px] text-primary/55">
             {STREAM_LABEL[student.stream] ?? student.stream}
             {student.class_level ? ` · ${student.class_level}` : ""}
           </p>
           <p className="mt-2 text-[12px] font-semibold">
             {student.consent_given ? (
-              <span className="text-[#155d27]">Consent recorded</span>
+              <span className="text-forest">Consent recorded</span>
             ) : (
-              <span className="text-[#c1300f]">Consent not yet recorded</span>
+              <span className="text-red-ink">Consent not yet recorded</span>
             )}
           </p>
         </div>
@@ -243,7 +243,7 @@ function StudentCard({
             <button
               type="submit"
               disabled={removePending}
-              className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-[#faf6ee] disabled:opacity-55"
+              className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-cream disabled:opacity-55"
             >
               Remove
             </button>
@@ -266,7 +266,7 @@ function StudentCard({
             <button
               type="submit"
               disabled={consentPending}
-              className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-[#faf6ee] disabled:opacity-55"
+              className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-cream disabled:opacity-55"
             >
               {student.consent_given ? "Withdraw consent" : "Record consent"}
             </button>
@@ -274,19 +274,19 @@ function StudentCard({
 
           <form action={photoAction} className="flex flex-wrap items-center gap-3">
             <input type="hidden" name="student_id" value={student.id} />
-            <label className="text-[12px] font-semibold text-[#003090]/60">
+            <label className="text-[12px] font-semibold text-primary/60">
               <span className="sr-only">Photograph for {student.full_name}</span>
               <input
                 type="file"
                 name="photo"
                 accept="image/jpeg,image/png,image/webp"
-                className="w-52 text-[12px] file:mr-3 file:rounded-full file:border-0 file:bg-[#003090]/8 file:px-4 file:py-2 file:text-[12px] file:font-semibold file:text-[#003090]"
+                className="w-52 text-[12px] file:mr-3 file:rounded-full file:border-0 file:bg-primary/8 file:px-4 file:py-2 file:text-[12px] file:font-semibold file:text-primary"
               />
             </label>
             <button
               type="submit"
               disabled={photoPending}
-              className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-[#faf6ee] disabled:opacity-55"
+              className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-cream disabled:opacity-55"
             >
               {photoPending ? "Uploading…" : "Upload"}
             </button>
@@ -310,7 +310,7 @@ export function Documents({
   return (
     <section className="mt-14">
       <h2 className="font-display text-xl font-bold">Supporting documents</h2>
-      <p className="mt-1.5 max-w-2xl text-[14px] leading-relaxed text-[#003090]/55">
+      <p className="mt-1.5 max-w-2xl text-[14px] leading-relaxed text-primary/55">
         Anything the committee has asked for: a letter from the principal, proof
         of registration, or consent forms. Files are private to your school and
         the committee.
@@ -328,7 +328,7 @@ export function Documents({
             >
               <div>
                 <p className="font-display text-[15px] font-bold">{d.label}</p>
-                <p className="mt-0.5 text-[12px] text-[#003090]/50">
+                <p className="mt-0.5 text-[12px] text-primary/50">
                   {d.size_bytes
                     ? `${(d.size_bytes / 1024).toFixed(0)} KB`
                     : "Uploaded"}
@@ -339,7 +339,7 @@ export function Documents({
                   <input type="hidden" name="document_id" value={d.id} />
                   <button
                     type="submit"
-                    className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-[#faf6ee]"
+                    className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-cream"
                   >
                     Remove
                   </button>
@@ -358,13 +358,13 @@ export function Documents({
           <div className="min-w-[14rem] flex-1">
             <Input label="Document name" name="label" placeholder="Principal's letter" />
           </div>
-          <label className="text-[12px] font-semibold text-[#003090]/60">
+          <label className="text-[12px] font-semibold text-primary/60">
             <span className="sr-only">Choose a file</span>
             <input
               type="file"
               name="document"
               accept="application/pdf,image/jpeg,image/png,image/webp"
-              className="w-60 text-[12px] file:mr-3 file:rounded-full file:border-0 file:bg-[#003090]/8 file:px-4 file:py-2 file:text-[12px] file:font-semibold file:text-[#003090]"
+              className="w-60 text-[12px] file:mr-3 file:rounded-full file:border-0 file:bg-primary/8 file:px-4 file:py-2 file:text-[12px] file:font-semibold file:text-primary"
             />
           </label>
           <SubmitButton pending={upPending} className="!px-6 !py-3">

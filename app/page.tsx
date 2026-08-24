@@ -50,7 +50,7 @@ export default function HomePage() {
               components/hero-slideshow.tsx */}
           <HeroSlideshow />
           {/* Legibility scrim: dark at the foot where the type sits, clear at the top */}
-          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[#06122f] via-[#06122f]/45 via-55% to-[#06122f]/10" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-ink via-ink/45 via-55% to-ink/10" />
           <div className="absolute inset-x-0 top-0 -z-10 h-44 bg-gradient-to-b from-black/50 to-transparent" />
 
           {/* Headline block, anchored bottom-left */}
@@ -94,7 +94,7 @@ export default function HomePage() {
               <div className="flex shrink-0 flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-3 [&>a]:w-full [&>a]:justify-center [&>a]:text-center sm:[&>a]:w-auto">
                 <Link
                   href="/register"
-                  className="rounded-full bg-[#f0a800] px-7 py-3.5 text-[13px] font-bold text-[#003090] transition hover:bg-white"
+                  className="rounded-full bg-gold px-7 py-3.5 text-[13px] font-bold text-primary transition hover:bg-white"
                 >
                   Register Now
                 </Link>

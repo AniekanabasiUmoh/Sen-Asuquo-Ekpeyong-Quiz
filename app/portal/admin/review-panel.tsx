@@ -49,7 +49,7 @@ export function ReviewPanel({
           type="button"
           onClick={() => setShowReason((v) => !v)}
           aria-expanded={showReason}
-          className="rounded-full border border-black/15 px-5 py-2.5 text-[12px] font-semibold transition hover:bg-[#faf6ee]"
+          className="rounded-full border border-black/15 px-5 py-2.5 text-[12px] font-semibold transition hover:bg-cream"
         >
           {showReason ? "Cancel" : "Send back or reject"}
         </button>
@@ -71,14 +71,14 @@ export function ReviewPanel({
               name="send_back"
               value="1"
               disabled={rejectPending}
-              className="rounded-full bg-[#003090] px-5 py-2.5 text-[12px] font-bold text-white transition hover:bg-[#0d2270] disabled:opacity-55"
+              className="rounded-full bg-primary px-5 py-2.5 text-[12px] font-bold text-white transition hover:bg-navy-deep disabled:opacity-55"
             >
               Send back for correction
             </button>
             <button
               type="submit"
               disabled={rejectPending}
-              className="rounded-full border border-[#f44423]/40 px-5 py-2.5 text-[12px] font-bold text-[#c1300f] transition hover:bg-[#f44423]/5 disabled:opacity-55"
+              className="rounded-full border border-red/40 px-5 py-2.5 text-[12px] font-bold text-red-ink transition hover:bg-red/5 disabled:opacity-55"
             >
               Reject
             </button>

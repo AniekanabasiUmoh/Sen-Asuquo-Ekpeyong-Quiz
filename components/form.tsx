@@ -1,9 +1,9 @@
 /**
  * Form primitives for the portal.
  *
- * Kept deliberately plain so they inherit the site's existing look: the navy
- * #003090 / gold #f0a800 pairing, the pill buttons and the 28px radius the
- * public pages already use. No new visual language is introduced here.
+ * Kept deliberately plain so they inherit the site's existing look: the
+ * primary/gold pairing, the pill buttons and the 28px radius the public
+ * pages already use. No new visual language is introduced here.
  *
  * Accessibility notes that matter and are easy to lose:
  *   * every input is label-associated by id, never placeholder-only
@@ -16,10 +16,10 @@ import { forwardRef } from "react";
 
 const FIELD =
   "w-full rounded-2xl border border-black/15 bg-white px-4 py-3 text-[14px] " +
-  "outline-none transition placeholder:text-[#003090]/30 " +
-  "focus:border-[#003090] focus:ring-2 focus:ring-[#003090]/20 " +
+  "outline-none transition placeholder:text-primary/30 " +
+  "focus:border-primary focus:ring-2 focus:ring-primary/20 " +
   "disabled:cursor-not-allowed disabled:bg-black/[0.03] " +
-  "aria-[invalid=true]:border-[#f44423] aria-[invalid=true]:ring-[#f44423]/20";
+  "aria-[invalid=true]:border-red aria-[invalid=true]:ring-red/20";
 
 type FieldShellProps = {
   id: string;
@@ -42,18 +42,18 @@ export function FieldShell({
     <div>
       <label
         htmlFor={id}
-        className="block text-[13px] font-semibold text-[#003090]"
+        className="block text-[13px] font-semibold text-primary"
       >
         {label}
         {required ? (
-          <span className="ml-1 text-[#f44423]" aria-hidden="true">
+          <span className="ml-1 text-red" aria-hidden="true">
             *
           </span>
         ) : null}
         {required ? <span className="sr-only"> (required)</span> : null}
       </label>
       {hint ? (
-        <p id={`${id}-hint`} className="mt-1 text-[12px] text-[#003090]/50">
+        <p id={`${id}-hint`} className="mt-1 text-[12px] text-primary/50">
           {hint}
         </p>
       ) : null}
@@ -61,7 +61,7 @@ export function FieldShell({
       {error ? (
         <p
           id={`${id}-error`}
-          className="mt-1.5 text-[12px] font-semibold text-[#f44423]"
+          className="mt-1.5 text-[12px] font-semibold text-red"
         >
           {error}
         </p>
@@ -211,16 +211,16 @@ export function Checkbox({
       <input
         type="checkbox"
         id={fieldId}
-        className="mt-0.5 h-5 w-5 flex-none rounded border-black/25 accent-[#003090]"
+        className="mt-0.5 h-5 w-5 flex-none rounded border-black/25 accent-primary"
         aria-describedby={hint ? `${fieldId}-hint` : undefined}
         {...rest}
       />
       <div>
-        <label htmlFor={fieldId} className="text-[14px] font-semibold text-[#003090]">
+        <label htmlFor={fieldId} className="text-[14px] font-semibold text-primary">
           {label}
         </label>
         {hint ? (
-          <p id={`${fieldId}-hint`} className="mt-0.5 text-[12px] leading-relaxed text-[#003090]/55">
+          <p id={`${fieldId}-hint`} className="mt-0.5 text-[12px] leading-relaxed text-primary/55">
             {hint}
           </p>
         ) : null}
@@ -241,10 +241,10 @@ export function SubmitButton({
       disabled={pending || rest.disabled}
       aria-busy={pending || undefined}
       className={
-        "rounded-full bg-[#f0a800] px-7 py-3.5 text-[13px] font-bold text-[#003090] " +
-        "transition hover:bg-[#003090] hover:text-white " +
-        "disabled:cursor-not-allowed disabled:opacity-55 disabled:hover:bg-[#f0a800] " +
-        "disabled:hover:text-[#003090] " +
+        "rounded-full bg-gold px-7 py-3.5 text-[13px] font-bold text-primary " +
+        "transition hover:bg-primary hover:text-white " +
+        "disabled:cursor-not-allowed disabled:opacity-55 disabled:hover:bg-gold " +
+        "disabled:hover:text-primary " +
         className
       }
       {...rest}
@@ -260,7 +260,7 @@ export function FormError({ message }: { message?: string | null }) {
   return (
     <div
       role="alert"
-      className="rounded-2xl border border-[#f44423]/30 bg-[#f44423]/5 px-4 py-3 text-[13px] font-semibold text-[#c1300f]"
+      className="rounded-2xl border border-red/30 bg-red/5 px-4 py-3 text-[13px] font-semibold text-red-ink"
     >
       {message}
     </div>
@@ -272,7 +272,7 @@ export function FormNotice({ message }: { message?: string | null }) {
   return (
     <div
       role="status"
-      className="rounded-2xl border border-[#2dc653]/30 bg-[#2dc653]/8 px-4 py-3 text-[13px] font-semibold text-[#155d27]"
+      className="rounded-2xl border border-grass/30 bg-grass/8 px-4 py-3 text-[13px] font-semibold text-forest"
     >
       {message}
     </div>

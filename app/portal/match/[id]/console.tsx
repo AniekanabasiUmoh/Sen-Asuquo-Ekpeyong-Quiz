@@ -51,7 +51,6 @@ const EVENT_LABEL: Record<string, string> = {
 
 export function MatchConsole({
   matchId,
-  matchName,
   status,
   publishState,
   schools,
@@ -92,8 +91,8 @@ export function MatchConsole({
               className={
                 "rounded-full px-4 py-2 text-[12px] font-bold transition " +
                 (status === s
-                  ? "bg-[#003090] text-white"
-                  : "border border-black/15 hover:bg-[#faf6ee]")
+                  ? "bg-primary text-white"
+                  : "border border-black/15 hover:bg-cream")
               }
             >
               {s === "live" ? "Go live" : s.charAt(0).toUpperCase() + s.slice(1)}
@@ -106,14 +105,14 @@ export function MatchConsole({
             <button
               type="submit"
               disabled={pubPending}
-              className="rounded-full bg-[#f0a800] px-6 py-2.5 text-[12px] font-bold text-[#003090] transition hover:bg-[#003090] hover:text-white disabled:opacity-55"
+              className="rounded-full bg-gold px-6 py-2.5 text-[12px] font-bold text-primary transition hover:bg-primary hover:text-white disabled:opacity-55"
             >
               Publish results
             </button>
           </form>
         ) : null}
         {publishState === "published" ? (
-          <span className="ml-auto rounded-full bg-[#2dc653]/20 px-4 py-2 text-[12px] font-bold text-[#155d27]">
+          <span className="ml-auto rounded-full bg-grass/20 px-4 py-2 text-[12px] font-bold text-forest">
             Results published
           </span>
         ) : null}
@@ -142,13 +141,13 @@ export function MatchConsole({
 
         <aside className="lg:sticky lg:top-28 lg:self-start">
           <h2 className="font-display text-lg font-bold">Match log</h2>
-          <p className="mt-1.5 text-[12px] leading-relaxed text-[#003090]/50">
+          <p className="mt-1.5 text-[12px] leading-relaxed text-primary/50">
             Append only. A mistake is corrected with an adjustment, so both stay
             visible.
           </p>
           <ol className="mt-4 max-h-[32rem] space-y-2 overflow-y-auto pr-1">
             {events.length === 0 ? (
-              <li className="rounded-2xl border border-dashed border-black/15 px-4 py-5 text-center text-[12px] text-[#003090]/45">
+              <li className="rounded-2xl border border-dashed border-black/15 px-4 py-5 text-center text-[12px] text-primary/45">
                 Nothing recorded yet.
               </li>
             ) : (
@@ -159,18 +158,18 @@ export function MatchConsole({
                       {EVENT_LABEL[e.event_type] ?? e.event_type}
                     </span>
                     {e.points !== 0 ? (
-                      <span className="font-mono text-[12px] font-bold tabular-nums text-[#155d27]">
+                      <span className="font-mono text-[12px] font-bold tabular-nums text-forest">
                         {e.points > 0 ? "+" : ""}
                         {e.points}
                       </span>
                     ) : null}
                   </div>
-                  <p className="mt-0.5 text-[11px] text-[#003090]/50">
+                  <p className="mt-0.5 text-[11px] text-primary/50">
                     {byId.get(e.school_id) ?? "Unknown"}
                     {e.question_no ? ` · Q${e.question_no}` : ""}
                   </p>
                   {e.note ? (
-                    <p className="mt-1 text-[11px] italic text-[#003090]/45">{e.note}</p>
+                    <p className="mt-1 text-[11px] italic text-primary/45">{e.note}</p>
                   ) : null}
                 </li>
               ))
@@ -209,7 +208,7 @@ function SchoolPanel({
     <li className="rounded-[24px] bg-white p-6">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex items-center gap-4">
-          <span className="font-mono text-[13px] tabular-nums text-[#003090]/30">
+          <span className="font-mono text-[13px] tabular-nums text-primary/30">
             {String(position).padStart(2, "0")}
           </span>
           <h3 className="font-display text-lg font-bold">{school.name}</h3>
@@ -219,7 +218,7 @@ function SchoolPanel({
         </p>
       </div>
 
-      <p className="mt-1 text-[12px] text-[#003090]/50">
+      <p className="mt-1 text-[12px] text-primary/50">
         {standing?.striker_correct ?? 0} striker · {standing?.assist_correct ?? 0}{" "}
         assist · {standing?.var_referrals ?? 0} VAR ·{" "}
         {standing?.substitutions ?? 0} sub
@@ -232,11 +231,11 @@ function SchoolPanel({
         <input type="hidden" name="match_id" value={matchId} />
         <input type="hidden" name="school_id" value={school.id} />
         <div className="flex flex-wrap items-end gap-3">
-          <label className="text-[11px] font-semibold text-[#003090]/55">
+          <label className="text-[11px] font-semibold text-primary/55">
             Student
             <select
               name="student_id"
-              className="mt-1 block rounded-full border border-black/15 bg-white px-3 py-2 text-[12px] outline-none focus:border-[#003090]"
+              className="mt-1 block rounded-full border border-black/15 bg-white px-3 py-2 text-[12px] outline-none focus:border-primary"
             >
               <option value="">Not specified</option>
               {students.map((s) => (
@@ -246,14 +245,14 @@ function SchoolPanel({
               ))}
             </select>
           </label>
-          <label className="text-[11px] font-semibold text-[#003090]/55">
+          <label className="text-[11px] font-semibold text-primary/55">
             Question
             <input
               type="number"
               name="question_no"
               min={1}
               max={15}
-              className="mt-1 block w-20 rounded-full border border-black/15 bg-white px-3 py-2 text-[12px] outline-none focus:border-[#003090]"
+              className="mt-1 block w-20 rounded-full border border-black/15 bg-white px-3 py-2 text-[12px] outline-none focus:border-primary"
             />
           </label>
         </div>
@@ -270,7 +269,7 @@ function SchoolPanel({
         <button
           type="button"
           onClick={() => setPanel(panel === "sub" ? "none" : "sub")}
-          className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-[#faf6ee]"
+          className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-cream"
         >
           Substitution
         </button>
@@ -278,7 +277,7 @@ function SchoolPanel({
           <button
             type="button"
             onClick={() => setPanel(panel === "adj" ? "none" : "adj")}
-            className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-[#faf6ee]"
+            className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-cream"
           >
             Adjust score
           </button>
@@ -305,7 +304,7 @@ function SchoolPanel({
           />
           <button
             type="submit"
-            className="rounded-full bg-[#003090] px-5 py-2.5 text-[12px] font-bold text-white transition hover:bg-[#0d2270]"
+            className="rounded-full bg-primary px-5 py-2.5 text-[12px] font-bold text-white transition hover:bg-navy-deep"
           >
             Record substitution
           </button>
@@ -327,7 +326,7 @@ function SchoolPanel({
           <Textarea label="Reason" name="reason" required rows={2} />
           <button
             type="submit"
-            className="rounded-full bg-[#003090] px-5 py-2.5 text-[12px] font-bold text-white transition hover:bg-[#0d2270]"
+            className="rounded-full bg-primary px-5 py-2.5 text-[12px] font-bold text-white transition hover:bg-navy-deep"
           >
             Record adjustment
           </button>
@@ -357,8 +356,8 @@ function Score({
       className={
         "rounded-full px-4 py-2.5 text-[12px] font-bold transition disabled:opacity-55 " +
         (tone === "good"
-          ? "bg-[#003090] text-white hover:bg-[#0d2270]"
-          : "border border-black/15 hover:bg-[#faf6ee]")
+          ? "bg-primary text-white hover:bg-navy-deep"
+          : "border border-black/15 hover:bg-cream")
       }
     >
       {label}

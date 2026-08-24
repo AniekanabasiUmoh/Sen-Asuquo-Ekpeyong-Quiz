@@ -10,10 +10,10 @@ import { assignToShift, setVolunteerStatus, type VolunteerAdminState } from "./a
 const EMPTY: VolunteerAdminState = {};
 
 const TONE: Record<VolunteerStatus, string> = {
-  applied: "bg-[#f0a800]/25 text-[#7a5300]",
-  accepted: "bg-[#2dc653]/20 text-[#155d27]",
-  declined: "bg-black/[0.06] text-[#003090]/60",
-  withdrawn: "bg-black/[0.06] text-[#003090]/60",
+  applied: "bg-gold/25 text-gold-ink",
+  accepted: "bg-grass/20 text-forest",
+  declined: "bg-black/[0.06] text-primary/60",
+  withdrawn: "bg-black/[0.06] text-primary/60",
 };
 
 export function VolunteerRows({
@@ -30,7 +30,7 @@ export function VolunteerRows({
 
   if (volunteers.length === 0) {
     return (
-      <p className="rounded-2xl border border-dashed border-black/15 px-5 py-8 text-center text-[13px] text-[#003090]/45">
+      <p className="rounded-2xl border border-dashed border-black/15 px-5 py-8 text-center text-[13px] text-primary/45">
         No applications yet.
       </p>
     );
@@ -47,16 +47,16 @@ export function VolunteerRows({
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div className="min-w-0">
                 <h3 className="font-display text-base font-bold">{v.full_name}</h3>
-                <p className="mt-0.5 text-[13px] text-[#003090]/55">{v.email}</p>
-                <p className="mt-0.5 text-[12px] text-[#003090]/45">
+                <p className="mt-0.5 text-[13px] text-primary/55">{v.email}</p>
+                <p className="mt-0.5 text-[12px] text-primary/45">
                   {v.lga_id ? lgaNames[v.lga_id] ?? "Unknown LGA" : "Anywhere"}
                   {v.phone ? ` · ${v.phone}` : ""}
                 </p>
                 {v.role_sought ? (
-                  <p className="mt-2 text-[13px] text-[#003090]/70">{v.role_sought}</p>
+                  <p className="mt-2 text-[13px] text-primary/70">{v.role_sought}</p>
                 ) : null}
                 {v.notes ? (
-                  <p className="mt-1 text-[13px] italic text-[#003090]/50">{v.notes}</p>
+                  <p className="mt-1 text-[13px] italic text-primary/50">{v.notes}</p>
                 ) : null}
               </div>
               <span className={`rounded-full px-3.5 py-1.5 text-[11px] font-bold ${TONE[v.status]}`}>
@@ -71,7 +71,7 @@ export function VolunteerRows({
                   <input type="hidden" name="status" value="accepted" />
                   <button
                     type="submit"
-                    className="rounded-full bg-[#003090] px-5 py-2.5 text-[12px] font-bold text-white transition hover:bg-[#0d2270]"
+                    className="rounded-full bg-primary px-5 py-2.5 text-[12px] font-bold text-white transition hover:bg-navy-deep"
                   >
                     Accept
                   </button>
@@ -81,7 +81,7 @@ export function VolunteerRows({
                   <input type="hidden" name="status" value="declined" />
                   <button
                     type="submit"
-                    className="rounded-full border border-black/15 px-5 py-2.5 text-[12px] font-semibold transition hover:bg-[#faf6ee]"
+                    className="rounded-full border border-black/15 px-5 py-2.5 text-[12px] font-semibold transition hover:bg-cream"
                   >
                     Decline
                   </button>
@@ -95,12 +95,12 @@ export function VolunteerRows({
                 className="mt-4 flex flex-wrap items-center gap-3 border-t border-black/10 pt-4"
               >
                 <input type="hidden" name="volunteer_id" value={v.id} />
-                <label className="text-[12px] font-semibold text-[#003090]/55">
+                <label className="text-[12px] font-semibold text-primary/55">
                   Assign to a shift
                   <select
                     name="shift_id"
                     required
-                    className="ml-2 rounded-full border border-black/15 bg-white px-3 py-2 text-[12px] outline-none focus:border-[#003090]"
+                    className="ml-2 rounded-full border border-black/15 bg-white px-3 py-2 text-[12px] outline-none focus:border-primary"
                   >
                     {shifts.map((s) => (
                       <option key={s.id} value={s.id}>
@@ -113,11 +113,11 @@ export function VolunteerRows({
                   type="text"
                   name="role"
                   placeholder="Role (optional)"
-                  className="w-40 rounded-full border border-black/15 bg-white px-3 py-2 text-[12px] outline-none focus:border-[#003090]"
+                  className="w-40 rounded-full border border-black/15 bg-white px-3 py-2 text-[12px] outline-none focus:border-primary"
                 />
                 <button
                   type="submit"
-                  className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-[#faf6ee]"
+                  className="rounded-full border border-black/15 px-4 py-2 text-[12px] font-semibold transition hover:bg-cream"
                 >
                   Assign
                 </button>

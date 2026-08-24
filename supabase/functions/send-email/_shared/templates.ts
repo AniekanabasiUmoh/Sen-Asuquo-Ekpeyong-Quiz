@@ -28,7 +28,6 @@
  */
 
 const NAVY = "#003090";
-const NAVY_DEEP = "#0d2270";
 const GOLD = "#f0a800";
 const PAPER = "#faf6ee";
 const INK_SOFT = "#4a5b8f";

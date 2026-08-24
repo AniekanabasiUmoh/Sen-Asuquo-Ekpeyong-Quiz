@@ -58,13 +58,13 @@ export default async function AdminReportsPage() {
 
   return (
     <div>
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#003090]/50">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary/50">
         Organising Committee
       </p>
       <h1 className="mt-3 font-display text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">
         Reports
       </h1>
-      <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#003090]/60">
+      <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-primary/60">
         Registration and participation across the seven Local Government Areas.
       </p>
 
@@ -79,7 +79,7 @@ export default async function AdminReportsPage() {
         <div className="mt-5 overflow-x-auto">
           <table className="w-full min-w-[44rem] border-collapse text-left text-[13px]">
             <thead>
-              <tr className="border-b border-black/10 text-[11px] uppercase tracking-[0.12em] text-[#003090]/45">
+              <tr className="border-b border-black/10 text-[11px] uppercase tracking-[0.12em] text-primary/45">
                 <th className="py-3 pr-4 font-bold">LGA</th>
                 <th className="py-3 pr-4 font-bold">Eligible</th>
                 <th className="py-3 pr-4 font-bold">Draft</th>
@@ -113,7 +113,7 @@ export default async function AdminReportsPage() {
             </tbody>
           </table>
         </div>
-        <p className="mt-4 max-w-2xl text-[12px] leading-relaxed text-[#003090]/45">
+        <p className="mt-4 max-w-2xl text-[12px] leading-relaxed text-primary/45">
           Eligible counts are the provisional public school figures from the
           Principals&rsquo; Meeting Report and total 117. The published
           &ldquo;250+ schools&rdquo; figure includes private schools and
@@ -123,13 +123,13 @@ export default async function AdminReportsPage() {
 
       <section className="mt-14">
         <h2 className="font-display text-xl font-bold">Progression</h2>
-        <p className="mt-1.5 max-w-2xl text-[14px] leading-relaxed text-[#003090]/55">
+        <p className="mt-1.5 max-w-2xl text-[14px] leading-relaxed text-primary/55">
           Schools with a published result at each stage, and how many advanced
           past it. Empty until fixtures have been played and results
           published.
         </p>
         {(progression ?? []).every((p) => p.entered === 0) ? (
-          <p className="mt-5 rounded-2xl border border-dashed border-black/15 px-5 py-6 text-center text-[13px] text-[#003090]/45">
+          <p className="mt-5 rounded-2xl border border-dashed border-black/15 px-5 py-6 text-center text-[13px] text-primary/45">
             No results published yet.
           </p>
         ) : (
@@ -140,12 +140,12 @@ export default async function AdminReportsPage() {
                 className="flex items-center justify-between gap-4 rounded-2xl bg-white px-5 py-3.5"
               >
                 <span className="text-[13px] font-semibold">
-                  <span className="mr-2 font-mono text-[11px] tabular-nums text-[#003090]/30">
+                  <span className="mr-2 font-mono text-[11px] tabular-nums text-primary/30">
                     {String(p.stage_ordinal).padStart(2, "0")}
                   </span>
                   {p.stage_name}
                 </span>
-                <span className="text-[13px] tabular-nums text-[#003090]/60">
+                <span className="text-[13px] tabular-nums text-primary/60">
                   {p.advanced} of {p.entered} advanced
                 </span>
               </li>
@@ -156,18 +156,18 @@ export default async function AdminReportsPage() {
 
       <section className="mt-14">
         <h2 className="font-display text-xl font-bold">Attendance</h2>
-        <p className="mt-1.5 max-w-2xl text-[14px] leading-relaxed text-[#003090]/55">
+        <p className="mt-1.5 max-w-2xl text-[14px] leading-relaxed text-primary/55">
           Check-in rate by accreditation type. See{" "}
           <a
             href="/portal/admin/accreditation"
-            className="font-semibold text-[#003090] underline-offset-4 hover:underline"
+            className="font-semibold text-primary underline-offset-4 hover:underline"
           >
             Accreditation
           </a>{" "}
           to issue badges or scan someone in.
         </p>
         {(attendance ?? []).length === 0 ? (
-          <p className="mt-5 rounded-2xl border border-dashed border-black/15 px-5 py-6 text-center text-[13px] text-[#003090]/45">
+          <p className="mt-5 rounded-2xl border border-dashed border-black/15 px-5 py-6 text-center text-[13px] text-primary/45">
             No accreditations issued yet.
           </p>
         ) : (
@@ -176,10 +176,10 @@ export default async function AdminReportsPage() {
               <li key={a.holder_type} className="rounded-2xl bg-white px-5 py-4">
                 <p className="text-[13px] font-semibold capitalize">{a.holder_type}s</p>
                 <p className="mt-1 font-display text-lg font-extrabold tabular-nums">
-                  {a.checked_in} <span className="text-[#003090]/40">/ {a.issued}</span>
+                  {a.checked_in} <span className="text-primary/40">/ {a.issued}</span>
                 </p>
                 {a.revoked > 0 ? (
-                  <p className="mt-0.5 text-[11px] text-[#003090]/45">{a.revoked} revoked</p>
+                  <p className="mt-0.5 text-[11px] text-primary/45">{a.revoked} revoked</p>
                 ) : null}
               </li>
             ))}
@@ -189,11 +189,11 @@ export default async function AdminReportsPage() {
 
       <section className="mt-14">
         <h2 className="font-display text-xl font-bold">Recorded activity</h2>
-        <p className="mt-1.5 text-[14px] text-[#003090]/55">
+        <p className="mt-1.5 text-[14px] text-primary/55">
           The most frequent actions in the last 500 audit entries.
         </p>
         {topActions.length === 0 ? (
-          <p className="mt-5 rounded-2xl border border-dashed border-black/15 px-5 py-6 text-center text-[13px] text-[#003090]/45">
+          <p className="mt-5 rounded-2xl border border-dashed border-black/15 px-5 py-6 text-center text-[13px] text-primary/45">
             Nothing recorded yet.
           </p>
         ) : (
@@ -219,7 +219,7 @@ export default async function AdminReportsPage() {
 function Stat({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-[22px] bg-white p-6">
-      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#003090]/45">
+      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary/45">
         {label}
       </p>
       <p className="mt-2 font-display text-3xl font-extrabold tabular-nums">{value}</p>
@@ -228,5 +228,5 @@ function Stat({ label, value }: { label: string; value: number }) {
 }
 
 function Cell({ v }: { v: number }) {
-  return <td className="py-3 pr-4 tabular-nums text-[#003090]/70">{v}</td>;
+  return <td className="py-3 pr-4 tabular-nums text-primary/70">{v}</td>;
 }

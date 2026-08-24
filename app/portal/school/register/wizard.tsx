@@ -64,7 +64,7 @@ export function RegistrationWizard({
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="rounded-full border border-black/15 px-6 py-3 text-[13px] font-semibold transition hover:bg-[#faf6ee]"
+                className="rounded-full border border-black/15 px-6 py-3 text-[13px] font-semibold transition hover:bg-cream"
               >
                 Back
               </button>
@@ -88,7 +88,7 @@ export function RegistrationWizard({
                 <button
                   type="button"
                   onClick={() => setStep(step - 1)}
-                  className="rounded-full border border-black/15 px-6 py-3 text-[13px] font-semibold transition hover:bg-[#faf6ee]"
+                  className="rounded-full border border-black/15 px-6 py-3 text-[13px] font-semibold transition hover:bg-cream"
                 >
                   Back
                 </button>
@@ -98,7 +98,7 @@ export function RegistrationWizard({
                 <button
                   type="button"
                   onClick={() => setStep(Math.min(step + 1, 3))}
-                  className="text-[13px] font-semibold text-[#003090] underline-offset-4 hover:underline"
+                  className="text-[13px] font-semibold text-primary underline-offset-4 hover:underline"
                 >
                   Next step
                 </button>
@@ -108,7 +108,7 @@ export function RegistrationWizard({
         )}
       </div>
 
-      <p className="mt-5 text-[13px] text-[#003090]/50">
+      <p className="mt-5 text-[13px] text-primary/50">
         Your answers are saved as you go. You can close this page and come back
         to it at any time before submitting.
       </p>
@@ -137,10 +137,10 @@ function StepBar({
               className={
                 "rounded-full px-4 py-2 text-[12px] font-bold transition " +
                 (state === "current"
-                  ? "bg-[#003090] text-white"
+                  ? "bg-primary text-white"
                   : state === "done"
-                    ? "bg-[#003090]/10 text-[#003090] hover:bg-[#003090]/20"
-                    : "border border-black/10 text-[#003090]/45 hover:bg-black/[0.03]")
+                    ? "bg-primary/10 text-primary hover:bg-primary/20"
+                    : "border border-black/10 text-primary/45 hover:bg-black/[0.03]")
               }
             >
               <span className="font-mono tabular-nums">
@@ -200,7 +200,7 @@ function StepStreams({ school }: { school: School | null }) {
     <div className="space-y-6">
       <div>
         <h3 className="font-display text-lg font-bold">Streams entered</h3>
-        <p className="mt-1.5 text-[14px] leading-relaxed text-[#003090]/55">
+        <p className="mt-1.5 text-[14px] leading-relaxed text-primary/55">
           School-level screening runs three examinations on the same day. Select
           the streams your school will enter.
         </p>
@@ -226,7 +226,7 @@ function StepContact({ school }: { school: School | null }) {
     <div className="space-y-5">
       <div>
         <h3 className="font-display text-lg font-bold">Coordinating teacher</h3>
-        <p className="mt-1.5 text-[14px] leading-relaxed text-[#003090]/55">
+        <p className="mt-1.5 text-[14px] leading-relaxed text-primary/55">
           The member of staff the committee will contact about schedules,
           screening and results.
         </p>
@@ -259,7 +259,7 @@ function StepContact({ school }: { school: School | null }) {
 function Review({ school, lgas }: { school: School | null; lgas: Lga[] }) {
   if (!school) {
     return (
-      <p className="text-[14px] text-[#003090]/60">
+      <p className="text-[14px] text-primary/60">
         Nothing has been saved yet. Start at step one.
       </p>
     );
@@ -285,12 +285,12 @@ function Review({ school, lgas }: { school: School | null; lgas: Lga[] }) {
             key={k}
             className="grid grid-cols-[minmax(0,10rem)_1fr] gap-4 border-t border-black/10 py-3"
           >
-            <dt className="text-[13px] font-semibold text-[#003090]/55">{k}</dt>
+            <dt className="text-[13px] font-semibold text-primary/55">{k}</dt>
             <dd className="text-[14px]">{v}</dd>
           </div>
         ))}
       </dl>
-      <p className="mt-5 text-[13px] leading-relaxed text-[#003090]/55">
+      <p className="mt-5 text-[13px] leading-relaxed text-primary/55">
         Once submitted, these details are locked while the committee reviews
         them. Your registration number is issued when the registration is
         approved.
@@ -327,7 +327,7 @@ function LockedNotice({ school }: { school: School }) {
   const m = map[school.status] ?? map.submitted;
 
   return (
-    <div className="rounded-[28px] bg-[#003090] p-8 text-white sm:p-9">
+    <div className="rounded-[28px] bg-primary p-8 text-white sm:p-9">
       <h2 className="font-display text-2xl font-extrabold">{m.title}</h2>
       <p className="mt-3 text-[15px] leading-relaxed text-white/70">{m.body}</p>
       {school.registration_no ? (

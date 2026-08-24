@@ -44,7 +44,7 @@ export default async function PortalLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#faf6ee]">
+    <div className="min-h-screen bg-cream">
       <header className="border-b border-black/10 bg-white">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-x-8 gap-y-3 px-5 py-4">
           <Link href="/" className="font-display text-lg font-extrabold tracking-[-0.01em]">
@@ -56,7 +56,7 @@ export default async function PortalLayout({
               <Link
                 key={l.href}
                 href={l.href}
-                className="text-[13px] font-semibold text-[#003090]/65 transition hover:text-[#003090]"
+                className="text-[13px] font-semibold text-primary/65 transition hover:text-primary"
               >
                 {l.label}
               </Link>
@@ -66,13 +66,13 @@ export default async function PortalLayout({
           <div className="ml-auto flex items-center gap-4">
             {user ? (
               <>
-                <span className="hidden text-[13px] text-[#003090]/50 sm:inline">
+                <span className="hidden text-[13px] text-primary/50 sm:inline">
                   {user.fullName ?? user.email}
                 </span>
                 <form action={signOut}>
                   <button
                     type="submit"
-                    className="rounded-full border border-black/15 px-5 py-2 text-[12px] font-semibold transition hover:bg-[#faf6ee]"
+                    className="rounded-full border border-black/15 px-5 py-2 text-[12px] font-semibold transition hover:bg-cream"
                   >
                     Sign out
                   </button>
@@ -81,7 +81,7 @@ export default async function PortalLayout({
             ) : (
               <Link
                 href="/login"
-                className="rounded-full bg-[#f0a800] px-5 py-2 text-[12px] font-bold text-[#003090] transition hover:bg-[#003090] hover:text-white"
+                className="rounded-full bg-gold px-5 py-2 text-[12px] font-bold text-primary transition hover:bg-primary hover:text-white"
               >
                 Sign in
               </Link>

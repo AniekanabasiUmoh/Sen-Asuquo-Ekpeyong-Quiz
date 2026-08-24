@@ -119,7 +119,7 @@ export function VideoHero({
               aria-hidden="true"
               className="ml-1"
             >
-              <path d="M21 12 0 24V0l21 12Z" fill="#003090" />
+              <path d="M21 12 0 24V0l21 12Z" fill="var(--color-primary)" />
             </svg>
           </span>
 

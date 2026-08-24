@@ -27,8 +27,23 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
 
   return (
     <>
+      {/* WCAG 2.4.1 (Level A). The nav carries two dropdown groups, so without
+          this a keyboard or screen-reader user tabs roughly fifteen links
+          before reaching the content on every single page load. Visually
+          hidden until focused, then it sits above the header. */}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-primary focus:px-5 focus:py-3 focus:text-[13px] focus:font-bold focus:text-white"
+      >
+        Skip to content
+      </a>
       <SiteHeader overlay={pathname === "/"} />
-      <main className="flex-1">{children}</main>
+      {/* tabIndex={-1} so the skip link can move focus here, not just scroll:
+          without it the browser jumps the viewport but leaves focus in the
+          header, and the next Tab returns to the nav the user just skipped. */}
+      <main id="main" tabIndex={-1} className="flex-1">
+        {children}
+      </main>
       <SiteFooter />
     </>
   );

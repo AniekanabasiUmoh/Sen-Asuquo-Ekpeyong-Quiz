@@ -85,7 +85,7 @@ export default function CopyrightPage() {
           <div key={s.title} className="mb-10 last:mb-0">
             <h2 className="font-display text-xl font-bold">{s.title}</h2>
             {s.body.map((p) => (
-              <p key={p} className="mt-3 text-[15px] leading-relaxed text-[#003090]/70">
+              <p key={p} className="mt-3 text-[15px] leading-relaxed text-primary/70">
                 {p}
               </p>
             ))}
@@ -94,21 +94,21 @@ export default function CopyrightPage() {
 
         <div className="mt-12 rounded-[28px] bg-white p-8">
           <h2 className="font-display text-lg font-bold">Questions</h2>
-          <p className="mt-3 text-[15px] leading-relaxed text-[#003090]/70">
+          <p className="mt-3 text-[15px] leading-relaxed text-primary/70">
             For permission requests, or to report a concern about content
             published on this site, contact the Organising Committee.
           </p>
           <p className="mt-4 text-[15px]">
             <a
               href={`mailto:${contact.email}`}
-              className="font-semibold text-[#003090] underline-offset-4 hover:underline"
+              className="font-semibold text-primary underline-offset-4 hover:underline"
             >
               {contact.email}
             </a>
             <br />
             <a
               href={`tel:${contact.phone}`}
-              className="font-semibold text-[#003090] underline-offset-4 hover:underline"
+              className="font-semibold text-primary underline-offset-4 hover:underline"
             >
               {contact.phone}
             </a>

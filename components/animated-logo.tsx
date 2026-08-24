@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 /**
@@ -38,7 +39,7 @@ export function AnimatedLogo({
   }, []);
 
   return (
-    <a
+    <Link
       href="/"
       aria-label="SAEAC, home"
       className={`group relative flex shrink-0 items-center ${className}`}
@@ -71,10 +72,15 @@ export function AnimatedLogo({
           transition: "width 900ms cubic-bezier(0.22, 1, 0.36, 1) 260ms",
         }}
       >
-        {["#f03018", "#fe6c03", "#0006eb", "#f0a800"].map((c) => (
+        {[
+          "var(--color-red)",
+          "var(--color-orange)",
+          "var(--color-primary)",
+          "var(--color-gold)",
+        ].map((c) => (
           <span key={c} className="h-full flex-1" style={{ background: c }} />
         ))}
       </span>
-    </a>
+    </Link>
   );
 }

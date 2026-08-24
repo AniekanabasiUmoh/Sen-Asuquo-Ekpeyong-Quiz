@@ -42,7 +42,12 @@ export function Ribbon({
   className?: string;
   vertical?: boolean;
 }) {
-  const colors = ["#f44423", "#fe6c03", "#0006eb", "#ffe169"];
+  const colors = [
+    "var(--color-red)",
+    "var(--color-orange)",
+    "var(--color-primary)",
+    "var(--color-gold)",
+  ];
   return (
     <div
       className={`flex ${vertical ? "flex-col w-1.5" : "h-1.5 w-full"} ${className}`}
@@ -77,8 +82,8 @@ export function CornerRibbon({
     >
       <Ribbon className="mb-1 opacity-90" />
       <div className="flex h-1.5 w-full">
-        <div className="flex-1 bg-[#f44423]" />
-        <div className="flex-1 bg-[#ffe169]" />
+        <div className="flex-1 bg-red" />
+        <div className="flex-1 bg-gold" />
       </div>
     </div>
   );
@@ -97,9 +102,9 @@ export function DiagonalRibbon({
   side?: "left" | "right";
 }) {
   const bars = [
-    { c: "#f03018", h: 210, x: 0 },
-    { c: "#f0a800", h: 168, x: 26 },
-    { c: "#003090", h: 126, x: 52 },
+    { c: "var(--color-red)", h: 210, x: 0 },
+    { c: "var(--color-gold)", h: 168, x: 26 },
+    { c: "var(--color-primary)", h: 126, x: 52 },
   ];
   return (
     <div

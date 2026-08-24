@@ -36,7 +36,7 @@ export default async function AdminRegistrationsPage() {
 
   return (
     <div>
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#003090]/50">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary/50">
         Organising Committee
       </p>
       <h1 className="mt-3 font-display text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">
@@ -54,7 +54,7 @@ export default async function AdminRegistrationsPage() {
           Awaiting review ({pending.length})
         </h2>
         {pending.length === 0 ? (
-          <p className="mt-3 text-[14px] text-[#003090]/55">
+          <p className="mt-3 text-[14px] text-primary/55">
             Nothing is waiting for review.
           </p>
         ) : (
@@ -64,12 +64,12 @@ export default async function AdminRegistrationsPage() {
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div>
                     <h3 className="font-display text-lg font-bold">{s.name}</h3>
-                    <p className="mt-1 text-[13px] text-[#003090]/55">
+                    <p className="mt-1 text-[13px] text-primary/55">
                       {lgaName.get(s.lga_id) ?? "Unknown LGA"} ·{" "}
                       {s.is_private ? "Private" : "Public"}
                     </p>
                   </div>
-                  <span className="rounded-full bg-[#f0a800]/25 px-3.5 py-1.5 text-[11px] font-bold text-[#7a5300]">
+                  <span className="rounded-full bg-gold/25 px-3.5 py-1.5 text-[11px] font-bold text-gold-ink">
                     {s.status === "submitted" ? "Submitted" : "Under review"}
                   </span>
                 </div>
@@ -102,14 +102,14 @@ export default async function AdminRegistrationsPage() {
           All registrations ({settled.length})
         </h2>
         {settled.length === 0 ? (
-          <p className="mt-3 text-[14px] text-[#003090]/55">
+          <p className="mt-3 text-[14px] text-primary/55">
             No other registrations yet.
           </p>
         ) : (
           <div className="mt-5 overflow-x-auto">
             <table className="w-full min-w-[44rem] border-collapse text-left text-[13px]">
               <thead>
-                <tr className="border-b border-black/10 text-[11px] uppercase tracking-[0.12em] text-[#003090]/45">
+                <tr className="border-b border-black/10 text-[11px] uppercase tracking-[0.12em] text-primary/45">
                   <th className="py-3 pr-4 font-bold">School</th>
                   <th className="py-3 pr-4 font-bold">LGA</th>
                   <th className="py-3 pr-4 font-bold">Status</th>
@@ -120,11 +120,11 @@ export default async function AdminRegistrationsPage() {
                 {settled.map((s) => (
                   <tr key={s.id} className="border-b border-black/[0.06]">
                     <td className="py-3 pr-4 font-semibold">{s.name}</td>
-                    <td className="py-3 pr-4 text-[#003090]/60">
+                    <td className="py-3 pr-4 text-primary/60">
                       {lgaName.get(s.lga_id) ?? "-"}
                     </td>
-                    <td className="py-3 pr-4 text-[#003090]/60">{s.status}</td>
-                    <td className="py-3 pr-4 font-mono tabular-nums text-[#003090]/60">
+                    <td className="py-3 pr-4 text-primary/60">{s.status}</td>
+                    <td className="py-3 pr-4 font-mono tabular-nums text-primary/60">
                       {s.registration_no ?? "-"}
                     </td>
                   </tr>
@@ -141,7 +141,7 @@ export default async function AdminRegistrationsPage() {
 function Stat({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-[22px] bg-white p-6">
-      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[#003090]/45">
+      <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary/45">
         {label}
       </p>
       <p className="mt-2 font-display text-3xl font-extrabold tabular-nums">
@@ -154,8 +154,8 @@ function Stat({ label, value }: { label: string; value: number }) {
 function Row({ k, v }: { k: string; v: string | null }) {
   return (
     <div className="flex gap-3">
-      <dt className="min-w-[6.5rem] font-semibold text-[#003090]/50">{k}</dt>
-      <dd className="text-[#003090]/80">{v || "Not given"}</dd>
+      <dt className="min-w-[6.5rem] font-semibold text-primary/50">{k}</dt>
+      <dd className="text-primary/80">{v || "Not given"}</dd>
     </div>
   );
 }

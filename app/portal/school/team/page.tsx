@@ -27,13 +27,13 @@ export default async function TeamPage() {
         <h1 className="font-display text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">
           Register your school first
         </h1>
-        <p className="mt-4 text-[15px] leading-relaxed text-[#003090]/60">
+        <p className="mt-4 text-[15px] leading-relaxed text-primary/60">
           Your five qualifying students can be entered once the school itself is
           registered.
         </p>
         <Link
           href="/portal/school/register"
-          className="mt-8 inline-block rounded-full bg-[#f0a800] px-7 py-3.5 text-[13px] font-bold text-[#003090] transition hover:bg-[#003090] hover:text-white"
+          className="mt-8 inline-block rounded-full bg-gold px-7 py-3.5 text-[13px] font-bold text-primary transition hover:bg-primary hover:text-white"
         >
           Start registration
         </Link>
@@ -86,13 +86,13 @@ export default async function TeamPage() {
 
   return (
     <div>
-      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#003090]/50">
+      <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary/50">
         {school.name}
       </p>
       <h1 className="mt-3 font-display text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">
         Our team
       </h1>
-      <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#003090]/60">
+      <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-primary/60">
         Five students carry your school: three Strikers, who answer in their own
         right, and two Assists, whose answers are worth half a point. Your mentor
         is the Coach.
@@ -101,7 +101,7 @@ export default async function TeamPage() {
       {locked ? (
         <p
           role="status"
-          className="mt-6 max-w-2xl rounded-2xl border border-black/10 bg-white px-5 py-4 text-[13px] leading-relaxed text-[#003090]/65"
+          className="mt-6 max-w-2xl rounded-2xl border border-black/10 bg-white px-5 py-4 text-[13px] leading-relaxed text-primary/65"
         >
           Your registration is with the committee, so the team is read-only until
           they have reviewed it.

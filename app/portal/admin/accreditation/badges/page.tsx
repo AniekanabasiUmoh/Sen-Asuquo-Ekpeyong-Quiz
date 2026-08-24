@@ -97,6 +97,9 @@ export default async function BadgesPage() {
       const qr = await QRCode.toDataURL(a.code, {
         width: 240,
         margin: 1,
+        // Literal hex, not a token: this is encoded into a PNG data URI by
+        // the qrcode library, which never sees the page's CSS. Keep in step
+        // with --color-primary by hand.
         color: { dark: "#003090", light: "#ffffff" },
       });
       return { ...a, qr, ...(info[key] ?? { name: "Unknown", sub: null }) };
@@ -106,13 +109,13 @@ export default async function BadgesPage() {
   return (
     <div>
       <div className="print:hidden">
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#003090]/50">
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary/50">
           Organising Committee
         </p>
         <h1 className="mt-3 font-display text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">
           Printable badges
         </h1>
-        <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-[#003090]/60">
+        <p className="mt-4 max-w-2xl text-[15px] leading-relaxed text-primary/60">
           {badges.length} active accreditation{badges.length === 1 ? "" : "s"}. Print
           this page (each badge is sized to cut out) or screenshot an individual
           code below.
@@ -125,21 +128,21 @@ export default async function BadgesPage() {
             key={b.id}
             className="break-inside-avoid rounded-2xl border border-black/10 bg-white p-4 text-center print:border-black/20"
           >
-            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#003090]/45">
+            <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-primary/45">
               {HOLDER_LABEL[b.holder_type]}
             </p>
             {/* eslint-disable-next-line @next/next/no-img-element -- a generated data: URI, next/image cannot optimise it and there is nothing to optimise */}
             <img src={b.qr} alt="" className="mx-auto mt-2 h-auto w-full max-w-[10rem]" />
             <p className="mt-2 truncate font-display text-[13px] font-bold">{b.name}</p>
             {b.sub ? (
-              <p className="truncate text-[11px] text-[#003090]/50">{b.sub}</p>
+              <p className="truncate text-[11px] text-primary/50">{b.sub}</p>
             ) : null}
           </div>
         ))}
       </div>
 
       {badges.length === 0 ? (
-        <p className="mt-6 rounded-2xl border border-dashed border-black/15 px-5 py-8 text-center text-[13px] text-[#003090]/45">
+        <p className="mt-6 rounded-2xl border border-dashed border-black/15 px-5 py-8 text-center text-[13px] text-primary/45">
           No accreditations issued yet.
         </p>
       ) : null}
