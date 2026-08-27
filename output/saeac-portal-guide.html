@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>SAEAC Portal — Test Accounts &amp; Feature Guide</title>
+  <style>
+    @font-face { font-family: Lama; src: url("../public/fonts/LamaSans-Regular.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: Lama; src: url("../public/fonts/LamaSans-Bold.woff2") format("woff2"); font-weight: 700; }
+    @font-face { font-family: Lama; src: url("../public/fonts/LamaSans-ExtraBold.woff2") format("woff2"); font-weight: 800; }
+    @font-face { font-family: LamaCond; src: url("../public/fonts/LamaSans-BlackCondensed.woff2") format("woff2"); font-weight: 900; }
+    @page { size: A4; margin: 15mm 14mm 17mm; }
+    :root { --navy: #003090; --ink: #06122f; --cream: #faf6ee; --gold: #f0a800; --red: #f03018; --muted: #66718a; --line: #dfe4ed; }
+    * { box-sizing: border-box; }
+    body { margin: 0; color: var(--ink); background: var(--cream); font-family: Lama, Arial, sans-serif; font-size: 10.5pt; line-height: 1.48; }
+    .page { page-break-after: always; }
+    .page:last-child { page-break-after: auto; }
+    .cover { min-height: 250mm; margin: -15mm -14mm -17mm; padding: 22mm 18mm; color: white; background: var(--navy); position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+    .cover:after { content: "SAEAC"; position: absolute; right: -8mm; bottom: 19mm; color: rgba(255,255,255,.07); font-family: LamaCond, sans-serif; font-size: 72mm; line-height: .8; transform: rotate(-7deg); }
+    .ribbon { display: flex; width: 78mm; height: 5mm; gap: 1.5mm; margin-bottom: 18mm; }
+    .ribbon span:nth-child(1) { background: var(--red); flex: 1; }
+    .ribbon span:nth-child(2) { background: var(--gold); flex: 1; }
+    .ribbon span:nth-child(3) { background: #01daeb; flex: 1; }
+    .ribbon span:nth-child(4) { background: #2dc653; flex: 1; }
+    .eyebrow { color: var(--gold); font-size: 9pt; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+    h1, h2, h3 { margin: 0; font-weight: 800; letter-spacing: -.025em; }
+    .cover h1 { max-width: 150mm; margin-top: 7mm; font-size: 34pt; line-height: .99; }
+    .cover .dek { max-width: 120mm; margin-top: 9mm; color: rgba(255,255,255,.72); font-size: 13pt; }
+    .cover-footer { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: end; border-top: 1px solid rgba(255,255,255,.2); padding-top: 7mm; color: rgba(255,255,255,.62); font-size: 8.5pt; }
+    .cover-footer strong { color: white; display: block; font-size: 11pt; }
+    .section-title { margin: 0 0 5mm; padding-bottom: 3mm; border-bottom: 2px solid var(--navy); color: var(--navy); font-size: 21pt; line-height: 1.05; }
+    .section-title span { color: var(--red); }
+    .section { margin-bottom: 8mm; }
+    .section p { margin: 2mm 0; }
+    .url-box { border: 1px solid var(--line); border-left: 4px solid var(--gold); background: white; border-radius: 4mm; padding: 4mm 5mm; }
+    .url-box div { margin: 1.4mm 0; font-size: 10pt; }
+    .url-box b { display: inline-block; width: 30mm; color: var(--muted); font-size: 8pt; letter-spacing: .08em; text-transform: uppercase; }
+    table { width: 100%; border-collapse: collapse; background: white; border-radius: 3mm; overflow: hidden; font-size: 9.2pt; }
+    th { padding: 3mm 3.5mm; color: white; background: var(--navy); text-align: left; font-size: 8pt; letter-spacing: .08em; text-transform: uppercase; }
+    td { padding: 3mm 3.5mm; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tr:last-child td { border-bottom: 0; }
+    tr:nth-child(even) td { background: #f5f7fb; }
+    code { color: var(--navy); background: #edf1f8; border-radius: 1.5mm; padding: .5mm 1.2mm; font-family: Consolas, monospace; font-size: .9em; }
+    .url { color: var(--navy); overflow-wrap: anywhere; font-size: 8.6pt; }
+    .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+    .card { min-height: 31mm; padding: 4mm; border: 1px solid var(--line); border-radius: 4mm; background: white; break-inside: avoid; }
+    .card h3 { margin-bottom: 2mm; color: var(--navy); font-size: 12pt; }
+    .card p { margin: 1mm 0; font-size: 9.3pt; }
+    .card .url { display: block; margin-bottom: 2mm; }
+    ul { margin: 2mm 0 0 5mm; padding-left: 4mm; }
+    li { margin: 1.4mm 0; }
+    .note { margin-top: 5mm; padding: 4mm 5mm; border-radius: 4mm; border: 1px solid #e7c46f; border-left: 4px solid var(--gold); background: #fff8df; break-inside: avoid; }
+    .note strong { color: #7a5300; }
+    .footer { margin-top: 8mm; padding-top: 3mm; border-top: 1px solid var(--line); color: var(--muted); font-size: 8pt; display: flex; justify-content: space-between; }
+    .break-before { page-break-before: always; }
+    @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } a { color: inherit; text-decoration: none; } }
+  </style>
+</head>
+<body>
+  <section class="page cover">
+    <div>
+      <div class="ribbon"><span></span><span></span><span></span><span></span></div>
+      <div class="eyebrow">Senator Asuquo Ekpeyong Academic Championship</div>
+      <h1>Portal Test Accounts &amp; Feature Guide</h1>
+      <p class="dek">A practical walkthrough of the seeded SAEAC experience for schools, judges, Change Makers, committee administrators, and public visitors.</p>
+    </div>
+    <div class="cover-footer"><div><strong>SAEAC</strong>Calabar · Cross River State</div><div>Testing edition · 2026</div></div>
+  </section>
+
+  <section class="page">
+    <h2 class="section-title"><span>01</span> Access &amp; accounts</h2>
+    <div class="section url-box">
+      <div><b>Live site</b> <span class="url">https://senatorquiz.vercel.app</span></div>
+      <div><b>Login</b> <span class="url">https://senatorquiz.vercel.app/login</span></div>
+      <div><b>Password</b> <code>123456</code> for every test account</div>
+    </div>
+    <div class="note"><strong>Testing only:</strong> These accounts and the seeded data are provided for evaluation and demonstration. Do not use these credentials for real users or production operations.</div>
+
+    <h2 class="section-title" style="margin-top:10mm"><span>02</span> Test accounts</h2>
+    <table>
+      <thead><tr><th>Email</th><th>Role</th><th>Portal URL</th></tr></thead>
+      <tbody>
+        <tr><td><code>admin@test.com</code></td><td>Super admin and committee member</td><td class="url">https://senatorquiz.vercel.app/portal/admin</td></tr>
+        <tr><td><code>school@test.com</code></td><td>School administrator</td><td class="url">https://senatorquiz.vercel.app/portal/school</td></tr>
+        <tr><td><code>coach@test.com</code></td><td>Coach</td><td class="url">https://senatorquiz.vercel.app/portal/school</td></tr>
+        <tr><td><code>judge@test.com</code></td><td>Judge and quizmaster</td><td class="url">https://senatorquiz.vercel.app/portal/match</td></tr>
+        <tr><td><code>judges@test.com</code></td><td>Second judge</td><td class="url">https://senatorquiz.vercel.app/portal/match</td></tr>
+        <tr><td><code>volunteer@test.com</code></td><td>Change Maker volunteer</td><td class="url">https://senatorquiz.vercel.app/portal/volunteer</td></tr>
+      </tbody>
+    </table>
+
+    <h2 class="section-title" style="margin-top:10mm"><span>03</span> School administrator</h2>
+    <div class="card-grid">
+      <div class="card"><h3>My School</h3><span class="url">https://senatorquiz.vercel.app/portal/school</span><p>View approval status, registration number <code>SAEAC-2026-0001</code>, LGA, and coordinator details.</p></div>
+      <div class="card"><h3>Our Team</h3><span class="url">https://senatorquiz.vercel.app/portal/school/team</span><p>View the five-student roster: three Strikers and two Assists. Try adding a sixth student—the database enforces the limit. Record or withdraw consent and upload photographs.</p></div>
+      <div class="card"><h3>Registration</h3><span class="url">https://senatorquiz.vercel.app/portal/school/register</span><p>Review the five-step registration wizard. It is read-only because the school is approved.</p></div>
+      <div class="card"><h3>Volunteering</h3><span class="url">https://senatorquiz.vercel.app/portal/volunteer</span><p>Displays the state indicating that the school has not submitted a volunteer application.</p></div>
+    </div>
+  </section>
+
+  <section class="page">
+    <h2 class="section-title"><span>04</span> Judge &amp; Change Maker</h2>
+    <div class="card-grid">
+      <div class="card"><h3>Judge — <code>judge@test.com</code></h3><span class="url">https://senatorquiz.vercel.app/portal/match</span><p>The judge sees only the assigned Grand Finale match.</p><ul><li>Striker answer: <strong>+1 point</strong></li><li>Assist answer: <strong>+0.5 points</strong></li><li>VAR referral: <strong>0 points</strong></li><li>Coach substitutions</li></ul><p>Seeded score: <strong>2.5 versus 1.0</strong>. Events are append-only; corrections use logged adjustments.</p></div>
+      <div class="card"><h3>Change Maker — <code>volunteer@test.com</code></h3><span class="url">https://senatorquiz.vercel.app/portal/volunteer</span><p>The account is accepted and assigned to the <strong>Grand Finale Check-in</strong> shift at the <strong>Registration desk</strong>. Two volunteer briefings are available.</p></div>
+    </div>
+
+    <h2 class="section-title break-before"><span>05</span> Committee administrator</h2>
+    <p>Sign in with <code>admin@test.com</code> to test the following workflows:</p>
+    <table>
+      <thead><tr><th>Area</th><th>URL</th><th>What to test</th></tr></thead>
+      <tbody>
+        <tr><td>Registrations</td><td class="url">https://senatorquiz.vercel.app/portal/admin</td><td>Review <strong>Pending Grammar School</strong>. Approve it to issue a registration number or return it with a reason.</td></tr>
+        <tr><td>Schedule</td><td class="url">https://senatorquiz.vercel.app/portal/admin/schedule</td><td>Publish the draft <strong>Calabar Municipality Qualifier</strong>. Reschedule the Finale and confirm the change is logged and publicly displayed.</td></tr>
+        <tr><td>Matches</td><td class="url">https://senatorquiz.vercel.app/portal/match</td><td>Record scores, make an adjustment, and publish results.</td></tr>
+        <tr><td>Accreditation</td><td class="url">https://senatorquiz.vercel.app/portal/admin/accreditation</td><td>Review the nine issued badges.</td></tr>
+        <tr><td>Printable badges</td><td class="url">https://senatorquiz.vercel.app/portal/admin/accreditation/badges</td><td>Print badges and scan them with a phone camera.</td></tr>
+        <tr><td>Users</td><td class="url">https://senatorquiz.vercel.app/portal/admin/users</td><td>Grant or revoke roles and review the audit trail.</td></tr>
+        <tr><td>Change Makers</td><td class="url">https://senatorquiz.vercel.app/portal/admin/volunteers</td><td>Accept or decline applications, assign shifts, and publish briefings.</td></tr>
+        <tr><td>Broadcast</td><td class="url">https://senatorquiz.vercel.app/portal/admin/broadcast</td><td>Add a YouTube embed, manage simulcast links, and mark broadcasts live or ended.</td></tr>
+        <tr><td>Reports</td><td class="url">https://senatorquiz.vercel.app/portal/admin/reports</td><td>Review registration, progression, and attendance reports.</td></tr>
+        <tr><td>Groupings</td><td class="url">https://senatorquiz.vercel.app/portal/admin/lgas</td><td>Review the six qualifying groups, including combined Akpabuyo and Bakassi.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="page">
+    <h2 class="section-title"><span>06</span> Public pages</h2>
+    <p>No login is required for these pages:</p>
+    <div class="card-grid">
+      <div class="card"><h3>Home</h3><span class="url">https://senatorquiz.vercel.app/</span></div>
+      <div class="card"><h3>Schedule</h3><span class="url">https://senatorquiz.vercel.app/schedule</span></div>
+      <div class="card"><h3>Results</h3><span class="url">https://senatorquiz.vercel.app/results</span></div>
+      <div class="card"><h3>Live</h3><span class="url">https://senatorquiz.vercel.app/live</span></div>
+      <div class="card"><h3>Hall of Fame</h3><span class="url">https://senatorquiz.vercel.app/hall-of-fame</span></div>
+      <div class="card"><h3>LGAs</h3><span class="url">https://senatorquiz.vercel.app/lgas</span></div>
+      <div class="card"><h3>News</h3><span class="url">https://senatorquiz.vercel.app/news</span></div>
+    </div>
+
+    <h2 class="section-title" style="margin-top:12mm"><span>07</span> Important notes</h2>
+    <div class="note"><ul><li>The database contains two schools, one approved school, one pending school, a complete five-student roster, two judges, an accepted volunteer, a live match, scores, nine accreditation badges, venues, fixtures, and a news article.</li><li>Public pages display approved information only. Pending schools and student records remain private.</li><li>Security is enforced in Postgres, not only in the interface. For example, <code>school@test.com</code> should be redirected away from the admin portal.</li><li><code>/schedule</code> and <code>/news</code> may be cached for up to one hour. <code>/live</code> and authenticated portal pages update immediately.</li></ul></div>
+    <div class="footer"><span>SAEAC Portal · Test Accounts &amp; Feature Guide</span><span>https://senatorquiz.vercel.app</span></div>
+  </section>
+</body>
+</html>
