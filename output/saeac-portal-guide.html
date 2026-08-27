@@ -51,6 +51,7 @@
     .note { margin-top: 5mm; padding: 4mm 5mm; border-radius: 4mm; border: 1px solid #e7c46f; border-left: 4px solid var(--gold); background: #fff8df; break-inside: avoid; }
     .note strong { color: #7a5300; }
     .footer { margin-top: 8mm; padding-top: 3mm; border-top: 1px solid var(--line); color: var(--muted); font-size: 8pt; display: flex; justify-content: space-between; }
+    a.url { color: var(--navy); text-decoration: none; }
     .break-before { page-break-before: always; }
     @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } a { color: inherit; text-decoration: none; } }
   </style>
@@ -140,5 +141,23 @@
     <div class="note"><ul><li>The database contains two schools, one approved school, one pending school, a complete five-student roster, two judges, an accepted volunteer, a live match, scores, nine accreditation badges, venues, fixtures, and a news article.</li><li>Public pages display approved information only. Pending schools and student records remain private.</li><li>Security is enforced in Postgres, not only in the interface. For example, <code>school@test.com</code> should be redirected away from the admin portal.</li><li><code>/schedule</code> and <code>/news</code> may be cached for up to one hour. <code>/live</code> and authenticated portal pages update immediately.</li></ul></div>
     <div class="footer"><span>SAEAC Portal · Test Accounts &amp; Feature Guide</span><span>https://senatorquiz.vercel.app</span></div>
   </section>
+  <script>
+    // Keep the full URL visible while making every printed URL a real link.
+    document.querySelectorAll(".url").forEach((node) => {
+      const href = node.textContent.trim();
+      const lower = href.toLowerCase();
+      if (!lower.startsWith("http://") && !lower.startsWith("https://")) return;
+      const link = document.createElement("a");
+      link.className = node.className;
+      link.href = href;
+      link.textContent = href;
+      link.target = "_blank";
+      if (node.tagName === "TD") {
+        node.replaceChildren(link);
+      } else {
+        node.replaceWith(link);
+      }
+    });
+  </script>
 </body>
 </html>
