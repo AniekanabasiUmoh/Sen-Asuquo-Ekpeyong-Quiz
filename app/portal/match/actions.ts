@@ -203,7 +203,7 @@ export async function createMatch(
   _prev: MatchState,
   formData: FormData,
 ): Promise<MatchState> {
-  await requireRole(ADMIN_ROLES, "/portal/match");
+  await requireStepUp(ADMIN_ROLES, "/portal/match");
   const supabase = await createClient();
 
   const fixtureId = String(formData.get("fixture_id") ?? "");
