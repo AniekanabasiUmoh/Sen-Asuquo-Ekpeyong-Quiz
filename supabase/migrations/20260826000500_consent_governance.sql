@@ -35,7 +35,17 @@ language plpgsql
 set search_path = public
 as $$
 begin
-  if new.consent_given then
+  -- Existing rows may predate provenance columns. Allow unrelated edits to
+  -- those legacy rows, but require full provenance whenever consent is newly
+  -- granted or its provenance is changed.
+  if new.consent_given
+     and (
+       tg_op = 'INSERT'
+       or not old.consent_given
+       or new.consent_at is distinct from old.consent_at
+       or new.consent_version is distinct from old.consent_version
+       or new.consent_given_by is distinct from old.consent_given_by
+     ) then
     if new.consent_at is null
        or new.consent_version is null
        or new.consent_given_by is null then
@@ -45,7 +55,7 @@ begin
        or new.consent_withdrawn_by is not null then
       raise exception 'active consent cannot carry withdrawal metadata';
     end if;
-  elsif tg_op = 'UPDATE' and old.consent_given then
+  elsif tg_op = 'UPDATE' and old.consent_given and not new.consent_given then
     if new.consent_withdrawn_at is null
        or new.consent_withdrawn_by is null then
       raise exception 'withdrawing consent requires timestamp and withdrawing actor';
