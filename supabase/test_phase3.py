@@ -12,8 +12,8 @@ Proves the competition rules hold in the database rather than only in the UI:
   * publishing snapshots the standings into results, ordered by score
 
 Creates its own throwaway data (@test.invalid users, 'probe-*' slugs) and
-removes it afterwards, purging leftovers first so an aborted run never blocks
-the next one.
+removes it afterwards. Assertions are scoped to the disposable IDs so the
+script can run safely against a seeded or production-like database.
 """
 
 import json
@@ -197,7 +197,7 @@ def main() -> int:
         print("\njudge scope")
         reset()
         as_user(judge_uid)
-        cur.execute("select count(*) from matches")
+        cur.execute("select count(*) from matches where id=%s", (match,))
         check("assigned judge sees the match", cur.fetchone()[0], 1)
 
         # A second, unassigned fixture must stay invisible.
@@ -213,16 +213,16 @@ def main() -> int:
         )
         conn.commit()
         as_user(judge_uid)
-        cur.execute("select count(*) from matches")
+        cur.execute("select count(*) from matches where id=%s", (match,))
         check("judge does not see unassigned matches", cur.fetchone()[0], 1)
         conn.commit()
 
         print("\npublic visibility, before publication")
         reset()
         cur.execute("set local role anon")
-        cur.execute("select count(*) from matches")
+        cur.execute("select count(*) from matches where id=%s", (match,))
         check("unpublished match is hidden", cur.fetchone()[0], 0)
-        cur.execute("select count(*) from match_events")
+        cur.execute("select count(*) from match_events where match_id=%s", (match,))
         check("its events are hidden", cur.fetchone()[0], 0)
         cur.execute("select count(*) from students")
         check("students stay hidden", cur.fetchone()[0], 0)
@@ -230,7 +230,10 @@ def main() -> int:
 
         print("\npublication")
         reset()
-        cur.execute("select id from auth.users where email='saeacadmin2026@saeac.org'")
+        # Use an existing super-admin account from the project rather than a
+        # hard-coded historical email. The seeded acceptance environment uses
+        # a different address, and the test must not create or promote admins.
+        cur.execute("select user_id from user_roles where role='super_admin' limit 1")
         admin_row = cur.fetchone()
         if not admin_row:
             failures.append("admin account missing")
@@ -252,7 +255,7 @@ def main() -> int:
             cur.execute("set local role anon")
             cur.execute("select count(*) from results where fixture_id=%s", (fixture,))
             check("published results are public", cur.fetchone()[0], 2)
-            cur.execute("select count(*) from matches")
+            cur.execute("select count(*) from matches where id=%s", (match,))
             check("published match is now public", cur.fetchone()[0], 1)
             conn.commit()
 

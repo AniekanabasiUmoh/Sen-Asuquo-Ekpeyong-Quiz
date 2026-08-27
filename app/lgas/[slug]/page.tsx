@@ -27,7 +27,7 @@ export async function generateMetadata({
 
   return {
     title: `${lga.name} LGA`,
-    description: `${lga.name} Local Government Area in the Senator Asuquo Ekpenyong Academic Championship — participating schools, qualifier, and results.`,
+    description: `${lga.name} Local Government Area in the Senator Asuquo Ekpenyong Academic Championship. Participating schools, qualifier, and results.`,
     alternates: { canonical: `/lgas/${lga.slug}` },
   };
 }
@@ -254,7 +254,7 @@ export default async function LgaPage({
                     {v && (
                       <span className="w-full text-[13px] text-primary/50">
                         {v.name}
-                        {v.address ? ` — ${v.address}` : ""}
+                        {v.address ? `, ${v.address}` : ""}
                       </span>
                     )}
                   </li>
@@ -264,11 +264,11 @@ export default async function LgaPage({
           ) : (
             <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-primary/60">
               Fixtures and the qualifier venue for {lga.name} have not been
-              published yet. They appear here — and on the{" "}
+              published yet. They appear here and on the{" "}
               <Link href="/schedule" className="font-bold text-red-ink underline hover:text-red">
                 full schedule
               </Link>{" "}
-              — once the Organising Committee confirms them. Any later change to
+              once the Organising Committee confirms them. Any later change to
               a date or venue is recorded with its reason.
             </p>
           )}

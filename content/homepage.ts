@@ -600,8 +600,6 @@ export const sponsors = [
   "Diaspora Educational Trust Fund",
   "Scholars in Diaspora",
   "Cross River State Ministry of Education",
-  "Sponsor Placeholder",
-  "Sponsor Placeholder",
 ] as const;
 
 export const contact = {
@@ -653,6 +651,8 @@ export const nav = [
       { label: "Participating LGAs", href: "/lgas" },
       { label: "Schedule", href: "/schedule" },
       { label: "Results", href: "/results" },
+      { label: "Gallery", href: "/gallery" },
+      { label: "Downloads & Rules", href: "/downloads" },
       { label: "Live", href: "/live" },
       { label: "Hall of Fame", href: "/hall-of-fame" },
     ],
@@ -702,6 +702,8 @@ export const footerLinks = [
   { label: "Competition Structure", href: "/competition" },
   { label: "Eligibility", href: "/eligibility" },
   { label: "Participating LGAs", href: "/lgas" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "Downloads & Rules", href: "/downloads" },
   { label: "Prizes", href: "/prizes" },
   { label: "FAQs", href: "/faq" },
   { label: "Contact", href: "/contact" },

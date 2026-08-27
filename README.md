@@ -1,86 +1,74 @@
-# SAEAC Website — Phase 0
+# SAEAC Website
 
-Five homepage concepts for the Senator Asuquo Ekpenyong Academic Championship, built so the
-project team can pick one design direction before the rest of the site is built.
+The public website and authenticated portal for the Senator Asuquo Ekpenyong
+Academic Championship (SAEAC). It is a Next.js App Router application backed
+by Supabase Auth, Postgres, Storage and Realtime, deployed through Vercel.
 
-## Run it
+## Run locally
 
 ```bash
-cd saeac-v2/site
+cd calabar-quiz-demo
 npm install
+cp .env.example .env.local
+# fill .env.local with the project values
 npm run dev
 ```
 
-Then open <http://localhost:3000>. The index page lists all five variants; a bar at the bottom of
-every page jumps between them.
+Open <http://localhost:3000>. Public pages render safe empty/fallback states
+when optional Supabase data is unavailable; authenticated portals require the
+server and public Supabase variables.
 
-| Route | Variant | Reference template | Character |
-|---|---|---|---|
-| `/` | Comparison index | — | Side-by-side review page |
-| `/a` | Bold Editorial | Caladan | Oversized condensed caps, full-bleed navy, loudest |
-| `/b` | Minimal Institutional | Origin Studio | Whitespace-driven, restrained, official |
-| `/c` | Editorial Contrast | People Work | Photography-led storytelling scroll |
-| `/d` | Warm Community | Safeer | Rounded cards, soft tints, parent-friendly |
-| `/e` | Data-Forward | Setrex SaaS | Stat tiles, live scoreboard, platform feel |
+## Main routes
 
-## What is fixed vs. what is being chosen
+- Public: `/`, `/about`, `/competition`, `/eligibility`, `/lgas`,
+  `/schedule`, `/results`, `/live`, `/gallery`, `/downloads`, `/faq`, `/news`,
+  `/hall-of-fame`, `/contact`, and `/get-involved`.
+- Authentication: `/login`, `/signup`, and `/forgot-password`.
+- School workspace: `/portal/school`, `/portal/school/team`,
+  `/portal/school/register`, and `/portal/school/appeals`.
+- Committee workspace: `/portal/admin` and its schedule, match, accreditation,
+  broadcast, content, gallery, news, sponsor, volunteer, user, appeal and
+  reporting tools.
+- Judge and event workspace: `/portal/match`; Change Maker workspace:
+  `/portal/volunteer`.
 
-**Fixed — not part of this review.** SAEAC has a completed brand identity, so all five variants
-share it exactly:
+## Supabase
 
-- SÆAC logo (note the **Æ ligature**), white and blue lockups
-- The official 12-colour palette — primary blue `#0006EB`, logo navy `#14339F`, gold `#FFE169`
-- Lama Sans (Baianat) — body weights plus the condensed cuts used for headline caps
-- The four-colour ribbon motif (red / orange / blue / gold)
-- All copy, figures, and competition mechanics
+Schema changes live in `supabase/migrations/` and must be applied in filename
+order. The eight `2026082600*.sql` remediation migrations are intentionally
+pending until the project owner grants CLI access and an isolated Preview
+database is available. Never put `SUPABASE_SERVICE_ROLE_KEY` in a client
+component or in a `NEXT_PUBLIC_` variable.
 
-**Being chosen.** Layout, section rhythm, component style, density, and tone.
+The data-boundary regression checks are:
 
-## Structure
-
+```bash
+python supabase/test_rls.py
+python supabase/test_phase3.py
 ```
-app/
-  page.tsx            comparison index
-  a|b|c|d|e/page.tsx  the five homepage variants
-  globals.css         @font-face declarations + brand tokens (Tailwind v4 @theme)
-components/
-  brand.tsx           Logo, Ribbon, CornerRibbon, Pill
-  countdown.tsx       live countdown (hydration-safe)
-  switcher.tsx        review-only variant switcher bar
-content/
-  homepage.ts         ALL copy and data — single source of truth for every variant
-public/
-  brand/              logo PNGs at web sizes
-  fonts/              Lama Sans woff2 (9 weights, ~44 KB each)
-  img/                placeholder photography
-```
-
-Every variant imports from `content/homepage.ts`, so the five pages are guaranteed to show
-identical content. To correct a fact, edit that one file.
 
 ## Verification
 
 ```bash
-node shots.mjs    # screenshots to shots/  (ROUTES=a,b MOBILE=1 to narrow)
-node audit.mjs    # horizontal overflow, broken images, heading order, tap-target sizes
+npx tsc --noEmit
+npm run lint
+npm run build
+git diff --check
 ```
 
-Both currently pass clean at 390px and 1440px, and `npm run build` prerenders all six routes
-as static pages.
+`/api/health` is a non-sensitive readiness check for monitoring. It reports
+configuration and Supabase availability without credentials or database error
+details.
 
-## Placeholder content to replace
+## Release status
 
-- **Photography** — stock imagery of West African secondary school students (Pexels, licensed for
-  commercial use, no attribution required). Replace with real SAEAC event photography.
-- **Countdown deadline** — provisionally 30 October 2026. Needs the Organising Committee's
-  confirmed registration deadline.
-- **News items, sponsor names, Variant E scoreboard** — illustrative dummy data.
+The implementable remediation work is in the pushed `main` branch. The
+production web deployment is Vercel Ready. Applying the pending migrations,
+deploying the `send-email` Edge Function, configuring Resend, Preview
+variables, backups/alerts, MFA recovery and committee-approved copy remain
+owner-controlled release gates. See [HANDOVER.md](HANDOVER.md) and
+[RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md) for the evidence and exact
+sequence; do not invent those values or bypass those gates.
 
-Everything else — 117 schools, the seven LGAs and their school counts, all seven stages, the prize
-schedule, and the Round 3 Striker/Assist/Substitution/VAR mechanics — comes directly from the
-Website Content Guide and the RD deck.
-
-## Not in Phase 0
-
-No backend, no authentication, no CMS, no database. Supabase arrives in Phase 2. See
-[../SAEAC-PHASES-AND-SPRINTS.md](../SAEAC-PHASES-AND-SPRINTS.md).
+The original homepage concepts and design history remain in the sibling
+`saeac-v2` directory and in the phase plan.

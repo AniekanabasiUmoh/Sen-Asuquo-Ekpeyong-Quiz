@@ -8,6 +8,7 @@ import { lgaSlug } from "@/content/lgas";
 import { Carousel } from "@/components/carousel";
 import { FannedCards } from "@/components/fanned-cards";
 import { ZoomImage } from "@/components/zoom-image";
+import { createPublicClient } from "@/lib/supabase/server";
 import {
   about,
   board,
@@ -341,6 +342,33 @@ export function StagesSection() {
         <p className="max-w-xs text-[15px] leading-relaxed text-primary/55">
           Seven stages take the whole district down to a single champion.
         </p>
+      </div>
+
+      {/* A quick visual route through the championship. The detailed list
+          below remains the accessible, copy-rich version for screen readers
+          and narrow screens; this strip is deliberately decorative. */}
+      <div
+        className="mt-10 overflow-x-auto pb-2"
+        aria-hidden="true"
+      >
+        <ol className="flex min-w-[760px] items-stretch gap-2">
+          {stages.map((st, i) => (
+            <li key={`flow-${st.n}`} className="flex min-w-0 flex-1 items-center gap-2">
+              <Reveal
+                delay={i * 70}
+                className="flex min-h-[92px] min-w-[104px] flex-1 flex-col justify-between rounded-2xl border border-black/10 bg-white p-4"
+              >
+                <span className="font-mono text-[10px] font-bold text-red">{String(st.n).padStart(2, "0")}</span>
+                <span className="mt-3 font-display text-[14px] font-bold leading-tight">{st.name}</span>
+              </Reveal>
+              {i < stages.length - 1 ? (
+                <span className="shrink-0 text-lg text-primary/25" aria-hidden="true">
+                  →
+                </span>
+              ) : null}
+            </li>
+          ))}
+        </ol>
       </div>
 
       <ol className="mt-12">
@@ -794,7 +822,31 @@ export function PrizesSection() {
   );
 }
 
-export function NewsSection() {
+export async function NewsSection({ category }: { category?: string } = {}) {
+  const supabase = createPublicClient();
+  const { data: databaseNews } = supabase
+    ? await supabase
+        .from("news")
+        .select("title, slug, excerpt, category, image_path, published_at")
+        .eq("status", "published")
+        .order("published_at", { ascending: false, nullsFirst: false })
+        .limit(6)
+    : { data: null };
+
+  const items = (databaseNews ?? []).length
+    ? databaseNews!.map((item) => ({
+        category: item.category ?? "SAEAC",
+        date: item.published_at ?? new Date().toISOString(),
+        title: item.title,
+        excerpt: item.excerpt ?? "Read the latest update from the championship.",
+      img: item.image_path || "/img/meeting-group.jpg",
+      slug: item.slug,
+      }))
+    : news.map((item) => ({ ...item, slug: "" }));
+  const categories = [...new Set(items.map((item) => item.category))].sort();
+  const visibleItems = category
+    ? items.filter((item) => item.category.toLowerCase() === category.toLowerCase())
+    : items;
   /* ── News ── */
   return (
     <section id="news" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-14 sm:py-20">
@@ -804,28 +856,56 @@ export function NewsSection() {
           trail="the Championship"
           className="text-[clamp(2.25rem,4.6vw,3.5rem)] leading-[1.03]"
         />
-        <a
+        <Link
           href="/news"
           className="rounded-full border border-black/15 px-6 py-3 text-[13px] font-semibold transition hover:bg-white"
         >
           All updates
-        </a>
+        </Link>
       </div>
 
+      {categories.length > 1 ? (
+        <form className="mt-7 flex flex-wrap items-end gap-3" aria-label="Filter news">
+          <label className="text-[13px] font-semibold text-primary">
+            Category
+            <select
+              name="category"
+              defaultValue={category ?? ""}
+              className="mt-2 block rounded-2xl border border-black/15 bg-white px-4 py-3 text-[14px] outline-none focus:border-primary"
+            >
+              <option value="">All updates</option>
+              {categories.map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button
+            type="submit"
+            className="rounded-full border border-black/15 px-5 py-3 text-[13px] font-semibold transition hover:bg-white"
+          >
+            Filter
+          </button>
+        </form>
+      ) : null}
+
       <div className="mt-10 grid gap-3 md:grid-cols-3">
-        {news.map((n, i) => (
+        {visibleItems.map((n, i) => (
           <Reveal
             key={n.title}
             delay={i * 90}
             as="article"
             className="group overflow-hidden rounded-2xl bg-white"
           >
-            <ZoomImage
-              src={n.img}
-              alt=""
-              sizes="(min-width: 768px) 33vw, 100vw"
-              className="aspect-[16/10]"
-            />
+            <Link href={n.slug ? `/news/${n.slug}` : "/news"} className="block">
+              <ZoomImage
+                src={n.img}
+                alt=""
+                sizes="(min-width: 768px) 33vw, 100vw"
+                className="aspect-[16/10]"
+              />
+            </Link>
             <div className="p-6">
               <div className="flex items-center gap-3 text-[11px]">
                 <span className="font-bold uppercase tracking-wider text-primary/45">
@@ -840,12 +920,17 @@ export function NewsSection() {
                   })}
                 </time>
               </div>
-              <h3 className="mt-3 font-display text-lg font-bold leading-snug">{n.title}</h3>
+              <h3 className="mt-3 font-display text-lg font-bold leading-snug"><Link href={n.slug ? `/news/${n.slug}` : "/news"} className="transition hover:text-red">{n.title}</Link></h3>
               <p className="mt-2 text-sm leading-relaxed text-primary/55">{n.excerpt}</p>
             </div>
           </Reveal>
         ))}
       </div>
+      {visibleItems.length === 0 ? (
+        <p className="mt-8 rounded-2xl border border-dashed border-black/15 px-5 py-8 text-center text-[14px] text-primary/55">
+          No updates match that category yet.
+        </p>
+      ) : null}
     </section>
   );
 }
@@ -1037,7 +1122,14 @@ export function FannedCtaSection() {
   );
 }
 
-export function SponsorsSection() {
+export async function SponsorsSection() {
+  const supabase = createPublicClient();
+  const { data: databaseSponsors } = supabase
+    ? await supabase.from("sponsors").select("name, tier, logo_path, website").eq("status", "published").order("sort_order", { ascending: true })
+    : { data: null };
+  const sponsorItems = (databaseSponsors ?? []).length
+    ? databaseSponsors!
+    : sponsors.map((name) => ({ name, tier: null, logo_path: null, website: null }));
   /* ── Sponsors & Partners ── */
   return (
     <section id="sponsor" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-16">
@@ -1046,10 +1138,8 @@ export function SponsorsSection() {
           Sponsors &amp; Partners
         </p>
         <div className="mt-7 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
-          {sponsors.map((s, i) => (
-            <span key={`${s}-${i}`} className="text-[13px] font-semibold text-primary/35">
-              {s}
-            </span>
+          {sponsorItems.map((s, i) => (
+            s.website ? <a key={`${s.name}-${i}`} href={s.website} target="_blank" rel="noopener noreferrer" className="text-[13px] font-semibold text-primary/35 transition hover:text-primary">{s.name}</a> : <span key={`${s.name}-${i}`} className="text-[13px] font-semibold text-primary/35">{s.name}</span>
           ))}
         </div>
         {/* No CTA here. The ask now lives in Become a Change Maker above,

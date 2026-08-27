@@ -216,3 +216,15 @@ nav a {
     transition-duration: 0.001ms !important;
   }
 }
+
+@media print {
+  header,
+  footer,
+  nav,
+  .print\:hidden {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+  }
+}

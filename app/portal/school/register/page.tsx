@@ -14,10 +14,27 @@ export default async function SchoolRegisterPage() {
   const user = await requireUser("/portal/school/register");
   const supabase = await createClient();
 
-  const [{ data: school }, { data: lgas }] = await Promise.all([
+  const [{ data: ownedSchool }, { data: lgas }] = await Promise.all([
     supabase.from("schools").select("*").eq("owner_id", user.id).maybeSingle(),
     supabase.from("lgas").select("*").order("sort_order"),
   ]);
+  let school = ownedSchool;
+
+  if (!school && user.roles.includes("coach")) {
+    const { data: assignment } = await supabase
+      .from("coaches")
+      .select("school_id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    if (assignment) {
+      const result = await supabase
+        .from("schools")
+        .select("*")
+        .eq("id", assignment.school_id)
+        .maybeSingle();
+      school = result.data;
+    }
+  }
 
   return (
     <div className="max-w-3xl">
@@ -29,7 +46,11 @@ export default async function SchoolRegisterPage() {
       </h1>
 
       <div className="mt-9">
-        <RegistrationWizard school={school ?? null} lgas={lgas ?? []} />
+        <RegistrationWizard
+          school={school ?? null}
+          lgas={lgas ?? []}
+          readOnly={user.roles.includes("coach")}
+        />
       </div>
     </div>
   );

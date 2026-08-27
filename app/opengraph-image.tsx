@@ -21,7 +21,7 @@ import { ImageResponse } from "next/og";
  * They are the same licensed files, in a second container.
  */
 export const alt =
-  "SAEAC — Senator Asuquo Ekpenyong Academic Championship. Igniting Minds. Inspiring Excellence. Building Leaders.";
+  "SAEAC. Senator Asuquo Ekpenyong Academic Championship. Igniting Minds. Inspiring Excellence. Building Leaders.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 

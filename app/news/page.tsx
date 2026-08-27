@@ -11,11 +11,15 @@ export const metadata: Metadata = {
 /**
  * News and Updates, per Content Guide §4.12.
  *
- * The guide specifies category filters and a monthly archive. Both wait for a
- * real feed; with three articles a filter bar would be furniture. They arrive
- * with the CMS in Phase 2.
+ * The public feed is database-backed; cards link to the article detail route.
+ * Category filtering is URL-driven so a filtered feed can be shared directly.
  */
-export default function NewsPage() {
+export default async function NewsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string }>;
+}) {
+  const { category } = await searchParams;
   return (
     <>
       <PageHero
@@ -24,7 +28,7 @@ export default function NewsPage() {
         titleTrail="the Championship"
         intro="Announcements, stage reports and news from schools across the district."
       />
-      <NewsSection />
+      <NewsSection category={category} />
       <PrincipalsSection />
     </>
   );

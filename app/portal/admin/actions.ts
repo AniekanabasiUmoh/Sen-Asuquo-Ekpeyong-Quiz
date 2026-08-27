@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { requireRole, writeAudit } from "@/lib/auth";
+import { requireStepUp, writeAudit } from "@/lib/auth";
 import {
   sendRegistrationApprovedEmail,
   sendRegistrationChangesRequestedEmail,
@@ -25,7 +25,7 @@ export async function approveSchool(
   _prev: AdminState,
   formData: FormData,
 ): Promise<AdminState> {
-  const user = await requireRole(ADMIN_ROLES, "/portal/admin");
+  const user = await requireStepUp(ADMIN_ROLES, "/portal/admin");
   const id = String(formData.get("school_id") ?? "");
   if (!id) return { error: "No school given." };
 
@@ -76,12 +76,26 @@ export async function approveSchool(
     after: { status: "approved", registration_no: registrationNo },
   });
 
+  let deliveryWarning = "";
   if (before.contact_email) {
-    void sendRegistrationApprovedEmail(before.contact_email, before.name, registrationNo);
+    const delivered = await sendRegistrationApprovedEmail(
+      before.contact_email,
+      before.name,
+      registrationNo,
+    );
+    if (!delivered) {
+      deliveryWarning = " Email delivery is pending; share the number manually.";
+      await writeAudit({
+        action: "school.approval_email_failed",
+        entity: "schools",
+        entityId: id,
+        reason: "Registration approval succeeded but the notification was not delivered",
+      });
+    }
   }
 
   revalidatePath("/portal/admin");
-  return { notice: `Approved. Registration number ${registrationNo} issued.` };
+  return { notice: `Approved. Registration number ${registrationNo} issued.${deliveryWarning}` };
 }
 
 /** Reject, or send back for correction. Both require a reason. */
@@ -89,7 +103,7 @@ export async function rejectSchool(
   _prev: AdminState,
   formData: FormData,
 ): Promise<AdminState> {
-  await requireRole(ADMIN_ROLES, "/portal/admin");
+  await requireStepUp(ADMIN_ROLES, "/portal/admin");
   const id = String(formData.get("school_id") ?? "");
   const reason = String(formData.get("reason") ?? "").trim();
   const sendBack = formData.get("send_back") === "1";
@@ -127,16 +141,26 @@ export async function rejectSchool(
     reason,
   });
 
+  let deliveryWarning = "";
   if (before.contact_email) {
-    void (sendBack
+    const delivered = await (sendBack
       ? sendRegistrationChangesRequestedEmail(before.contact_email, before.name, reason)
       : sendRegistrationRejectedEmail(before.contact_email, before.name, reason));
+    if (!delivered) {
+      deliveryWarning = " Email delivery is pending; contact the school directly.";
+      await writeAudit({
+        action: sendBack ? "school.changes_email_failed" : "school.rejection_email_failed",
+        entity: "schools",
+        entityId: id,
+        reason: "Registration decision succeeded but the notification was not delivered",
+      });
+    }
   }
 
   revalidatePath("/portal/admin");
   return {
     notice: sendBack
-      ? "Sent back to the school for correction."
-      : "Registration marked as not accepted.",
+      ? `Sent back to the school for correction.${deliveryWarning}`
+      : `Registration marked as not accepted.${deliveryWarning}`,
   };
 }

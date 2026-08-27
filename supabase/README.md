@@ -4,9 +4,17 @@ Project ref: `lmohoeikidbsiioabmsz` · region `eu-west-1`
 
 ## Applying the migrations
 
-**All migrations have been applied to the hosted project and verified.** The
-seven LGAs, seven stages and seven subjects are seeded; no school, user or audit
-row exists yet.
+The core migrations through `20260823002100_chat_author_names.sql` have been
+applied to the hosted project and verified. The seven LGAs, seven stages and
+seven subjects are seeded. The hosted project also contains the deliberately
+seeded demo scenario used for acceptance tests (approved and pending schools, a
+five-student roster, matches/events, accreditations, volunteer briefings and
+news). Treat those rows as test data: do not alter or delete them during QA.
+
+The eight `2026082600*.sql` migrations are prepared locally but are **not yet
+applied** because the current Supabase CLI identity cannot see the project.
+Apply them, in order, only after project ownership is corrected and Preview
+verification is available.
 
 `supabase link` needs a personal access token, which this environment does not
 have, so the migrations were applied over the direct Postgres connection in
@@ -30,6 +38,14 @@ Or paste each file into the SQL Editor in the dashboard, in filename order:
 | 6 | `20260823000600_registration_number.sql` | `issue_registration_number()` under an advisory lock |
 | 7 | `20260823000700_fix_schools_select.sql` | Fixes `INSERT ... RETURNING` for a school's own row |
 | 8 | `20260823000800_fix_status_escalation.sql` | Stops a school approving itself; fixes the counter |
+| 22 | `20260826000100_content_cms.sql` | FAQ and Downloads/Rules tables with forced RLS |
+| 23 | `20260826000200_appeals.sql` | School appeals/disputes workflow with forced RLS |
+| 24 | `20260826000300_chat_author_names_anon.sql` | Allows the public live page to call the narrow chat-name RPC |
+| 25 | `20260826000400_schedule_visibility.sql` | Hides draft fixture changes, participants and unpublished venue addresses from public REST reads |
+| 26 | `20260826000500_consent_governance.sql` | Records consent policy version/actor and preserves withdrawal timestamps |
+| 27 | `20260826000600_match_setup_transaction.sql` | Creates matches, rounds and participants atomically |
+| 28 | `20260826000700_gallery_tags.sql` | Adds LGA, stage, and content-type taxonomy to gallery items |
+| 29 | `20260826000800_volunteer_messages.sql` | Adds the accepted-Change-Maker dashboard communication centre |
 
 Run in order. The seed is safe to re-run; the schema migrations are not.
 
@@ -44,9 +60,10 @@ python supabase/test_rls.py
 ```
 
 Walks a registration from sign-up to approval as three different roles and
-checks 17 boundaries. It cleans up after itself, and purges leftovers at the
-start, so it is safe to re-run. **Run it after any change to a policy or to the
-registration flow.**
+checks the RLS boundaries. It scopes assertions to its disposable school and
+actors, and only removes rows created by those actors; it does not truncate
+the audit trail or assume the hosted database is empty. **Run it after any
+change to a policy or to the registration flow.**
 
 It has already earned its keep, catching three bugs that reading the SQL had
 missed:
@@ -97,9 +114,8 @@ ref throughout.
 
 ## Known issues
 
-- **ESLint does not run** in this repo: a transitive dependency under
-  `es-abstract` fails to resolve (`object.fromentries/implementation.js`). This
-  predates the Supabase work and affects every file, including untouched Phase 1
-  pages. `npx tsc --noEmit` is clean and is the check to rely on meanwhile.
+- **ESLint is part of the release gate** and currently passes with the checked-in
+  repository configuration. Run `npm run lint` from `calabar-quiz-demo` before
+  every deployment.
 - The service-role key and DB password are in plaintext in the workspace-root
   `.env`. Rotate before go-live; deferred by decision during Sprint 2.1.

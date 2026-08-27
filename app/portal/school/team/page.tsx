@@ -15,11 +15,27 @@ export default async function TeamPage() {
   const user = await requireUser("/portal/school/team");
   const supabase = await createClient();
 
-  const { data: school } = await supabase
+  let { data: school } = await supabase
     .from("schools")
-    .select("id, name, status")
+    .select("id, name, status, owner_id")
     .eq("owner_id", user.id)
     .maybeSingle();
+
+  if (!school && user.roles.includes("coach")) {
+    const { data: assignment } = await supabase
+      .from("coaches")
+      .select("school_id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    if (assignment) {
+      const result = await supabase
+        .from("schools")
+        .select("id, name, status, owner_id")
+        .eq("id", assignment.school_id)
+        .maybeSingle();
+      school = result.data;
+    }
+  }
 
   if (!school) {
     return (
@@ -82,7 +98,9 @@ export default async function TeamPage() {
 
   // Once the registration is with the committee the roster is read-only, for
   // the same reason the registration itself is.
-  const locked = !["draft", "changes_requested", "approved"].includes(school.status);
+  const locked =
+    school.owner_id !== user.id ||
+    !["draft", "changes_requested", "approved"].includes(school.status);
 
   return (
     <div>

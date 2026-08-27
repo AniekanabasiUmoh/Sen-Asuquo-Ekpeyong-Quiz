@@ -126,7 +126,7 @@ export function BroadcastAdmin({
                 <p className="mt-3 text-[11px] text-primary/40">
                   Status: {b.status}
                   {b.status === "ended"
-                    ? " — the embed now plays back YouTube's automatic archive of the stream."
+                    ? ". The embed now plays back YouTube's automatic archive of the stream."
                     : ""}
                 </p>
 

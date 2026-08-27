@@ -90,7 +90,7 @@ export const lgaContent: LgaContent[] = [
     combined: false,
     headquarters: "Akpet Central",
     intro:
-      "The northernmost LGA in the district, with schools spread across a long stretch of the Calabar–Ikom corridor.",
+      "The northernmost LGA in the district, with schools spread across a long stretch of the road from Calabar to Ikom.",
     body: [
       "Biase sits at the northern end of the Cross River South Senatorial District, along the road that runs from Calabar towards Ikom. It is one of the district's more agricultural areas, with farming settlements distributed along the highway and the river.",
       "Its twenty-two public secondary schools are spread over a considerable distance rather than clustered in a single town, so the Local Government Qualifier draws from communities that can be an hour or more apart.",
@@ -158,7 +158,7 @@ export const lgaContent: LgaContent[] = [
     facts: [
       { label: "Headquarters", value: "Calabar" },
       { label: "Qualifying group", value: "One slot" },
-      { label: "Character", value: "Urban — state capital" },
+      { label: "Character", value: "Urban, state capital" },
     ],
     img: "/img/lga-calabar-municipality.jpg",
     imgAlt: "Secondary school students from Calabar Municipality",
@@ -173,12 +173,12 @@ export const lgaContent: LgaContent[] = [
       "The southern half of the state capital, the district's most densely populated LGA.",
     body: [
       "Calabar South is the southern half of the state capital and the most densely populated LGA in the district, taking in the older waterside quarters of the city and the commercial districts around the Marina.",
-      "Its fifteen public secondary schools sit within a comparatively small area, so its Local Government Qualifier is the most geographically compact of the seven — an advantage for attendance that the more rural LGAs do not share.",
+      "Its fifteen public secondary schools sit within a comparatively small area, so its Local Government Qualifier is the most geographically compact of the seven. That makes attendance easier than it is in the more rural LGAs.",
     ],
     facts: [
       { label: "Headquarters", value: "Anantigha" },
       { label: "Qualifying group", value: "One slot" },
-      { label: "Character", value: "Urban — most densely populated in district" },
+      { label: "Character", value: "Urban, most densely populated in the district" },
     ],
     img: "/img/lga-calabar-south.jpg",
     imgAlt: "Secondary school students from Calabar South Local Government Area",

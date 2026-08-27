@@ -8,6 +8,91 @@ For the phase-by-phase build history and what remains, see
 This file is the "how do I actually run and operate it" companion to that
 one.
 
+## Verified state (27 August 2026)
+
+The production URL `https://senatorquiz.vercel.app` is serving a Ready Vercel
+deployment. Read-only REST checks using the configured server credentials
+confirmed two schools (one approved and one pending), five registered
+students, matches and append-only match events, accreditations, broadcasts,
+volunteer briefings, and published news. Anonymous checks saw only the
+approved school and no student records, pending schools, audit rows,
+unpublished news, or draft results, which is the intended public RLS boundary.
+
+The pushed remediation commit is now the latest Ready production deployment
+through the repository's Vercel integration; read-only checks of `/gallery`,
+`/downloads`, `/api/health`, `/schedule?view=calendar`, and `/results` return
+200. This confirms the web deployment only. The new database migrations remain
+unapplied, so CMS, appeals, taxonomy, consent-governance, atomic match setup,
+and Change Maker message data still require the Preview migration and
+acceptance gates below before those workflows are treated as production-ready.
+
+The locally authenticated Supabase CLI account does not list project
+`lmohoeikidbsiioabmsz`, even though the application credentials can reach its
+data API. Do not run `supabase link`, `supabase db push`, or any migration
+command until a project owner grants the CLI account access and the project
+appears in `supabase projects list`. Preview environment variables are also
+not yet configured in Vercel, so Preview must not be used for production-data
+testing.
+
+The deployed `send-email` Edge Function currently returns HTTP 404. Email
+delivery therefore remains an external deployment task, not a frontend claim:
+deploy the function and set its Resend secrets only after the correct Supabase
+project access and sender-domain approval are in place.
+
+The working tree also contains the timestamped migration
+`20260826000100_content_cms.sql` for FAQ and Downloads/Rules management. It is
+not applied to production because the CLI project-ownership gate is still open;
+the public pages fall back to the approved static FAQ copy and an explicit
+“being finalised” state until the migration is applied.
+
+The working tree also contains `20260826000200_appeals.sql`, which adds the
+school-to-committee appeals/disputes workflow with forced RLS. It has the same
+apply gate and must be verified in Preview before production use.
+
+The working tree also contains `20260826000300_chat_author_names_anon.sql`.
+It grants anonymous execution of the already-scoped chat-author-name RPC so
+public live pages can label chat messages without exposing profile rows. Apply
+it with the other pending migrations after the ownership and Preview gates are
+closed.
+
+The working tree also contains `20260826000400_schedule_visibility.sql`, which
+restricts draft fixture changes and participant identifiers to administrators;
+public readers see them only after the fixture itself is published.
+
+The working tree also contains `20260826000500_consent_governance.sql`. It
+adds consent policy version/actor fields and withdrawal timestamps for student
+records, while preserving the original consent timestamp. The roster actions
+remove private photo objects when a student or replacement photo is deleted;
+apply and verify this migration in Preview before production use.
+
+The working tree also contains `20260826000600_match_setup_transaction.sql`.
+The admin match-creation action uses its atomic setup function so a failed
+round or participant insert cannot leave a partial match. Apply this migration
+before deploying the updated match portal.
+
+The working tree also contains `20260826000700_gallery_tags.sql`. It adds
+content type, LGA, and stage taxonomy to gallery items and powers the public
+gallery filters. Apply and verify it before using those fields in production.
+
+The working tree also contains `20260826000800_volunteer_messages.sql`. It
+adds an audited, shift-targetable dashboard broadcast channel for accepted
+Change Makers. It intentionally does not claim SMS or email delivery; those
+remain dependent on the external provider setup described above.
+
+Privileged MFA enrollment is available at `/portal/security`. Enforcement is
+controlled by the server-only `SAEAC_REQUIRE_MFA` variable and is intentionally
+`false` by default. Enrol and test at least two privileged administrators and
+agree recovery procedures before setting it to `true` in Vercel. High-risk
+mutations also have a separate `SAEAC_REQUIRE_STEP_UP` flag; it gates role
+changes, result publication, accreditation issuance/revocation, broadcast
+state changes, school decisions, fixture/venue creation, fixture rescheduling,
+and Change Maker administration on an AAL2 session.
+Keep both flags off until the same recovery rehearsal is complete.
+
+School workspaces resolve both owner registrations and coach assignments. A
+coach can review the assigned school's approved roster, while registration and
+roster mutation actions remain owner-checked server actions.
+
 ## What this is
 
 The public website and portal for the Senator Asuquo Ekpenyong Academic
@@ -22,7 +107,7 @@ admin tools, and the live match/scoreboard experience.
 |---|---|---|
 | Supabase project | `lmohoeikidbsiioabmsz`, region `eu-west-1` | Dashboard login needed for: personal access tokens (`supabase link`), physical backups/PITR, and anything under Project Settings. The service-role key alone does **not** grant this — it authenticates to the *data* API, not the *management* API. |
 | Vercel | Project `sen-asuquo-ekpeyong-quiz`, live at senatorquiz.vercel.app | Env vars below **must** be set in Vercel — it does not read `.env.local`. `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY` are set for Production and Development; **Preview is still unset**, so preview deployments will run without a session refresh until someone adds them. |
-| Resend | Transactional email | **Key supplied and verified working** (root `.env`, `RESEND_KEY`; send-only restricted key). Still blocked: `saeac.org` is not a verified sender domain, and the key must be set as a Supabase Edge Function secret. See "Email" below. |
+| Resend | Transactional email | A `RESEND_KEY` is present in the workspace `.env`, but its current read-only API check returned HTTP 401, so it must be revalidated or replaced. `saeac.org` is also not verified, and the key must be set as a Supabase Edge Function secret. See "Email" below. |
 | Domain (saeac.org) | Registrar | **Blocking email.** Resend returns 403 for `saeac.org` until the domain is added at resend.com/domains and its SPF/DKIM records are published. Also needed to serve the site at the real domain. |
 
 ## Environment variables
@@ -71,14 +156,17 @@ Next.js layer. Every table has RLS enabled *and forced* — check
 `supabase/migrations/20260823000200_rls.sql` onward for the pattern before
 adding a new table without it.
 
-## Email — key supplied, blocked on domain verification
+Email status note (27 August 2026): a workspace `RESEND_KEY` is present, but
+the current read-only Resend domains check returned HTTP 401. Revalidate or
+replace it before configuring the Edge Function; do not print or commit it.
+
+## Email — provider key/domain still require verification
 
 Registration confirmations and schedule-change notices are fully coded —
-templates, an Edge Function, and every call site. A Resend API key now exists
-(workspace-root `.env`, as `RESEND_KEY`). It has been tested directly against
-the Resend API and **the key itself works**: it is a send-only restricted key,
-which is the right least-privilege choice, and a test send through Resend's
-own verified domain returned 200.
+templates, an Edge Function, and every call site. A `RESEND_KEY` is present in
+the workspace `.env`, but the current read-only Resend domains check returned
+HTTP 401. Treat the key as invalid or expired until the owner revalidates or
+replaces it; do not print it or commit it. Its scope should remain send-only.
 
 **Two things still stand between that and a school receiving an email:**
 
@@ -109,6 +197,12 @@ See [`supabase/functions/send-email/index.ts`](supabase/functions/send-email/ind
 for the full explanation.
 
 ## Event-day operations
+
+`/api/health` is a non-sensitive readiness endpoint for an uptime monitor. It
+checks that public Supabase configuration and the reference-data query are
+available, returns 200/503, and never includes credentials or database error
+text. Register it with the chosen monitoring provider after the Vercel alerting
+owner is nominated.
 
 - **Accreditation / check-in**: `/portal/admin/accreditation`, scans a QR
   code with any staff member's phone camera (no app, no dedicated hardware).

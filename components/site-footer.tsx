@@ -8,7 +8,7 @@ import { brand, contact, footerLinks, portalLinks } from "@/content/homepage";
  *
  * Lifted out of the homepage when the site was split into pages, so every
  * page carries the same one. Portal links point at the unified login gateway
- * recommended in §2.2 and are marked pending until Phase 2 builds it.
+ * recommended in §2.2.
  */
 export function SiteFooter() {
   return (
@@ -67,15 +67,12 @@ export function SiteFooter() {
               <ul className="mt-5 space-y-3 text-sm">
                 {portalLinks.map((l) => (
                   <li key={l.label}>
-                    {/* Pending until the Phase 2 login gateway exists. Rendered
-                        as plain text rather than a dead link, so nobody clicks
-                        through to a 404. */}
-                    <span className="inline-flex items-center gap-2 text-white/35">
+                    <Link
+                      href={l.href}
+                      className="text-white/60 transition hover:text-white"
+                    >
                       {l.label}
-                      <span className="rounded-full bg-white/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white/45">
-                        Soon
-                      </span>
-                    </span>
+                    </Link>
                   </li>
                 ))}
               </ul>

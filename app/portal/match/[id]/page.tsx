@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { getSessionUser, isAdmin, requireUser } from "@/lib/auth";
+import { isAdmin, requireRole } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { Student } from "@/lib/supabase/types";
 
@@ -18,8 +18,7 @@ export default async function MatchConsolePage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  await requireUser(`/portal/match/${id}`);
-  const user = await getSessionUser();
+  const user = await requireRole(["super_admin", "committee", "judge"], `/portal/match/${id}`);
   const supabase = await createClient();
 
   // RLS decides visibility: an unassigned judge sees nothing and lands on 404,

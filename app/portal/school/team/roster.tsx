@@ -230,7 +230,17 @@ function StudentCard({
           </p>
           <p className="mt-2 text-[12px] font-semibold">
             {student.consent_given ? (
-              <span className="text-forest">Consent recorded</span>
+              <span className="text-forest">
+                Consent recorded
+                {student.consent_at
+                  ? ` on ${new Date(student.consent_at).toLocaleDateString("en-GB")}`
+                  : ""}
+              </span>
+            ) : student.consent_withdrawn_at ? (
+              <span className="text-red-ink">
+                Consent withdrawn
+                {` on ${new Date(student.consent_withdrawn_at).toLocaleDateString("en-GB")}`}
+              </span>
             ) : (
               <span className="text-red-ink">Consent not yet recorded</span>
             )}

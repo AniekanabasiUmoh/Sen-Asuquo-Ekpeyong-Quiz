@@ -102,9 +102,11 @@ export async function removeStudent(
 
   const { data: before } = await supabase
     .from("students")
-    .select("full_name")
+    .select("full_name, photo_path")
     .eq("id", id)
+    .eq("school_id", school.id)
     .maybeSingle();
+  if (!before) return { error: "That student could not be found." };
 
   const { error } = await supabase
     .from("students")
@@ -113,6 +115,10 @@ export async function removeStudent(
     .eq("school_id", school.id);
 
   if (error) return { error: `Could not remove the student: ${error.message}` };
+
+  if (before.photo_path) {
+    await supabase.storage.from("student-photos").remove([before.photo_path]);
+  }
 
   await writeAudit({
     action: "student.removed",
@@ -137,17 +143,29 @@ export async function setConsent(
   _prev: RosterState,
   formData: FormData,
 ): Promise<RosterState> {
-  const { supabase, school } = await ownSchool();
+  const { user, supabase, school } = await ownSchool();
   if (!school) return { error: "No school found for this account." };
 
   const id = String(formData.get("student_id") ?? "");
   const given = formData.get("consent") === "1";
+  const consentVersion = "2026-08-26-v1";
 
   const { error } = await supabase
     .from("students")
     .update({
       consent_given: given,
-      consent_at: given ? new Date().toISOString() : null,
+      ...(given
+        ? {
+            consent_at: new Date().toISOString(),
+            consent_version: consentVersion,
+            consent_given_by: user.id,
+            consent_withdrawn_at: null,
+            consent_withdrawn_by: null,
+          }
+        : {
+            consent_withdrawn_at: new Date().toISOString(),
+            consent_withdrawn_by: user.id,
+          }),
     })
     .eq("id", id)
     .eq("school_id", school.id);
@@ -158,7 +176,11 @@ export async function setConsent(
     action: given ? "student.consent_given" : "student.consent_withdrawn",
     entity: "students",
     entityId: id,
-    after: { consent_given: given },
+    after: {
+      consent_given: given,
+      consent_version: given ? consentVersion : undefined,
+      consent_withdrawn_at: given ? null : "recorded",
+    },
   });
 
   revalidatePath("/portal/school/team");
@@ -187,12 +209,24 @@ export async function uploadStudentPhoto(
   if (!(file instanceof File) || file.size === 0) {
     return { error: "Choose a photograph to upload." };
   }
+  const photoTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
+  if (!photoTypes.has(file.type)) {
+    return { error: "Use a JPG, PNG or WebP image for a student photograph." };
+  }
   if (file.size > 5 * 1024 * 1024) {
     return { error: "That photograph is larger than 5MB. Please use a smaller one." };
   }
 
-  const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
+  const ext = file.type === "image/png" ? "png" : file.type === "image/webp" ? "webp" : "jpg";
   const path = `${school.id}/${id}-${Date.now()}.${ext}`;
+
+  const { data: before } = await supabase
+    .from("students")
+    .select("photo_path")
+    .eq("id", id)
+    .eq("school_id", school.id)
+    .maybeSingle();
+  if (!before) return { error: "That student could not be found." };
 
   const { error: uploadError } = await supabase.storage
     .from("student-photos")
@@ -206,7 +240,14 @@ export async function uploadStudentPhoto(
     .eq("id", id)
     .eq("school_id", school.id);
 
-  if (error) return { error: `Uploaded, but could not save: ${error.message}` };
+  if (error) {
+    await supabase.storage.from("student-photos").remove([path]);
+    return { error: `Uploaded, but could not save: ${error.message}` };
+  }
+
+  if (before?.photo_path && before.photo_path !== path) {
+    await supabase.storage.from("student-photos").remove([before.photo_path]);
+  }
 
   revalidatePath("/portal/school/team");
   return { notice: "Photograph uploaded." };
@@ -249,7 +290,10 @@ export async function uploadSchoolDocument(
     uploaded_by: user.id,
   });
 
-  if (error) return { error: `Uploaded, but could not record it: ${error.message}` };
+  if (error) {
+    await supabase.storage.from("school-documents").remove([path]);
+    return { error: `Uploaded, but could not record it: ${error.message}` };
+  }
 
   await writeAudit({
     action: "document.uploaded",
@@ -279,7 +323,10 @@ export async function deleteSchoolDocument(
 
   if (!doc) return { error: "That document could not be found." };
 
-  await supabase.storage.from("school-documents").remove([doc.storage_path]);
+  const { error: storageError } = await supabase.storage
+    .from("school-documents")
+    .remove([doc.storage_path]);
+  if (storageError) return { error: `Could not remove the file: ${storageError.message}` };
   const { error } = await supabase.from("school_documents").delete().eq("id", id);
 
   if (error) return { error: `Could not remove it: ${error.message}` };

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { requireRole, writeAudit } from "@/lib/auth";
+import { requireStepUp, writeAudit } from "@/lib/auth";
 import { sendScheduleChangedEmail } from "@/lib/email";
 import { createClient } from "@/lib/supabase/server";
 
@@ -33,7 +33,7 @@ export async function createVenue(
   _prev: ScheduleState,
   formData: FormData,
 ): Promise<ScheduleState> {
-  await requireRole(ADMIN_ROLES, "/portal/admin/schedule");
+  await requireStepUp(ADMIN_ROLES, "/portal/admin/schedule");
 
   const name = String(formData.get("name") ?? "").trim();
   const lgaId = String(formData.get("lga_id") ?? "");
@@ -62,7 +62,7 @@ export async function createFixture(
   _prev: ScheduleState,
   formData: FormData,
 ): Promise<ScheduleState> {
-  await requireRole(ADMIN_ROLES, "/portal/admin/schedule");
+  await requireStepUp(ADMIN_ROLES, "/portal/admin/schedule");
 
   const stageId = String(formData.get("stage_id") ?? "");
   const name = String(formData.get("name") ?? "").trim();
@@ -104,7 +104,7 @@ export async function rescheduleFixture(
   _prev: ScheduleState,
   formData: FormData,
 ): Promise<ScheduleState> {
-  await requireRole(ADMIN_ROLES, "/portal/admin/schedule");
+  await requireStepUp(ADMIN_ROLES, "/portal/admin/schedule");
 
   const id = String(formData.get("fixture_id") ?? "");
   const when = String(formData.get("scheduled_at") ?? "").trim();
@@ -122,15 +122,30 @@ export async function rescheduleFixture(
   const supabase = await createClient();
   const { data: fixtureBefore } = await supabase
     .from("fixtures")
-    .select("name")
+    .select("name, scheduled_at, venue_id")
     .eq("id", id)
     .maybeSingle();
+  if (!fixtureBefore) return { error: "That fixture could not be found." };
+
+  const nextScheduledAt = when ? new Date(when).toISOString() : null;
+  if (when && Number.isNaN(Date.parse(when))) {
+    return { error: "Enter a valid date and time." };
+  }
+  const sameInstant =
+    (fixtureBefore.scheduled_at ? Date.parse(fixtureBefore.scheduled_at) : null) ===
+    (nextScheduledAt ? Date.parse(nextScheduledAt) : null);
+  const nextVenueId = venueId || null;
+  const changedFieldCount = (sameInstant ? 0 : 1) +
+    (fixtureBefore.venue_id === nextVenueId ? 0 : 1);
+  if (changedFieldCount === 0) {
+    return { notice: "No schedule change was needed." };
+  }
 
   const { error } = await supabase
     .from("fixtures")
     .update({
-      scheduled_at: when ? new Date(when).toISOString() : null,
-      venue_id: venueId || null,
+      scheduled_at: nextScheduledAt,
+      venue_id: nextVenueId,
     })
     .eq("id", id);
 
@@ -144,8 +159,9 @@ export async function rescheduleFixture(
     .select("id, field, old_value, new_value")
     .eq("fixture_id", id)
     .order("created_at", { ascending: false })
-    .limit(2);
+    .limit(changedFieldCount);
 
+  let deliveryWarning = "";
   if (latest?.length) {
     await supabase
       .from("fixture_changes")
@@ -170,9 +186,10 @@ export async function rescheduleFixture(
       (s): s is { name: string; contact_email: string } => !!s.contact_email,
     );
 
+    let undelivered = 0;
     for (const change of latest) {
       for (const school of recipients) {
-        void sendScheduleChangedEmail(school.contact_email, {
+        const delivered = await sendScheduleChangedEmail(school.contact_email, {
           schoolName: school.name,
           fixtureName: fixtureBefore?.name ?? "Your fixture",
           field: change.field === "venue" ? "venue" : "scheduled_at",
@@ -180,7 +197,18 @@ export async function rescheduleFixture(
           newValue: change.new_value,
           reason,
         });
+        if (!delivered) undelivered += 1;
       }
+    }
+
+    if (undelivered > 0) {
+      deliveryWarning = " Schedule notification email could not be delivered; contact affected schools directly.";
+      await writeAudit({
+        action: "fixture.reschedule_email_failed",
+        entity: "fixtures",
+        entityId: id,
+        reason: `${undelivered} schedule notification${undelivered === 1 ? "" : "s"} not delivered`,
+      });
     }
   }
 
@@ -193,7 +221,7 @@ export async function rescheduleFixture(
 
   revalidatePath("/portal/admin/schedule");
   revalidatePath("/schedule");
-  return { notice: "Fixture updated and the change logged." };
+  return { notice: `Fixture updated and the change logged.${deliveryWarning}` };
 }
 
 /** Publish or unpublish. Nothing reaches the public schedule until published. */
@@ -201,7 +229,7 @@ export async function setFixturePublish(
   _prev: ScheduleState,
   formData: FormData,
 ): Promise<ScheduleState> {
-  await requireRole(ADMIN_ROLES, "/portal/admin/schedule");
+  await requireStepUp(ADMIN_ROLES, "/portal/admin/schedule");
 
   const id = String(formData.get("fixture_id") ?? "");
   const publish = formData.get("publish") === "1";

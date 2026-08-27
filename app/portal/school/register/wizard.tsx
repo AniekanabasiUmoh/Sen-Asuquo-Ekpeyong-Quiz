@@ -27,9 +27,11 @@ const STEPS = [
 export function RegistrationWizard({
   school,
   lgas,
+  readOnly = false,
 }: {
   school: School | null;
   lgas: Lga[];
+  readOnly?: boolean;
 }) {
   // Resume where the school left off rather than always at step one.
   const initialStep = !school
@@ -44,7 +46,8 @@ export function RegistrationWizard({
     EMPTY,
   );
 
-  const locked = !!school && !["draft", "changes_requested"].includes(school.status);
+  const locked =
+    readOnly || (!!school && !["draft", "changes_requested"].includes(school.status));
 
   if (locked) {
     return <LockedNotice school={school!} />;

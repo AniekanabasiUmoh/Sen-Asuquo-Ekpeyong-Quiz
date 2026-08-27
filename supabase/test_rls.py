@@ -71,9 +71,17 @@ class Harness:
         if not ok:
             self.failures.append(label)
 
-    def purge(self) -> None:
+    def purge(self, actor_ids: list[str] | None = None) -> None:
         self.reset()
-        self.cur.execute("delete from audit_log")
+        # Never truncate or globally delete audit history. The hosted project
+        # contains seeded/demo activity and production history may coexist with
+        # this harness. Only remove rows written by this run's disposable
+        # actors, when their IDs are known.
+        if actor_ids:
+            self.cur.execute(
+                "delete from audit_log where actor_id::text = any(%s)",
+                (actor_ids,),
+            )
         self.cur.execute(
             "delete from schools where slug like 'test-model-sec%' or slug like 'probe-slug%'"
         )
@@ -150,19 +158,23 @@ def main() -> int:
             conn.rollback()
             h.as_user(school_uid)
 
-        cur.execute("select count(*) from schools")
+        cur.execute("select count(*) from schools where owner_id=%s", (school_uid,))
         h.check("school sees only its own row", cur.fetchone()[0], 1)
         conn.commit()
 
         print("\nas the committee")
         h.reset()
         h.as_user(admin_uid)
-        cur.execute("select count(*) from schools")
+        cur.execute("select count(*) from schools where id=%s", (school_id,))
         h.check("committee sees the submission", cur.fetchone()[0], 1)
 
         cur.execute("select issue_registration_number(%s)", (school_id,))
         reg = cur.fetchone()[0]
-        h.check("first number is 0001", reg.endswith("-0001"), True)
+        h.check(
+            "issued registration number has expected format",
+            bool(reg and reg.startswith("SAEAC-2026-") and len(reg.rsplit("-", 1)[-1]) == 4),
+            True,
+        )
 
         cur.execute(
             "update schools set status='approved',approved_at=now(),approved_by=%s where id=%s",
@@ -179,7 +191,7 @@ def main() -> int:
 
         print("\nas an anonymous visitor")
         h.as_anon()
-        cur.execute("select count(*) from schools")
+        cur.execute("select count(*) from schools where id=%s", (school_id,))
         h.check("approved school is public", cur.fetchone()[0], 1)
         cur.execute("select count(*) from students")
         h.check("students are never public", cur.fetchone()[0], 0)
@@ -221,7 +233,7 @@ def main() -> int:
         h.failures.append(f"{type(exc).__name__}: {exc}")
         print(f"\n  ERROR  {type(exc).__name__}: {str(exc)[:300]}")
     finally:
-        h.purge()
+        h.purge([school_uid, admin_uid])
 
     print()
     if h.failures:

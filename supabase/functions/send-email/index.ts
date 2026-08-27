@@ -124,7 +124,7 @@ serve(async (req) => {
   // ---------------------------------------------------------------------
   if (!RESEND_API_KEY) {
     console.log(
-      `[send-email] SKIPPED (no RESEND_API_KEY set) — kind=${body.kind} to=${body.to} subject="${email.subject}"`,
+      `[send-email] SKIPPED (no RESEND_API_KEY set) — kind=${body.kind} subject="${email.subject}"`,
     );
     return new Response(
       JSON.stringify({ ok: true, skipped: true, reason: "RESEND_API_KEY not set" }),
@@ -147,14 +147,14 @@ serve(async (req) => {
   });
 
   if (!resendResponse.ok) {
-    const text = await resendResponse.text();
-    console.error(`[send-email] Resend error ${resendResponse.status}: ${text}`);
+    await resendResponse.text();
+    console.error(`[send-email] Resend error ${resendResponse.status}`);
     // Email failing must never fail the caller's transaction (approving a
     // school, say) — the record is correct either way, so this reports the
     // problem without a non-2xx that could make a server action look like it
     // failed when the important part succeeded.
     return new Response(
-      JSON.stringify({ ok: false, sent: false, error: text }),
+      JSON.stringify({ ok: false, sent: false, error: "provider_error" }),
       { status: 200, headers: { "Content-Type": "application/json" } },
     );
   }

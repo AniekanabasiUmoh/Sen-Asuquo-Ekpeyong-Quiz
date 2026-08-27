@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { requireRole, writeAudit } from "@/lib/auth";
+import { requireStepUp, writeAudit } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 export type BroadcastState = { error?: string; notice?: string };
@@ -37,7 +37,7 @@ export async function saveBroadcast(
   _prev: BroadcastState,
   formData: FormData,
 ): Promise<BroadcastState> {
-  await requireRole(ADMIN_ROLES, "/portal/admin/broadcast");
+  await requireStepUp(ADMIN_ROLES, "/portal/admin/broadcast");
 
   const title = String(formData.get("title") ?? "").trim();
   const matchId = String(formData.get("match_id") ?? "");
@@ -82,7 +82,7 @@ export async function addSimulcastLink(
   _prev: BroadcastState,
   formData: FormData,
 ): Promise<BroadcastState> {
-  await requireRole(ADMIN_ROLES, "/portal/admin/broadcast");
+  await requireStepUp(ADMIN_ROLES, "/portal/admin/broadcast");
 
   const broadcastId = String(formData.get("broadcast_id") ?? "");
   const platform = String(formData.get("platform") ?? "").trim();
@@ -126,7 +126,7 @@ export async function removeSimulcastLink(
   _prev: BroadcastState,
   formData: FormData,
 ): Promise<BroadcastState> {
-  await requireRole(ADMIN_ROLES, "/portal/admin/broadcast");
+  await requireStepUp(ADMIN_ROLES, "/portal/admin/broadcast");
 
   const broadcastId = String(formData.get("broadcast_id") ?? "");
   const index = Number(formData.get("index") ?? -1);
@@ -158,7 +158,7 @@ export async function setBroadcastState(
   _prev: BroadcastState,
   formData: FormData,
 ): Promise<BroadcastState> {
-  await requireRole(ADMIN_ROLES, "/portal/admin/broadcast");
+  await requireStepUp(ADMIN_ROLES, "/portal/admin/broadcast");
 
   const id = String(formData.get("broadcast_id") ?? "");
   const publish = formData.get("publish") === "1";

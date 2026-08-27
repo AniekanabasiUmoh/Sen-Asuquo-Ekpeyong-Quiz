@@ -59,19 +59,19 @@ export default async function LiveMatchPage({
   const broadcast = broadcasts?.[0];
   const chatMessages = (chat ?? []) as ChatMessage[];
 
-  // Display names for chat authors. profiles is not publicly readable, so this
-  // is only ever the small set of people who have actually posted here, not a
-  // way to browse every account.
+  // Display names through the narrow RPC rather than selecting profiles. The
+  // profile table is intentionally private; the RPC only returns names for
+  // people who posted in this already-visible match.
   const authorIds = [...new Set(chatMessages.map((m) => m.user_id))];
   const { data: authors } = authorIds.length
-    ? await supabase.from("profiles").select("id, full_name").in("id", authorIds)
-    : { data: [] as { id: string; full_name: string | null }[] };
+    ? await supabase.rpc("chat_author_names", { target_match: id, user_ids: authorIds })
+    : { data: [] as { user_id: string; full_name: string | null }[] };
   const names = Object.fromEntries(
-    (authors ?? []).map((a) => [a.id, a.full_name ?? "Supporter"]),
+    (authors ?? []).map((a) => [a.user_id, a.full_name ?? "Supporter"]),
   );
 
   return (
-    <main className="min-h-screen bg-cream">
+    <div className="min-h-screen bg-cream">
       <div className="mx-auto max-w-5xl px-5 py-14 sm:py-20">
         <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-primary/50">
           {broadcast?.status === "ended" ? "Watch again" : "Live"}
@@ -127,6 +127,6 @@ export default async function LiveMatchPage({
           />
         </div>
       </div>
-    </main>
+    </div>
   );
 }

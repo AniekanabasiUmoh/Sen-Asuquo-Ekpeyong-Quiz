@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { getSessionUser, isAdmin, requireUser } from "@/lib/auth";
+import { isAdmin, requireRole } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 import { NewMatchForm } from "./new-match";
@@ -12,8 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function MatchListPage() {
-  await requireUser("/portal/match");
-  const user = await getSessionUser();
+  const user = await requireRole(["super_admin", "committee", "judge"], "/portal/match");
   const admin = isAdmin(user);
   const supabase = await createClient();
 

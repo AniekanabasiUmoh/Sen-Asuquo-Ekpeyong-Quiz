@@ -66,6 +66,42 @@ export async function requireRole(
   if (!user.roles.some((r) => roles.includes(r))) {
     redirect("/portal?denied=1");
   }
+  // MFA is deliberately feature-flagged until the committee has enrolled at
+  // least two recovery-capable administrators. Once enabled, this server-side
+  // check applies to every privileged page and server action, not just the UI.
+  if (
+    process.env.SAEAC_REQUIRE_MFA === "true" &&
+    user.roles.some((role) => role === "super_admin" || role === "committee")
+  ) {
+    const supabase = await createClient();
+    const { data: assurance } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+    if (assurance?.currentLevel !== "aal2") {
+      const next = nextPath ? `?next=${encodeURIComponent(nextPath)}` : "";
+      redirect(`/portal/security${next}`);
+    }
+  }
+  return user;
+}
+
+/**
+ * Optional step-up check for irreversible committee actions. This is separate
+ * from route-level MFA so a committee can keep ordinary navigation convenient
+ * while requiring an AAL2 session for role changes, publication, and event-day
+ * controls. It is disabled until the committee enables the server-only flag.
+ */
+export async function requireStepUp(
+  roles: readonly AppRole[],
+  nextPath?: string,
+): Promise<SessionUser> {
+  const user = await requireRole(roles, nextPath);
+  if (process.env.SAEAC_REQUIRE_STEP_UP !== "true") return user;
+
+  const supabase = await createClient();
+  const { data: assurance } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (assurance?.currentLevel !== "aal2") {
+    const next = nextPath ? `?next=${encodeURIComponent(nextPath)}&stepup=1` : "?stepup=1";
+    redirect(`/portal/security${next}`);
+  }
   return user;
 }
 
@@ -82,9 +118,13 @@ export function isAdmin(user: SessionUser | null): boolean {
  */
 export function landingPathFor(user: SessionUser): string {
   if (isAdmin(user)) return "/portal/admin";
+  // Judges operate matches directly. Keep this before school roles so a
+  // person who has both a judge and school role opens the event workspace.
+  if (user.roles.includes("judge")) return "/portal/match";
   if (user.roles.includes("school_admin") || user.roles.includes("coach")) {
     return "/portal/school";
   }
+  if (user.roles.includes("volunteer")) return "/portal/volunteer";
   return "/portal";
 }
 

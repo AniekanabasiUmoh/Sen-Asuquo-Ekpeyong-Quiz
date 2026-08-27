@@ -4,6 +4,9 @@ import { Accordion } from "@/components/accordion";
 import { PageHero } from "@/components/page-hero";
 import { Reveal } from "@/components/reveal";
 import { faq } from "@/content/homepage";
+import { createPublicClient } from "@/lib/supabase/server";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = {
   title: "Frequently Asked Questions",
@@ -17,7 +20,12 @@ export const metadata: Metadata = {
  * The client asked for this section to come off the homepage in Round 1, and
  * it did. It belongs on its own page, which is where the guide always had it.
  */
-export default function FaqPage() {
+export default async function FaqPage() {
+  const supabase = createPublicClient();
+  const { data: databaseFaqs } = supabase
+    ? await supabase.from("faqs").select("question, answer").eq("status", "published").order("sort_order").order("created_at", { ascending: false })
+    : { data: null };
+  const items = databaseFaqs?.length ? databaseFaqs.map((item) => ({ q: item.question, a: item.answer })) : faq.map((item) => ({ q: item.q, a: item.a }));
   return (
     <>
       <PageHero
@@ -29,7 +37,7 @@ export default function FaqPage() {
 
       <section className="mx-auto max-w-3xl px-5 py-14 sm:py-16">
         <Reveal>
-          <Accordion items={faq.map((f) => ({ q: f.q, a: f.a }))} />
+          <Accordion items={items} />
         </Reveal>
 
         <Reveal className="mt-12 rounded-[24px] bg-white p-8 text-center">

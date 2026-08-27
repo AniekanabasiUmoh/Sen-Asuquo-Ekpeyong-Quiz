@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { requireRole, writeAudit } from "@/lib/auth";
+import { requireRole, requireStepUp, writeAudit } from "@/lib/auth";
 import { createAdminClient, createClient } from "@/lib/supabase/server";
 import type { AppRole } from "@/lib/supabase/types";
 
@@ -34,7 +34,7 @@ export async function grantRole(
   _prev: UserState,
   formData: FormData,
 ): Promise<UserState> {
-  const actor = await requireRole(ADMIN_ROLES, "/portal/admin/users");
+  const actor = await requireStepUp(ADMIN_ROLES, "/portal/admin/users");
 
   const userId = String(formData.get("user_id") ?? "");
   const role = String(formData.get("role") ?? "") as AppRole;
@@ -73,7 +73,7 @@ export async function revokeRole(
   _prev: UserState,
   formData: FormData,
 ): Promise<UserState> {
-  const actor = await requireRole(ADMIN_ROLES, "/portal/admin/users");
+  const actor = await requireStepUp(ADMIN_ROLES, "/portal/admin/users");
 
   const userId = String(formData.get("user_id") ?? "");
   const role = String(formData.get("role") ?? "") as AppRole;

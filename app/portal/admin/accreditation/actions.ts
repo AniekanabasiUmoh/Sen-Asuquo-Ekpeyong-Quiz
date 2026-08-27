@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { requireRole, writeAudit } from "@/lib/auth";
+import { requireRole, requireStepUp, writeAudit } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import type { AccreditationHolder } from "@/lib/supabase/types";
 
@@ -22,7 +22,7 @@ const ADMIN_ROLES = ["super_admin", "committee"] as const;
 export async function issueMissingAccreditations(
   _prev: AccreditationState,
 ): Promise<AccreditationState> {
-  await requireRole(ADMIN_ROLES, "/portal/admin/accreditation");
+  await requireStepUp(ADMIN_ROLES, "/portal/admin/accreditation");
   const supabase = await createClient();
 
   // Approved school ids first, then filter students/coaches against that set
@@ -88,7 +88,7 @@ export async function revokeAccreditation(
   _prev: AccreditationState,
   formData: FormData,
 ): Promise<AccreditationState> {
-  await requireRole(ADMIN_ROLES, "/portal/admin/accreditation");
+  await requireStepUp(ADMIN_ROLES, "/portal/admin/accreditation");
   const id = String(formData.get("accreditation_id") ?? "");
   if (!id) return { error: "No accreditation given." };
 

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
-import { requireRole, requireUser, writeAudit } from "@/lib/auth";
+import { requireRole, requireStepUp, writeAudit } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 
 /**
@@ -35,7 +35,7 @@ export async function recordEvent(
   _prev: MatchState,
   formData: FormData,
 ): Promise<MatchState> {
-  const user = await requireUser("/portal/match");
+  const user = await requireRole(["super_admin", "committee", "judge"], "/portal/match");
   const supabase = await createClient();
 
   const matchId = String(formData.get("match_id") ?? "");
@@ -70,7 +70,7 @@ export async function recordSubstitution(
   _prev: MatchState,
   formData: FormData,
 ): Promise<MatchState> {
-  const user = await requireUser("/portal/match");
+  const user = await requireRole(["super_admin", "committee", "judge"], "/portal/match");
   const supabase = await createClient();
 
   const matchId = String(formData.get("match_id") ?? "");
@@ -105,7 +105,7 @@ export async function adjustScore(
   _prev: MatchState,
   formData: FormData,
 ): Promise<MatchState> {
-  const user = await requireRole(ADMIN_ROLES, "/portal/match");
+  const user = await requireStepUp(ADMIN_ROLES, "/portal/match");
   const supabase = await createClient();
 
   const matchId = String(formData.get("match_id") ?? "");
@@ -145,7 +145,7 @@ export async function setMatchStatus(
   _prev: MatchState,
   formData: FormData,
 ): Promise<MatchState> {
-  await requireUser("/portal/match");
+  await requireRole(["super_admin", "committee", "judge"], "/portal/match");
   const supabase = await createClient();
 
   const matchId = String(formData.get("match_id") ?? "");
@@ -177,7 +177,7 @@ export async function publishResults(
   _prev: MatchState,
   formData: FormData,
 ): Promise<MatchState> {
-  await requireRole(ADMIN_ROLES, "/portal/match");
+  await requireStepUp(ADMIN_ROLES, "/portal/match");
   const supabase = await createClient();
 
   const matchId = String(formData.get("match_id") ?? "");
@@ -213,35 +213,21 @@ export async function createMatch(
   if (!fixtureId) return { error: "Select a fixture." };
   if (!name) return { error: "Give the match a name." };
 
-  const { data: match, error } = await supabase
-    .from("matches")
-    .insert({ fixture_id: fixtureId, name })
-    .select("id")
-    .single();
+  // Match, its four Grand Finale rounds, and selected participants are created
+  // in one database transaction. This prevents a half-created match if a
+  // round or participant insert fails during event-day setup.
+  const { data: matchId, error } = await supabase.rpc("create_match_setup", {
+    target_fixture: fixtureId,
+    target_name: name,
+    target_school_ids: schoolIds,
+  });
 
-  if (error) return { error: `Could not create the match: ${error.message}` };
-
-  // Grand Finale rounds, per the RD deck.
-  const rounds = [
-    { ordinal: 1, name: "Advanced Mathematics and English" },
-    { ordinal: 2, name: "Advanced Science, Art and Commercial" },
-    { ordinal: 3, name: "Advanced Current Affairs Showdown" },
-    { ordinal: 4, name: "Advanced General Knowledge" },
-  ];
-  await supabase
-    .from("match_rounds")
-    .insert(rounds.map((r) => ({ ...r, match_id: match.id })));
-
-  if (schoolIds.length) {
-    await supabase.from("fixture_participants").insert(
-      schoolIds.map((school_id) => ({ fixture_id: fixtureId, school_id })),
-    );
-  }
+  if (error || !matchId) return { error: `Could not create the match: ${error?.message ?? "setup failed"}` };
 
   await writeAudit({
     action: "match.created",
     entity: "matches",
-    entityId: match.id,
+    entityId: matchId,
     after: { name },
   });
 

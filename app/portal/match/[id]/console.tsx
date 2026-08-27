@@ -69,7 +69,7 @@ export function MatchConsole({
   events: EventRow[];
   isAdmin: boolean;
 }) {
-  const [statusState, statusAction] = useActionState(setMatchStatus, EMPTY);
+  const [statusState, statusAction, statusPending] = useActionState(setMatchStatus, EMPTY);
   const [pubState, pubAction, pubPending] = useActionState(publishResults, EMPTY);
 
   const byId = new Map(schools.map((s) => [s.id, s.name]));
@@ -87,6 +87,8 @@ export function MatchConsole({
             <input type="hidden" name="status" value={s} />
             <button
               type="submit"
+              disabled={statusPending}
+              aria-busy={statusPending || undefined}
               aria-pressed={status === s}
               className={
                 "rounded-full px-4 py-2 text-[12px] font-bold transition " +
@@ -120,6 +122,10 @@ export function MatchConsole({
 
       <FormError message={statusState.error ?? pubState.error} />
       <FormNotice message={statusState.notice ?? pubState.notice} />
+      <p className="mt-4 text-[12px] text-primary/50" aria-live="polite">
+        Match state: <span className="font-semibold capitalize">{status}</span> · {events.length} recorded event{events.length === 1 ? "" : "s"}
+        {publishState === "published" ? " · results published" : ""}
+      </p>
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_20rem] lg:gap-12">
         <div>
@@ -197,8 +203,8 @@ function SchoolPanel({
   isAdmin: boolean;
 }) {
   const [evState, evAction, evPending] = useActionState(recordEvent, EMPTY);
-  const [subState, subAction] = useActionState(recordSubstitution, EMPTY);
-  const [adjState, adjAction] = useActionState(adjustScore, EMPTY);
+  const [subState, subAction, subPending] = useActionState(recordSubstitution, EMPTY);
+  const [adjState, adjAction, adjPending] = useActionState(adjustScore, EMPTY);
   const [panel, setPanel] = useState<"none" | "sub" | "adj">("none");
 
   const strikers = students.filter((s) => s.is_striker);
@@ -304,9 +310,11 @@ function SchoolPanel({
           />
           <button
             type="submit"
+            disabled={subPending}
+            aria-busy={subPending || undefined}
             className="rounded-full bg-primary px-5 py-2.5 text-[12px] font-bold text-white transition hover:bg-navy-deep"
           >
-            Record substitution
+            {subPending ? "Recording…" : "Record substitution"}
           </button>
         </form>
       ) : null}
@@ -326,9 +334,11 @@ function SchoolPanel({
           <Textarea label="Reason" name="reason" required rows={2} />
           <button
             type="submit"
+            disabled={adjPending}
+            aria-busy={adjPending || undefined}
             className="rounded-full bg-primary px-5 py-2.5 text-[12px] font-bold text-white transition hover:bg-navy-deep"
           >
-            Record adjustment
+            {adjPending ? "Recording…" : "Record adjustment"}
           </button>
         </form>
       ) : null}

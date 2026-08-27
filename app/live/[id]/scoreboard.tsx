@@ -47,9 +47,13 @@ export function Scoreboard({
     const supabase = createClient();
 
     async function refresh() {
-      const { data } = await supabase.rpc("live_scoreboard", {
+      const { data, error } = await supabase.rpc("live_scoreboard", {
         target_match: matchId,
       });
+      if (error) {
+        setLive(false);
+        return;
+      }
       if (data) setRows(data as Row[]);
     }
 
@@ -102,7 +106,7 @@ export function Scoreboard({
           ) : null}
           {matchStatus === "live" ? "Live" : matchStatus}
         </span>
-        <span className="text-[12px] text-primary/45">
+        <span role="status" aria-live="polite" className="text-[12px] text-primary/45">
           {live ? "Updating automatically" : "Reconnecting…"}
         </span>
       </div>

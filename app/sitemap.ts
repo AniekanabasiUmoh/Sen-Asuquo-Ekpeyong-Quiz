@@ -34,6 +34,7 @@ const pages: Entry[] = [
   { path: "get-involved", priority: 0.7, changeFrequency: "monthly" },
   // Updated as the competition runs.
   { path: "news", priority: 0.7, changeFrequency: "weekly" },
+  { path: "gallery", priority: 0.6, changeFrequency: "monthly" },
   { path: "schedule", priority: 0.7, changeFrequency: "weekly" },
   { path: "results", priority: 0.6, changeFrequency: "weekly" },
   { path: "live", priority: 0.6, changeFrequency: "daily" },

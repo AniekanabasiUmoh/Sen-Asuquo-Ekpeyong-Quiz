@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { requireUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { VolunteerBriefing, VolunteerShift, VolunteerStatus } from "@/lib/supabase/types";
+import type { VolunteerBriefing, VolunteerMessage, VolunteerShift, VolunteerStatus } from "@/lib/supabase/types";
 
 export const metadata: Metadata = {
   title: "Volunteering",
@@ -117,6 +117,9 @@ export default async function VolunteerDashboardPage() {
       : Promise.resolve({ data: [] as VolunteerBriefing[] }),
   ]);
   const briefings = [...(generalBriefings ?? []), ...(shiftBriefings ?? [])];
+  const { data: messages } = volunteer.status === "accepted"
+    ? await supabase.from("volunteer_messages").select("*").order("published_at", { ascending: false })
+    : { data: [] as VolunteerMessage[] };
 
   return (
     <div>
@@ -201,6 +204,25 @@ export default async function VolunteerDashboardPage() {
                     <p className="mt-2 whitespace-pre-line text-[14px] leading-relaxed text-primary/65">
                       {b.body}
                     </p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+
+          <section className="mt-10">
+            <h2 className="font-display text-xl font-bold">Messages from the committee</h2>
+            {!messages?.length ? (
+              <p className="mt-5 rounded-2xl border border-dashed border-black/15 px-5 py-8 text-center text-[13px] text-primary/45">
+                No messages yet.
+              </p>
+            ) : (
+              <ul className="mt-5 space-y-3">
+                {messages.map((message) => (
+                  <li key={message.id} className="rounded-[24px] bg-white p-6">
+                    <h3 className="font-display text-base font-bold">{message.title}</h3>
+                    <p className="mt-2 whitespace-pre-line text-[14px] leading-relaxed text-primary/65">{message.body}</p>
+                    {message.published_at ? <p className="mt-3 text-[11px] uppercase tracking-[0.12em] text-primary/40">Published {new Date(message.published_at).toLocaleString("en-GB")}</p> : null}
                   </li>
                 ))}
               </ul>

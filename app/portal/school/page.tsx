@@ -55,11 +55,30 @@ export default async function SchoolDashboardPage() {
   const user = await requireUser("/portal/school");
   const supabase = await createClient();
 
-  const { data: school } = await supabase
+  let { data: school } = await supabase
     .from("schools")
     .select("*")
     .eq("owner_id", user.id)
     .maybeSingle();
+
+  // Coaches are assigned through the coaches table rather than owning the
+  // registration. They still need to see the school workspace, but mutation
+  // actions remain owner-checked in their respective server actions.
+  if (!school && user.roles.includes("coach")) {
+    const { data: assignment } = await supabase
+      .from("coaches")
+      .select("school_id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    if (assignment) {
+      const result = await supabase
+        .from("schools")
+        .select("*")
+        .eq("id", assignment.school_id)
+        .maybeSingle();
+      school = result.data;
+    }
+  }
 
   if (!school) {
     return (

@@ -175,16 +175,24 @@ export async function submitRegistration(
     after: { status: "submitted" },
   });
 
-  // A courtesy on top of an already-successful submission; never awaited into
-  // the response, and its own failures never surface here. See lib/email.ts.
+  let deliveryWarning = "";
   if (school.contact_email) {
-    void sendRegistrationSubmittedEmail(school.contact_email, school.name);
+    const delivered = await sendRegistrationSubmittedEmail(school.contact_email, school.name);
+    if (!delivered) {
+      deliveryWarning = " Email delivery is pending; contact the committee if you need confirmation.";
+      await writeAudit({
+        action: "school.submission_email_failed",
+        entity: "schools",
+        entityId: school.id,
+        reason: "Registration submission succeeded but the notification was not delivered",
+      });
+    }
   }
 
   revalidatePath("/portal/school");
   return {
     ok: true,
     notice:
-      "Registration submitted. The Organising Committee will review it and you will be notified by email.",
+      `Registration submitted. The Organising Committee will review it and you will be notified by email.${deliveryWarning}`,
   };
 }

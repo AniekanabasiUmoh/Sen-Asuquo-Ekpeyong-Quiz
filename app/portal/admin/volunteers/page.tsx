@@ -15,12 +15,13 @@ export default async function AdminVolunteersPage() {
   await requireRole(["super_admin", "committee"], "/portal/admin/volunteers");
   const supabase = await createClient();
 
-  const [{ data: volunteers }, { data: lgas }, { data: shifts }, { data: briefings }] =
+  const [{ data: volunteers }, { data: lgas }, { data: shifts }, { data: briefings }, { data: messages }] =
     await Promise.all([
       supabase.from("volunteers").select("*").order("created_at", { ascending: false }),
       supabase.from("lgas").select("id, name").order("sort_order"),
       supabase.from("volunteer_shifts").select("*").order("starts_at"),
       supabase.from("volunteer_briefings").select("*").order("created_at", { ascending: false }),
+      supabase.from("volunteer_messages").select("*").order("created_at", { ascending: false }),
     ]);
 
   const rows = volunteers ?? [];
@@ -55,7 +56,7 @@ export default async function AdminVolunteersPage() {
           What accepted Change Makers see on their own dashboard once assigned.
         </p>
         <div className="mt-7">
-          <ShiftsAndBriefings shifts={shifts ?? []} briefings={briefings ?? []} />
+          <ShiftsAndBriefings shifts={shifts ?? []} briefings={briefings ?? []} messages={messages ?? []} />
         </div>
       </section>
     </div>

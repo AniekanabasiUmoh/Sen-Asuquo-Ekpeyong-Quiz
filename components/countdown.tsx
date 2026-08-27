@@ -52,7 +52,7 @@ export function Countdown({
       {units.map(([label, value]) => (
         <div key={label} className={`min-w-16 flex-1 text-center sm:min-w-20 ${boxClass}`}>
           <div className={`tabular-nums ${valueClass}`}>
-            {value === null ? "––" : String(value).padStart(2, "0")}
+            {value === null ? "--" : String(value).padStart(2, "0")}
           </div>
           <div className={labelClass}>{label}</div>
         </div>

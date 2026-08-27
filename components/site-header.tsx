@@ -44,6 +44,15 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
     };
   }, [open]);
 
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open]);
+
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href.split("#")[0]);
 
@@ -148,6 +157,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
+            aria-controls="mobile-primary-nav"
             aria-label={open ? "Close menu" : "Open menu"}
             className={`flex h-10 w-10 items-center justify-center rounded-full border transition lg:hidden ${
               light ? "border-white/25 text-white" : "border-black/15 text-primary"
@@ -178,7 +188,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
           A rounded card hanging under the pill rather than a full-bleed
           panel, so the sheet belongs to the same object as the bar. */}
       {open && (
-        <div className="mx-auto mt-2 max-h-[calc(100svh-7rem)] max-w-6xl overflow-y-auto rounded-[24px] border border-black/10 bg-cream px-5 pb-8 pt-3 shadow-[0_16px_40px_rgba(6,18,47,0.14)] lg:hidden">
+        <div id="mobile-primary-nav" className="mx-auto mt-2 max-h-[calc(100svh-7rem)] max-w-6xl overflow-y-auto rounded-[24px] border border-black/10 bg-cream px-5 pb-8 pt-3 shadow-[0_16px_40px_rgba(6,18,47,0.14)] lg:hidden">
           <nav aria-label="Primary mobile">
             {nav.map((n) => {
               const kids = "children" in n ? n.children : undefined;

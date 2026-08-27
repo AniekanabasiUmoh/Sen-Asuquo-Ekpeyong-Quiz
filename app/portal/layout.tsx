@@ -25,10 +25,20 @@ export default async function PortalLayout({
     { href: "/portal", label: "Overview" },
   ];
   if (user) {
-    links.push({ href: "/portal/school", label: "My school" });
-    links.push({ href: "/portal/school/team", label: "Our team" });
-    links.push({ href: "/portal/volunteer", label: "Volunteering" });
-    if (admin || user.roles.includes("judge")) {
+    links.push({ href: "/portal/security", label: "Security" });
+    const isSchoolUser = user.roles.includes("school_admin") || user.roles.includes("coach");
+    const isJudge = user.roles.includes("judge");
+    const isVolunteer = user.roles.includes("volunteer");
+
+    if (isSchoolUser) {
+      links.push({ href: "/portal/school", label: "My school" });
+      links.push({ href: "/portal/school/team", label: "Our team" });
+      links.push({ href: "/portal/school/appeals", label: "Appeals" });
+    }
+    if (isVolunteer) {
+      links.push({ href: "/portal/volunteer", label: "Volunteering" });
+    }
+    if (admin || isJudge) {
       links.push({ href: "/portal/match", label: "Matches" });
     }
     if (admin) {
@@ -38,8 +48,13 @@ export default async function PortalLayout({
       links.push({ href: "/portal/admin/broadcast", label: "Broadcast" });
       links.push({ href: "/portal/admin/accreditation", label: "Accreditation" });
       links.push({ href: "/portal/admin/volunteers", label: "Change Makers" });
+      links.push({ href: "/portal/admin/news", label: "News" });
+      links.push({ href: "/portal/admin/gallery", label: "Gallery" });
+      links.push({ href: "/portal/admin/sponsors", label: "Sponsors" });
+      links.push({ href: "/portal/admin/content", label: "FAQs & Downloads" });
       links.push({ href: "/portal/admin/reports", label: "Reports" });
       links.push({ href: "/portal/admin/users", label: "Users" });
+      links.push({ href: "/portal/admin/appeals", label: "Appeals" });
     }
   }
 
@@ -90,7 +105,7 @@ export default async function PortalLayout({
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl px-5 py-10 sm:py-14">{children}</main>
+      <div className="mx-auto max-w-7xl px-5 py-10 sm:py-14">{children}</div>
     </div>
   );
 }

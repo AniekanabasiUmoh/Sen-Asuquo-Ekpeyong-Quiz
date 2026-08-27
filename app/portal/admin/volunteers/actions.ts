@@ -2,19 +2,20 @@
 
 import { revalidatePath } from "next/cache";
 
-import { requireRole, writeAudit } from "@/lib/auth";
+import { requireStepUp, writeAudit } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { VolunteerStatus } from "@/lib/supabase/types";
+import type { PublishStatus, VolunteerStatus } from "@/lib/supabase/types";
 
 export type VolunteerAdminState = { error?: string; notice?: string };
 
 const VALID: VolunteerStatus[] = ["applied", "accepted", "declined", "withdrawn"];
+const PUBLISH_STATES: PublishStatus[] = ["draft", "review", "published", "archived"];
 
 export async function setVolunteerStatus(
   _prev: VolunteerAdminState,
   formData: FormData,
 ): Promise<VolunteerAdminState> {
-  await requireRole(["super_admin", "committee"], "/portal/admin/volunteers");
+  await requireStepUp(["super_admin", "committee"], "/portal/admin/volunteers");
 
   const id = String(formData.get("volunteer_id") ?? "");
   const status = String(formData.get("status") ?? "") as VolunteerStatus;
@@ -59,7 +60,7 @@ export async function createShift(
   _prev: VolunteerAdminState,
   formData: FormData,
 ): Promise<VolunteerAdminState> {
-  await requireRole(["super_admin", "committee"], "/portal/admin/volunteers");
+  await requireStepUp(["super_admin", "committee"], "/portal/admin/volunteers");
 
   const title = String(formData.get("title") ?? "").trim();
   const location = String(formData.get("location") ?? "").trim();
@@ -86,7 +87,7 @@ export async function assignToShift(
   _prev: VolunteerAdminState,
   formData: FormData,
 ): Promise<VolunteerAdminState> {
-  await requireRole(["super_admin", "committee"], "/portal/admin/volunteers");
+  await requireStepUp(["super_admin", "committee"], "/portal/admin/volunteers");
 
   const shiftId = String(formData.get("shift_id") ?? "");
   const volunteerId = String(formData.get("volunteer_id") ?? "");
@@ -116,7 +117,7 @@ export async function removeAssignment(
   _prev: VolunteerAdminState,
   formData: FormData,
 ): Promise<VolunteerAdminState> {
-  await requireRole(["super_admin", "committee"], "/portal/admin/volunteers");
+  await requireStepUp(["super_admin", "committee"], "/portal/admin/volunteers");
 
   const id = String(formData.get("assignment_id") ?? "");
   if (!id) return { error: "No assignment given." };
@@ -134,7 +135,7 @@ export async function publishBriefing(
   _prev: VolunteerAdminState,
   formData: FormData,
 ): Promise<VolunteerAdminState> {
-  await requireRole(["super_admin", "committee"], "/portal/admin/volunteers");
+  await requireStepUp(["super_admin", "committee"], "/portal/admin/volunteers");
 
   const title = String(formData.get("title") ?? "").trim();
   const body = String(formData.get("body") ?? "").trim();
@@ -154,4 +155,51 @@ export async function publishBriefing(
 
   revalidatePath("/portal/admin/volunteers");
   return { notice: `${title} published to Change Makers.` };
+}
+
+/** Broadcast a dashboard message to all accepted Change Makers, or one shift. */
+export async function publishVolunteerMessage(
+  _prev: VolunteerAdminState,
+  formData: FormData,
+): Promise<VolunteerAdminState> {
+  const user = await requireStepUp(["super_admin", "committee"], "/portal/admin/volunteers");
+  const title = String(formData.get("title") ?? "").trim();
+  const body = String(formData.get("body") ?? "").trim();
+  const shiftId = String(formData.get("shift_id") ?? "").trim() || null;
+  if (!title || !body) return { error: "Give the message a title and its content." };
+  if (title.length > 160 || body.length > 5000) return { error: "Keep the title under 160 characters and the message under 5,000 characters." };
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("volunteer_messages").insert({
+    title,
+    body,
+    shift_id: shiftId,
+    publish: "published",
+    published_at: new Date().toISOString(),
+    created_by: user.id,
+  }).select("id").single();
+  if (error) return { error: `Could not publish the message: ${error.message}` };
+  await writeAudit({ action: "volunteer_message.published", entity: "volunteer_messages", entityId: data.id, after: { title, shiftId } });
+  revalidatePath("/portal/admin/volunteers");
+  revalidatePath("/portal/volunteer");
+  return { notice: `${title} published to ${shiftId ? "the selected shift" : "all accepted Change Makers"}.` };
+}
+
+export async function setVolunteerMessageStatus(
+  _prev: VolunteerAdminState,
+  formData: FormData,
+): Promise<VolunteerAdminState> {
+  await requireStepUp(["super_admin", "committee"], "/portal/admin/volunteers");
+  const id = String(formData.get("message_id") ?? "");
+  const publish = String(formData.get("publish") ?? "") as PublishStatus;
+  if (!id || !PUBLISH_STATES.includes(publish)) return { error: "Choose a message and a valid status." };
+  const supabase = await createClient();
+  const { data: before } = await supabase.from("volunteer_messages").select("title, publish").eq("id", id).maybeSingle();
+  if (!before) return { error: "That message could not be found." };
+  const { error } = await supabase.from("volunteer_messages").update({ publish, published_at: publish === "published" ? new Date().toISOString() : null }).eq("id", id);
+  if (error) return { error: `Could not update the message: ${error.message}` };
+  await writeAudit({ action: "volunteer_message.status_changed", entity: "volunteer_messages", entityId: id, before: { publish: before.publish }, after: { publish } });
+  revalidatePath("/portal/admin/volunteers");
+  revalidatePath("/portal/volunteer");
+  return { notice: `${before.title} is now ${publish}.` };
 }

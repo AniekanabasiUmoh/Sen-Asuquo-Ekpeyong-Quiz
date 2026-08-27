@@ -55,10 +55,10 @@ export default async function PortalPage({
       ) : (
         <div className="mt-8">
           <Link
-            href="/portal/school"
+            href={landingPathFor(user)}
             className="rounded-full border border-black/15 px-7 py-3.5 text-[13px] font-semibold transition hover:bg-white"
           >
-            Go to my school
+            Go to my workspace
           </Link>
         </div>
       )}

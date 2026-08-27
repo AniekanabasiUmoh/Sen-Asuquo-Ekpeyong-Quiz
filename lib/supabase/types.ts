@@ -35,6 +35,8 @@ export type VolunteerStatus = "applied" | "accepted" | "declined" | "withdrawn";
 
 export type PublishStatus = "draft" | "review" | "published" | "archived";
 
+export type GalleryContentType = "event" | "school" | "student" | "people" | "venue" | "press";
+
 export type MatchStatus =
   | "pending"
   | "live"
@@ -145,6 +147,10 @@ export type Student = Timestamps & {
   photo_path: string | null;
   consent_given: boolean;
   consent_at: string | null;
+  consent_version: string | null;
+  consent_given_by: string | null;
+  consent_withdrawn_at: string | null;
+  consent_withdrawn_by: string | null;
 };
 
 export type Coach = Timestamps & {
@@ -230,6 +236,7 @@ export type GalleryItem = Timestamps & {
   image_path: string;
   lga_id: string | null;
   stage_id: string | null;
+  content_type: GalleryContentType;
   status: PublishStatus;
   sort_order: number;
 };
@@ -243,6 +250,43 @@ export type Sponsor = Timestamps & {
   website: string | null;
   status: PublishStatus;
   sort_order: number;
+};
+
+export type Faq = Timestamps & {
+  id: string;
+  question: string;
+  answer: string;
+  category: string | null;
+  status: PublishStatus;
+  sort_order: number;
+};
+
+export type Download = Timestamps & {
+  id: string;
+  title: string;
+  description: string | null;
+  version: string | null;
+  file_url: string;
+  file_size_bytes: number | null;
+  status: PublishStatus;
+  published_at: string | null;
+  download_count: number;
+};
+
+export type AppealKind = "registration" | "result" | "schedule" | "other";
+export type AppealStatus = "submitted" | "under_review" | "resolved" | "rejected" | "withdrawn";
+export type Appeal = Timestamps & {
+  id: string;
+  school_id: string;
+  submitted_by: string;
+  kind: AppealKind;
+  subject: string;
+  details: string;
+  evidence_url: string | null;
+  status: AppealStatus;
+  resolution: string | null;
+  assigned_to: string | null;
+  resolved_at: string | null;
 };
 
 export type Volunteer = Timestamps & {
@@ -281,6 +325,16 @@ export type VolunteerBriefing = Timestamps & {
   title: string;
   body: string;
   publish: PublishStatus;
+};
+
+export type VolunteerMessage = Timestamps & {
+  id: string;
+  title: string;
+  body: string;
+  shift_id: string | null;
+  publish: PublishStatus;
+  published_at: string | null;
+  created_by: string | null;
 };
 
 export type Judge = Timestamps & {
@@ -545,6 +599,9 @@ export type Database = {
       news: Table<News, Insertable<News, "title" | "slug">, Partial<News>>;
       gallery_items: Table<GalleryItem, Insertable<GalleryItem, "image_path">, Partial<GalleryItem>>;
       sponsors: Table<Sponsor, Insertable<Sponsor, "name" | "slug">, Partial<Sponsor>>;
+      faqs: Table<Faq, Insertable<Faq, "question" | "answer">, Partial<Faq>>;
+      downloads: Table<Download, Insertable<Download, "title" | "file_url">, Partial<Download>>;
+      appeals: Table<Appeal, Insertable<Appeal, "school_id" | "submitted_by" | "kind" | "subject" | "details">, Partial<Appeal>>;
       volunteers: Table<Volunteer, Insertable<Volunteer, "full_name" | "email">, Partial<Volunteer>>;
       judges: Table<Judge, Insertable<Judge, "full_name">, Partial<Judge>>;
       volunteer_shifts: Table<
@@ -562,6 +619,11 @@ export type Database = {
         VolunteerBriefing,
         Insertable<VolunteerBriefing, "title" | "body">,
         Partial<VolunteerBriefing>
+      >;
+      volunteer_messages: Table<
+        VolunteerMessage,
+        Insertable<VolunteerMessage, "title" | "body">,
+        Partial<VolunteerMessage>
       >;
       school_documents: Table<
         SchoolDocument,
@@ -662,6 +724,10 @@ export type Database = {
       publish_match_results: {
         Args: { target_match: string };
         Returns: number;
+      };
+      create_match_setup: {
+        Args: { target_fixture: string; target_name: string; target_school_ids?: string[] };
+        Returns: string;
       };
       /** Registration and participation by LGA. Committee only. */
       registration_report: {
