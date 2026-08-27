@@ -113,6 +113,22 @@ export async function assignToShift(
   if (!shiftId || !volunteerId) return { error: "Select a shift and a Change Maker." };
 
   const supabase = await createClient();
+  const { data: volunteer } = await supabase
+    .from("volunteers")
+    .select("status")
+    .eq("id", volunteerId)
+    .maybeSingle();
+  if (!volunteer) return { error: "That Change Maker could not be found." };
+  if (volunteer.status !== "accepted") {
+    return { error: "Only an accepted Change Maker can be assigned to a shift." };
+  }
+  const { data: shift } = await supabase
+    .from("volunteer_shifts")
+    .select("id")
+    .eq("id", shiftId)
+    .maybeSingle();
+  if (!shift) return { error: "That shift could not be found." };
+
   const { data, error } = await supabase
     .from("volunteer_shift_assignments")
     .insert({
