@@ -39,6 +39,8 @@ Last verification: 27 August 2026
 - [x] Post-test production-like counts remain: 2 schools, 5 students, 1 match, 1 volunteer, 0 test results, 0 audit rows.
 - [x] Anonymous RLS checks still hide students, pending schools, audit rows, unpublished news, and draft results.
 - [x] `npm run lint` completes cleanly with the repository ESLint configuration.
+- [x] `npm audit --omit=dev --audit-level=moderate` reports 0 vulnerabilities
+  after upgrading the Next.js toolchain to 16.3.3.
 - [x] `deno check supabase/functions/send-email/index.ts` passes for the Edge
   Function source.
 

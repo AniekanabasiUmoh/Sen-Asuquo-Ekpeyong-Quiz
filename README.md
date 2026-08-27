@@ -53,6 +53,7 @@ python supabase/test_phase3.py
 npx tsc --noEmit
 npm run lint
 npm run build
+npm audit --omit=dev --audit-level=moderate
 git diff --check
 ```
 
