@@ -1132,7 +1132,7 @@ export async function SponsorsSection() {
     : sponsors.map((name) => ({ name, tier: null, logo_path: null, website: null }));
   /* ── Sponsors & Partners ── */
   return (
-    <section id="sponsor" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-16">
+    <section id="sponsors" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-16">
       <Reveal className="text-center">
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-primary/35">
           Sponsors &amp; Partners

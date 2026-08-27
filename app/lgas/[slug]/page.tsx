@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { PageHero } from "@/components/page-hero";
 import { Reveal } from "@/components/reveal";
+import { ZoomImage } from "@/components/zoom-image";
 import { lgaBySlug, lgaContent } from "@/content/lgas";
 import { createPublicClient } from "@/lib/supabase/server";
 
@@ -36,11 +37,11 @@ export async function generateMetadata({
  * One page per Local Government Area (Content Guide §4.5).
  *
  * The guide asks for registered schools, venue, schedule, results and gallery
- * per LGA. Only the first of those exists before the competition runs, so the
+ * per LGA. The page leads with the area itself, followed by live panels that
  * page leads with the area itself — geography, headquarters, where it sits in
  * the qualifying structure — and each live panel states plainly that it fills
- * in as the championship progresses. That is a page a principal can read
- * today; four empty boxes is not.
+ * fill in as the championship progresses. Empty states explain what is still
+ * pending instead of hiding the promised sections.
  *
  * Every live query is scoped by this LGA and goes through the public client,
  * so RLS decides what is visible: approved schools only, published fixtures
@@ -68,7 +69,14 @@ export default async function LgaPage({
         .maybeSingle()
     : { data: null };
 
-  const [{ data: schools }, { data: fixtures }, { data: stages }, { data: venues }] =
+  const [
+    { data: schools },
+    { data: fixtures },
+    { data: stages },
+    { data: venues },
+    { data: results },
+    { data: gallery },
+  ] =
     supabase && lgaRow
       ? await Promise.all([
           // RLS exposes approved schools only; the filter is belt and braces.
@@ -85,13 +93,40 @@ export default async function LgaPage({
             .order("scheduled_at", { ascending: true, nullsFirst: false }),
           supabase.from("stages").select("id, name, ordinal").order("ordinal"),
           supabase.from("venues").select("id, name, address"),
+          // Results are school-level only. Student names and profiles never
+          // enter a public query, even when a result is published.
+          supabase
+            .from("results")
+            .select("fixture_id, school_id, score, position, advanced")
+            .order("position", { ascending: true, nullsFirst: false }),
+          // Keep this query on core columns so it works before the optional
+          // gallery-taxonomy migration is applied.
+          supabase
+            .from("gallery_items")
+            .select("title, caption, image_path, stage_id")
+            .eq("lga_id", lgaRow.id)
+            .eq("status", "published")
+            .order("sort_order", { ascending: true })
+            .order("created_at", { ascending: false })
+            .limit(12),
         ])
-      : [{ data: null }, { data: null }, { data: null }, { data: null }];
+      : [
+          { data: null },
+          { data: null },
+          { data: null },
+          { data: null },
+          { data: null },
+          { data: null },
+        ];
 
   const stageName = new Map((stages ?? []).map((s) => [s.id, s.name]));
   const venueById = new Map((venues ?? []).map((v) => [v.id, v]));
   const schoolRows = schools ?? [];
   const fixtureRows = fixtures ?? [];
+  const fixtureIds = new Set(fixtureRows.map((fixture) => fixture.id));
+  const resultRows = (results ?? []).filter((result) => fixtureIds.has(result.fixture_id));
+  const schoolName = new Map(schoolRows.map((school) => [school.id, school.name]));
+  const galleryRows = gallery ?? [];
 
   const partner = lga.combinedWith
     ? lgaContent.find((l) => l.name === lga.combinedWith)
@@ -289,6 +324,123 @@ export default async function LgaPage({
           >
             Open the results portal →
           </Link>
+        </Reveal>
+
+        {/* ── LGA results ── */}
+        <Reveal className="mt-14 border-t border-black/10 pt-10">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary/45">
+                {lga.name} results
+              </p>
+              <h2 className="mt-2 font-display text-[clamp(1.5rem,2.8vw,2rem)] font-extrabold tracking-[-0.02em]">
+                Published standings
+              </h2>
+            </div>
+            <Link
+              href={`/results?lga=${encodeURIComponent(lgaRow?.id ?? "")}`}
+              className="text-[13px] font-bold text-red-ink hover:text-red"
+            >
+              Open all results →
+            </Link>
+          </div>
+          {resultRows.length > 0 ? (
+            <div className="mt-6 overflow-x-auto">
+              <table className="w-full min-w-[36rem] border-collapse text-left text-[14px]">
+                <thead>
+                  <tr className="border-b border-black/10 text-[11px] uppercase tracking-[0.12em] text-primary/45">
+                    <th className="py-3 pr-4 font-bold">Stage</th>
+                    <th className="py-3 pr-4 font-bold">School</th>
+                    <th className="py-3 pr-4 font-bold">Score</th>
+                    <th className="py-3 pr-4 font-bold">Outcome</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {resultRows.map((result) => {
+                    const fixture = fixtureRows.find((row) => row.id === result.fixture_id);
+                    return (
+                      <tr
+                        key={`${result.fixture_id}-${result.school_id}`}
+                        className="border-b border-black/[0.06]"
+                      >
+                        <td className="py-3 pr-4 text-primary/60">
+                          {stageName.get(fixture?.stage_id ?? "") ?? "Stage"}
+                        </td>
+                        <td className="py-3 pr-4 font-semibold">
+                          {schoolName.get(result.school_id) ?? "School"}
+                        </td>
+                        <td className="py-3 pr-4 font-mono tabular-nums">
+                          {Number(result.score).toFixed(1)}
+                        </td>
+                        <td className="py-3 pr-4 text-primary/60">
+                          {result.advanced ? "Advanced" : "Eliminated"}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-primary/60">
+              Published results for {lga.name} will appear here once its fixtures
+              have been completed and verified.
+            </p>
+          )}
+        </Reveal>
+
+        {/* ── LGA gallery ── */}
+        <Reveal className="mt-14 border-t border-black/10 pt-10">
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary/45">
+                {lga.name} gallery
+              </p>
+              <h2 className="mt-2 font-display text-[clamp(1.5rem,2.8vw,2rem)] font-extrabold tracking-[-0.02em]">
+                Moments from the area
+              </h2>
+            </div>
+            <Link
+              href={`/gallery?lga=${encodeURIComponent(lgaRow?.id ?? "")}`}
+              className="text-[13px] font-bold text-red-ink hover:text-red"
+            >
+              Open the full gallery →
+            </Link>
+          </div>
+          {galleryRows.length > 0 ? (
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {galleryRows.map((item, index) => (
+                <article
+                  key={`${item.image_path}-${index}`}
+                  className="overflow-hidden rounded-[24px] bg-white"
+                >
+                  <ZoomImage
+                    src={item.image_path}
+                    alt={item.title ?? `${lga.name} championship photograph`}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    className="aspect-[4/3]"
+                  />
+                  <div className="p-5">
+                    {item.title ? (
+                      <h3 className="font-display text-base font-bold leading-tight">
+                        {item.title}
+                      </h3>
+                    ) : null}
+                    {item.caption ? (
+                      <p className="mt-2 text-[13px] leading-relaxed text-primary/55">
+                        {item.caption}
+                      </p>
+                    ) : null}
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-primary/60">
+              Photographs from {lga.name} will be added after the relevant
+              competition day and published with the required consent review.
+            </p>
+          )}
         </Reveal>
 
         {/* ── Other LGAs ── */}

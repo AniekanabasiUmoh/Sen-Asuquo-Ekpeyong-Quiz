@@ -693,7 +693,7 @@ export const changeMaker = {
   body: "Change Makers power the championship, on the ground and behind it. Volunteer at the LGA qualifiers and the Grand Finale, or back the Trust Fund that puts students through school.",
   cta: { label: "Volunteer With Us", href: "#changemaker" },
   /** Second route for organisations rather than individuals. */
-  ctaSecondary: { label: "Sponsor the Championship", href: "#sponsor" },
+  ctaSecondary: { label: "Sponsor the Championship", href: "#sponsors" },
 } as const;
 
 /** Footer navigation, per Content Guide §3.2. */

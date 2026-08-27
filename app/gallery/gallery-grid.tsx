@@ -15,8 +15,8 @@ type GalleryViewItem = {
 
 type Taxonomy = { id: string; label: string };
 
-export function GalleryGrid({ items, lgas, stages }: { items: GalleryViewItem[]; lgas: Taxonomy[]; stages: Taxonomy[] }) {
-  const [filter, setFilter] = useState("all");
+export function GalleryGrid({ items, initialFilter, lgas, stages }: { items: GalleryViewItem[]; initialFilter?: string; lgas: Taxonomy[]; stages: Taxonomy[] }) {
+  const [filter, setFilter] = useState(initialFilter || "all");
   const options = useMemo(() => [
     { id: "all", label: "All moments" },
     ...Array.from(new Map(items.map((item) => [item.content_type ?? "event", item.content_type ?? "event"])).entries()).map(([id, label]) => ({ id, label: label[0].toUpperCase() + label.slice(1) })),
