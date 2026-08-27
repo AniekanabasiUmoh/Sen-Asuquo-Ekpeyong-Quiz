@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { requireRole, requireStepUp, writeAudit } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
+import type { MatchStatus } from "@/lib/supabase/types";
 
 /**
  * Quizmaster and judge console, Phase 3 sprint 3.2.
@@ -149,7 +150,17 @@ export async function setMatchStatus(
   const supabase = await createClient();
 
   const matchId = String(formData.get("match_id") ?? "");
-  const status = String(formData.get("status") ?? "");
+  const status = String(formData.get("status") ?? "") as MatchStatus;
+  const allowed: MatchStatus[] = ["pending", "live", "paused", "completed", "abandoned"];
+  if (!matchId) return { error: "No match given." };
+  if (!allowed.includes(status)) return { error: "That is not a valid match status." };
+
+  const { data: before } = await supabase
+    .from("matches")
+    .select("status")
+    .eq("id", matchId)
+    .maybeSingle();
+  if (!before) return { error: "That match could not be found." };
 
   const patch: Record<string, unknown> = { status };
   if (status === "live") patch.started_at = new Date().toISOString();
@@ -161,6 +172,14 @@ export async function setMatchStatus(
     .eq("id", matchId);
 
   if (error) return { error: `Could not update: ${error.message}` };
+
+  await writeAudit({
+    action: "match.status_changed",
+    entity: "matches",
+    entityId: matchId,
+    before: { status: before.status },
+    after: { status },
+  });
 
   revalidatePath(`/portal/match/${matchId}`);
   return { notice: `Match ${status}.` };
