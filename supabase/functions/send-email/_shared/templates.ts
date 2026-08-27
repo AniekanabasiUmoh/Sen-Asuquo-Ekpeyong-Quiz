@@ -44,15 +44,22 @@ function shell(opts: {
   ctaHref?: string;
 }): string {
   const { eyebrow, heading, bodyHtml, ctaLabel, ctaHref } = opts;
+  // Body content is assembled as trusted markup by the templates below, but
+  // shell fields include admin-entered values such as a fixture name. Escape
+  // them at the final HTML boundary before placing them in text or attributes.
+  const safeEyebrow = escapeHtml(eyebrow);
+  const safeHeading = escapeHtml(heading);
+  const safeCtaLabel = ctaLabel ? escapeHtml(ctaLabel) : null;
+  const safeCtaHref = ctaHref ? escapeHtml(ctaHref) : null;
   return `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>${heading}</title>
+<title>${safeHeading}</title>
 </head>
 <body style="margin:0;padding:0;background:${PAPER};font-family:${FONT_STACK};">
-  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">${eyebrow} &#8211; ${heading}</div>
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">${safeEyebrow} &#8211; ${safeHeading}</div>
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${PAPER};padding:32px 16px;">
     <tr><td align="center">
       <table role="presentation" width="100%" style="max-width:560px;" cellpadding="0" cellspacing="0">
@@ -63,20 +70,20 @@ function shell(opts: {
 
         <tr><td style="background:#ffffff;border-radius:16px;padding:36px 32px;">
           <p style="margin:0 0 10px;font-size:11px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:${INK_SOFT};">
-            ${eyebrow}
+            ${safeEyebrow}
           </p>
           <h1 style="margin:0 0 18px;font-size:24px;line-height:1.2;font-weight:800;letter-spacing:-0.01em;color:${NAVY};">
-            ${heading}
+            ${safeHeading}
           </h1>
           <div style="font-size:15px;line-height:1.6;color:#1a1a2e;">
             ${bodyHtml}
           </div>
           ${
-            ctaLabel && ctaHref
+            safeCtaLabel && safeCtaHref
               ? `<table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:28px;">
                   <tr><td style="border-radius:999px;background:${GOLD};">
-                    <a href="${ctaHref}" style="display:inline-block;padding:14px 28px;font-size:13px;font-weight:700;color:${NAVY};text-decoration:none;">
-                      ${ctaLabel}
+                    <a href="${safeCtaHref}" style="display:inline-block;padding:14px 28px;font-size:13px;font-weight:700;color:${NAVY};text-decoration:none;">
+                      ${safeCtaLabel}
                     </a>
                   </td></tr>
                 </table>`
@@ -125,7 +132,7 @@ export function registrationSubmittedEmail(schoolName: string) {
 
 export function registrationApprovedEmail(schoolName: string, registrationNo: string) {
   return {
-    subject: `${schoolName} is registered — ${registrationNo}`,
+    subject: `${safeSubjectPart(schoolName)} is registered — ${safeSubjectPart(registrationNo)}`,
     html: shell({
       eyebrow: "School Registration &middot; Approved",
       heading: "Your school is registered",
@@ -151,7 +158,7 @@ export function registrationApprovedEmail(schoolName: string, registrationNo: st
 
 export function registrationChangesRequestedEmail(schoolName: string, reason: string) {
   return {
-    subject: `Action needed on ${schoolName}'s registration`,
+    subject: `Action needed on ${safeSubjectPart(schoolName)}'s registration`,
     html: shell({
       eyebrow: "School Registration &middot; Changes requested",
       heading: "One thing to correct",
@@ -176,7 +183,7 @@ export function registrationChangesRequestedEmail(schoolName: string, reason: st
 
 export function registrationRejectedEmail(schoolName: string, reason: string) {
   return {
-    subject: `Update on ${schoolName}'s registration`,
+    subject: `Update on ${safeSubjectPart(schoolName)}'s registration`,
     html: shell({
       eyebrow: "School Registration",
       heading: "Registration not accepted",
@@ -210,7 +217,7 @@ export function scheduleChangedEmail(opts: {
   const { schoolName, fixtureName, field, oldValue, newValue, reason } = opts;
   const fieldLabel = field === "scheduled_at" ? "Time" : "Venue";
   return {
-    subject: `Schedule change: ${fixtureName}`,
+    subject: `Schedule change: ${safeSubjectPart(fixtureName)}`,
     html: shell({
       eyebrow: "Schedule change",
       heading: `${fixtureName} has moved`,
@@ -247,4 +254,9 @@ function escapeHtml(s: string): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
+}
+
+/** Remove control characters before a value is used in a mail subject. */
+function safeSubjectPart(value: string): string {
+  return value.replace(/[\r\n\u0000-\u001f\u007f]/g, " ").trim().slice(0, 180);
 }
