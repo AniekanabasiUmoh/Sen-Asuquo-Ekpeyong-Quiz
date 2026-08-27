@@ -117,14 +117,14 @@ serve(async (req) => {
   }
 
   // ---------------------------------------------------------------------
-  // PLACEHOLDER: no key yet. Log what would have sent, and return success
-  // so the calling action (approve a school, reschedule a fixture, ...)
-  // completes normally. Remove this block once RESEND_API_KEY is set — the
-  // real send below is already written and waiting.
+  // PLACEHOLDER: no key yet. Record only the template kind (never recipient,
+  // subject, or body) and return success so the calling action (approve a
+  // school, reschedule a fixture, ...) completes normally. Remove this block
+  // once RESEND_API_KEY is set — the real send below is already written.
   // ---------------------------------------------------------------------
   if (!RESEND_API_KEY) {
     console.log(
-      `[send-email] SKIPPED (no RESEND_API_KEY set) — kind=${body.kind} subject="${email.subject}"`,
+      `[send-email] SKIPPED (no RESEND_API_KEY set) — kind=${body.kind}`,
     );
     return new Response(
       JSON.stringify({ ok: true, skipped: true, reason: "RESEND_API_KEY not set" }),
