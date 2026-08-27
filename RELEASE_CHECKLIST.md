@@ -8,6 +8,9 @@ Last verification: 27 August 2026
 - [x] `git diff --check`
 - [x] `npm run build` completed and generated the App Router manifest.
 - [x] Public browser smoke: `/gallery`, `/news/registration-opens`, and `/results` return 200.
+- [x] Public LGA pages render published schools, fixtures, school-level
+  results, and the consent-reviewed gallery state; `/gallery` supports LGA,
+  stage, and content-type filters.
 - [x] Local production-server smoke: `/gallery`, `/downloads`, `/faq`,
   `/schedule`, `/results`, and `/api/health` return 200; unauthenticated
   `/portal/security` redirects to `/login`.

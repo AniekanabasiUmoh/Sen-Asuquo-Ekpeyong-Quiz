@@ -26,6 +26,12 @@ unapplied, so CMS, appeals, taxonomy, consent-governance, atomic match setup,
 and Change Maker message data still require the Preview migration and
 acceptance gates below before those workflows are treated as production-ready.
 
+Public LGA detail pages now render published schools, fixtures, school-level
+results, and LGA-tagged gallery items. Public results deliberately do not search
+or display student names: students are minors and the database's public RLS
+boundary keeps their records private unless a future, committee-approved
+publication workflow is added.
+
 The locally authenticated Supabase CLI account does not list project
 `lmohoeikidbsiioabmsz`, even though the application credentials can reach its
 data API. Do not run `supabase link`, `supabase db push`, or any migration
