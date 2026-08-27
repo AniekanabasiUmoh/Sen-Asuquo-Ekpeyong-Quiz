@@ -100,13 +100,46 @@ export default async function SchoolDashboardPage() {
     );
   }
 
-  const [{ data: lga }, { count: studentCount }] = await Promise.all([
+  const [{ data: lga }, { count: studentCount }, { data: participantRows }] = await Promise.all([
     supabase.from("lgas").select("name").eq("id", school.lga_id).maybeSingle(),
     supabase
       .from("students")
       .select("id", { count: "exact", head: true })
       .eq("school_id", school.id),
+    supabase
+      .from("fixture_participants")
+      .select("fixture_id")
+      .eq("school_id", school.id),
   ]);
+
+  const participantIds = (participantRows ?? []).map((row) => row.fixture_id);
+  const [{ data: fixtures }, { data: publishedResults }, { data: stages }, { data: venues }] =
+    await Promise.all([
+      participantIds.length
+        ? supabase
+            .from("fixtures")
+            .select("id, name, stage_id, venue_id, scheduled_at, publish")
+            .in("id", participantIds)
+            .eq("publish", "published")
+            .order("scheduled_at", { ascending: true, nullsFirst: false })
+        : Promise.resolve({ data: [] as { id: string; name: string; stage_id: string; venue_id: string | null; scheduled_at: string | null; publish: string }[] }),
+      supabase
+        .from("results")
+        .select("fixture_id, score, position, advanced, published_at")
+        .eq("school_id", school.id)
+        .eq("status", "published")
+        .order("published_at", { ascending: false, nullsFirst: false }),
+      supabase.from("stages").select("id, name, ordinal").order("ordinal"),
+      supabase.from("venues").select("id, name, address"),
+    ]);
+
+  const fixtureRows = fixtures ?? [];
+  const stageById = new Map((stages ?? []).map((stage) => [stage.id, stage]));
+  const venueById = new Map((venues ?? []).map((venue) => [venue.id, venue]));
+  const fixtureById = new Map(fixtureRows.map((fixture) => [fixture.id, fixture]));
+  const upcomingFixtures = fixtureRows.filter((fixture) => fixture.scheduled_at).slice(0, 3);
+  const latestResult = (publishedResults ?? []).find((result) => fixtureById.has(result.fixture_id));
+  const latestFixture = latestResult ? fixtureById.get(latestResult.fixture_id) : null;
 
   const status = STATUS_COPY[school.status];
   const editable = ["draft", "changes_requested"].includes(school.status);
@@ -180,6 +213,65 @@ export default async function SchoolDashboardPage() {
         >
           {editable ? "Continue registration" : "View registration"}
         </Link>
+      </div>
+
+      <div className="mt-12 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+        <section className="rounded-[24px] bg-white p-7" aria-labelledby="progress-heading">
+          <div className="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-primary/45">
+                Competition progress
+              </p>
+              <h2 id="progress-heading" className="mt-2 font-display text-xl font-bold">
+                {latestFixture ? stageById.get(latestFixture.stage_id)?.name ?? "Published stage" : "Awaiting your first published fixture"}
+              </h2>
+            </div>
+            {latestResult ? (
+              <span className="rounded-full bg-grass/20 px-3.5 py-1.5 text-[11px] font-bold text-forest">
+                {latestResult.advanced ? "Advanced" : "Result recorded"}
+              </span>
+            ) : null}
+          </div>
+          {latestResult ? (
+            <p className="mt-4 text-[14px] leading-relaxed text-primary/60">
+              Your latest published result is <strong className="font-bold text-primary">{Number(latestResult.score).toFixed(1)} points</strong>{latestResult.position ? `, position ${latestResult.position}` : ""}. Open the results portal for the complete published table.
+            </p>
+          ) : (
+            <p className="mt-4 text-[14px] leading-relaxed text-primary/60">
+              The committee will publish your school&rsquo;s stage and result here as each fixture is verified. Student names remain visible only inside your school workspace.
+            </p>
+          )}
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/results" className="rounded-full bg-primary px-5 py-3 text-[12px] font-bold text-white transition hover:bg-navy-deep">View published results</Link>
+            <Link href="/downloads" className="rounded-full border border-black/15 px-5 py-3 text-[12px] font-semibold transition hover:bg-cream">Rules &amp; downloads</Link>
+          </div>
+        </section>
+
+        <section className="rounded-[24px] bg-white p-7" aria-labelledby="school-schedule-heading">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-primary/45">
+                Your published fixtures
+              </p>
+              <h2 id="school-schedule-heading" className="mt-2 font-display text-xl font-bold">Upcoming schedule</h2>
+            </div>
+            <Link href="/schedule" className="text-[12px] font-bold text-red-ink hover:text-red">Full schedule →</Link>
+          </div>
+          {upcomingFixtures.length ? (
+            <ul className="mt-5 divide-y divide-black/10">
+              {upcomingFixtures.map((fixture) => {
+                const venue = fixture.venue_id ? venueById.get(fixture.venue_id) : null;
+                return <li key={fixture.id} className="py-3 first:pt-0 last:pb-0"><p className="text-[14px] font-semibold">{fixture.name}</p><p className="mt-1 text-[12px] text-primary/55">{stageById.get(fixture.stage_id)?.name ?? "Fixture"}{fixture.scheduled_at ? ` · ${new Date(fixture.scheduled_at).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}` : " · Date to be confirmed"}</p>{venue ? <p className="mt-1 text-[12px] text-primary/45">{venue.name}{venue.address ? `, ${venue.address}` : ""}</p> : null}</li>;
+              })}
+            </ul>
+          ) : (
+            <p className="mt-5 text-[14px] leading-relaxed text-primary/55">No published fixture has been assigned to your school yet. The committee will notify you when the schedule is confirmed.</p>
+          )}
+        </section>
+      </div>
+
+      <div className="mt-4">
+        <Link href="/portal/school/appeals" className="text-[13px] font-semibold text-primary/60 underline underline-offset-4 hover:text-red-ink">Need to query a registration, result, or fixture? Open an appeal.</Link>
       </div>
 
 
