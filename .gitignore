@@ -50,3 +50,6 @@ next-env.d.ts
 
 # Phase 0 review artifacts
 shots/
+
+# Local visual QA renders for generated documents
+output/*-preview.png
