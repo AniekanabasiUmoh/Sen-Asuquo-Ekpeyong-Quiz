@@ -61,9 +61,11 @@ public readers see them only after the fixture itself is published.
 
 The working tree also contains `20260826000500_consent_governance.sql`. It
 adds consent policy version/actor fields and withdrawal timestamps for student
-records, while preserving the original consent timestamp. The roster actions
-remove private photo objects when a student or replacement photo is deleted;
-apply and verify this migration in Preview before production use.
+records, while preserving the original consent timestamp. A database trigger
+rejects direct writes that omit consent or withdrawal provenance, so this
+guarantee does not depend on the roster form. The roster actions remove private
+photo objects when a student or replacement photo is deleted; apply and verify
+this migration in Preview before production use.
 
 The working tree also contains `20260826000600_match_setup_transaction.sql`.
 The admin match-creation action uses its atomic setup function so a failed
