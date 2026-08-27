@@ -19,6 +19,17 @@ export async function createSponsor(_prev: SponsorAdminState, formData: FormData
   const status = String(formData.get("status") ?? "draft") as PublishStatus;
   if (!name || !slug) return { error: "Enter the sponsor name." };
   if (!STATUSES.includes(status)) return { error: "Choose a valid publication status." };
+  if (website) {
+    try {
+      const parsed = new URL(website);
+      if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+        return { error: "Website must use HTTP or HTTPS." };
+      }
+    } catch {
+      return { error: "Enter a valid sponsor website URL." };
+    }
+    if (website.length > 2048) return { error: "That website URL is too long." };
+  }
   const supabase = await createClient();
   const { data, error } = await supabase.from("sponsors").insert({ name, slug, tier: tier || null, logo_path: logoPath || null, website: website || null, status }).select("id").single();
   if (error) return { error: `Could not create sponsor: ${error.message}` };

@@ -50,7 +50,8 @@ export async function createDownload(_prev: ContentAdminState, formData: FormDat
   const status = String(formData.get("status") ?? "draft") as PublishStatus;
   if (!title || !fileUrl) return { error: "Enter a title and file URL." };
   if (!STATUSES.includes(status)) return { error: "Choose a valid publication status." };
-  if (!fileUrl.startsWith("/") && !/^https:\/\//i.test(fileUrl)) return { error: "File URL must be a site path or HTTPS URL." };
+  if (fileUrl.startsWith("//") || (!fileUrl.startsWith("/") && !/^https:\/\//i.test(fileUrl))) return { error: "File URL must be a site path or HTTPS URL." };
+  if (fileUrl.length > 2048) return { error: "That file URL is too long." };
   const supabase = await createClient();
   const { data, error } = await supabase.from("downloads").insert({ title, description: description || null, version: version || null, file_url: fileUrl, file_size_bytes: Number.isFinite(fileSize) && fileSize > 0 ? fileSize : null, status, published_at: status === "published" ? new Date().toISOString() : null }).select("id").single();
   if (error) return { error: `Could not create download: ${error.message}` };

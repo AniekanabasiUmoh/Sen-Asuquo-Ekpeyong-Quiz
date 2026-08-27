@@ -16,7 +16,8 @@ export async function submitAppeal(_prev: AppealState, formData: FormData): Prom
   const evidenceUrl = String(formData.get("evidence_url") ?? "").trim();
   if (!KINDS.includes(kind)) return { error: "Choose what your appeal concerns." };
   if (!subject || !details) return { error: "Enter a subject and explain the issue." };
-  if (evidenceUrl && !evidenceUrl.startsWith("/") && !/^https:\/\//i.test(evidenceUrl)) return { error: "Evidence must be a site path or HTTPS URL." };
+  if (evidenceUrl && ((evidenceUrl.startsWith("//")) || (!evidenceUrl.startsWith("/") && !/^https:\/\//i.test(evidenceUrl)))) return { error: "Evidence must be a site path or HTTPS URL." };
+  if (evidenceUrl.length > 2048) return { error: "That evidence link is too long." };
   const supabase = await createClient();
   let { data: school } = await supabase.from("schools").select("id, name").eq("owner_id", user.id).maybeSingle();
   if (!school && user.roles.includes("coach")) {
