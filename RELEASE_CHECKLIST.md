@@ -49,8 +49,10 @@ Last verification: 27 August 2026
 
 ## Intentionally not release-approved
 
-- [ ] Supabase CLI ownership: the current CLI identity cannot see the SAEAC
-  project, so no migration or Edge Function deployment was attempted.
+- [ ] Supabase CLI management ownership: the current CLI identity cannot see
+  the SAEAC project. Production migrations were applied through the verified
+  direct Postgres pooler URL; Edge Function deployment still needs management
+  API access.
 - [ ] Vercel Preview variables and isolated Preview database.
 - [ ] `send-email` Edge Function deployment and Resend sender-domain approval.
 - [ ] Supabase backups/PITR, Vercel alerts, and a restore rehearsal.
@@ -62,22 +64,9 @@ Last verification: 27 August 2026
   `SAEAC_REQUIRE_MFA=true` and verify privileged routes require AAL2.
 - [ ] Official committee-approved rules PDF, retention period, named committee
   members, sponsor details, and other pending public copy.
-- [ ] Apply and verify `supabase/migrations/20260826000100_content_cms.sql`
-  before using the FAQ and Downloads admin tools in production.
-- [ ] Apply and verify `supabase/migrations/20260826000200_appeals.sql`
-  before using school or committee appeals in production.
-- [ ] Apply and verify `20260826000300_chat_author_names_anon.sql` and
-  `20260826000400_schedule_visibility.sql` before relying on public chat names
-  or exposing schedule metadata.
-- [ ] Apply and verify `20260826000500_consent_governance.sql` before recording
-  new student consent in production; confirm the withdrawal/photo cleanup
-  procedure with the data controller.
-- [ ] Apply and verify `20260826000600_match_setup_transaction.sql` before
-  creating matches with the updated portal action.
-- [ ] Apply and verify `20260826000700_gallery_tags.sql` before using gallery
-  taxonomy and public content-type filters in production.
-- [ ] Apply and verify `20260826000800_volunteer_messages.sql` before using
-  the Change Maker communication centre in production.
+- [x] Apply and verify the eight `2026082600*.sql` remediation migrations in
+  production. The remote history contains all 29 repository migrations; the
+  live RLS and scoring harnesses pass.
 - [ ] Full six-account browser acceptance on the deployed URL after deployment.
 
 ## Production safety note

@@ -21,10 +21,10 @@ unpublished news, or draft results, which is the intended public RLS boundary.
 The pushed remediation commit is now the latest Ready production deployment
 through the repository's Vercel integration; read-only checks of `/gallery`,
 `/downloads`, `/api/health`, `/schedule?view=calendar`, and `/results` return
-200. This confirms the web deployment only. The new database migrations remain
-unapplied, so CMS, appeals, taxonomy, consent-governance, atomic match setup,
-and Change Maker message data still require the Preview migration and
-acceptance gates below before those workflows are treated as production-ready.
+200. The eight remediation migrations are now applied to the verified SAEAC
+Postgres database. The remote migration history contains all 29 repository
+migrations, and the live RLS and scoring harnesses pass against that database.
+Provider, MFA, Preview, backup, and committee approval gates below still remain.
 
 Public LGA detail pages now render published schools, fixtures, school-level
 results, and LGA-tagged gallery items. Public results deliberately do not search
@@ -32,13 +32,12 @@ or display student names: students are minors and the database's public RLS
 boundary keeps their records private unless a future, committee-approved
 publication workflow is added.
 
-The locally authenticated Supabase CLI account does not list project
+The locally authenticated Supabase CLI account still does not list project
 `lmohoeikidbsiioabmsz`, even though the application credentials can reach its
-data API. Do not run `supabase link`, `supabase db push`, or any migration
-command until a project owner grants the CLI account access and the project
-appears in `supabase projects list`. Preview environment variables are also
-not yet configured in Vercel, so Preview must not be used for production-data
-testing.
+data API. Production was pushed through the verified pooler connection with an
+explicit `--workdir`; do not run `supabase link` or use another database URL
+until ownership is confirmed. Preview environment variables are also not yet
+configured in Vercel, so Preview must not be used for production-data testing.
 
 The deployed `send-email` Edge Function currently returns HTTP 404. Email
 delivery therefore remains an external deployment task, not a frontend claim:
@@ -51,41 +50,35 @@ not applied to production because the CLI project-ownership gate is still open;
 the public pages fall back to the approved static FAQ copy and an explicit
 “being finalised” state until the migration is applied.
 
-The working tree also contains `20260826000200_appeals.sql`, which adds the
-school-to-committee appeals/disputes workflow with forced RLS. It has the same
-apply gate and must be verified in Preview before production use.
+`20260826000200_appeals.sql` adds the school-to-committee appeals/disputes
+workflow with forced RLS. The table is present; the school/admin actions remain
+subject to the acceptance and committee-process gates below.
 
-The working tree also contains `20260826000300_chat_author_names_anon.sql`.
-It grants anonymous execution of the already-scoped chat-author-name RPC so
-public live pages can label chat messages without exposing profile rows. Apply
-it with the other pending migrations after the ownership and Preview gates are
-closed.
+`20260826000300_chat_author_names_anon.sql` grants anonymous execution of the
+already-scoped chat-author-name RPC so public live pages can label chat messages
+without exposing profile rows.
 
-The working tree also contains `20260826000400_schedule_visibility.sql`, which
-restricts draft fixture changes and participant identifiers to administrators;
-public readers see them only after the fixture itself is published.
+`20260826000400_schedule_visibility.sql` restricts draft fixture changes and
+participant identifiers to administrators; public readers see them only after
+the fixture itself is published.
 
-The working tree also contains `20260826000500_consent_governance.sql`. It
-adds consent policy version/actor fields and withdrawal timestamps for student
-records, while preserving the original consent timestamp. A database trigger
-rejects direct writes that omit consent or withdrawal provenance, so this
-guarantee does not depend on the roster form. The roster actions remove private
-photo objects when a student or replacement photo is deleted; apply and verify
-this migration in Preview before production use.
+`20260826000500_consent_governance.sql` adds consent policy version/actor fields
+and withdrawal timestamps for student records, while preserving the original
+consent timestamp. A database trigger rejects new consent or withdrawals that
+omit provenance, while allowing unrelated edits to legacy seeded rows until
+their records are renewed. The roster actions remove private photo objects
+when a student or replacement photo is deleted.
 
-The working tree also contains `20260826000600_match_setup_transaction.sql`.
-The admin match-creation action uses its atomic setup function so a failed
-round or participant insert cannot leave a partial match. Apply this migration
-before deploying the updated match portal.
+`20260826000600_match_setup_transaction.sql` provides the atomic match-setup
+function used by the admin match-creation action.
 
-The working tree also contains `20260826000700_gallery_tags.sql`. It adds
-content type, LGA, and stage taxonomy to gallery items and powers the public
-gallery filters. Apply and verify it before using those fields in production.
+`20260826000700_gallery_tags.sql` adds content type, LGA, and stage taxonomy to
+gallery items and powers the public gallery filters.
 
-The working tree also contains `20260826000800_volunteer_messages.sql`. It
-adds an audited, shift-targetable dashboard broadcast channel for accepted
-Change Makers. It intentionally does not claim SMS or email delivery; those
-remain dependent on the external provider setup described above.
+`20260826000800_volunteer_messages.sql` adds an audited, shift-targetable
+dashboard broadcast channel for accepted Change Makers. It intentionally does
+not claim SMS or email delivery; those remain dependent on the external
+provider setup described above.
 
 Privileged MFA enrollment is available at `/portal/security`. Enforcement is
 controlled by the server-only `SAEAC_REQUIRE_MFA` variable and is intentionally

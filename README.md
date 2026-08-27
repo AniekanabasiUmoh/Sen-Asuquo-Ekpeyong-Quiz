@@ -35,9 +35,9 @@ server and public Supabase variables.
 ## Supabase
 
 Schema changes live in `supabase/migrations/` and must be applied in filename
-order. The eight `2026082600*.sql` remediation migrations are intentionally
-pending until the project owner grants CLI access and an isolated Preview
-database is available. Never put `SUPABASE_SERVICE_ROLE_KEY` in a client
+order. The eight `2026082600*.sql` remediation migrations are applied to the
+verified production database; future changes should still be tested against an
+isolated Preview database first. Never put `SUPABASE_SERVICE_ROLE_KEY` in a client
 component or in a `NEXT_PUBLIC_` variable.
 
 The data-boundary regression checks are:
@@ -64,8 +64,8 @@ details.
 ## Release status
 
 The implementable remediation work is in the pushed `main` branch. The
-production web deployment is Vercel Ready. Applying the pending migrations,
-deploying the `send-email` Edge Function, configuring Resend, Preview
+production web deployment is Vercel Ready and the remediation migrations are
+applied. Deploying the `send-email` Edge Function, configuring Resend, Preview
 variables, backups/alerts, MFA recovery and committee-approved copy remain
 owner-controlled release gates. See [HANDOVER.md](HANDOVER.md) and
 [RELEASE_CHECKLIST.md](RELEASE_CHECKLIST.md) for the evidence and exact
