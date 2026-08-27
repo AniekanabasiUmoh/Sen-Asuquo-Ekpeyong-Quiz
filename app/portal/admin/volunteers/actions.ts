@@ -68,16 +68,33 @@ export async function createShift(
   const notes = String(formData.get("notes") ?? "").trim();
 
   if (!title) return { error: "Give the shift a title." };
+  let startsAtIso: string | null = null;
+  if (startsAt) {
+    const timestamp = Date.parse(startsAt);
+    if (Number.isNaN(timestamp)) return { error: "Enter a valid shift date and time." };
+    startsAtIso = new Date(timestamp).toISOString();
+  }
 
   const supabase = await createClient();
-  const { error } = await supabase.from("volunteer_shifts").insert({
-    title,
-    location: location || null,
-    starts_at: startsAt ? new Date(startsAt).toISOString() : null,
-    notes: notes || null,
-  });
+  const { data, error } = await supabase
+    .from("volunteer_shifts")
+    .insert({
+      title,
+      location: location || null,
+      starts_at: startsAtIso,
+      notes: notes || null,
+    })
+    .select("id")
+    .single();
 
   if (error) return { error: `Could not create the shift: ${error.message}` };
+
+  await writeAudit({
+    action: "volunteer_shift.created",
+    entity: "volunteer_shifts",
+    entityId: data.id,
+    after: { title, location, startsAt: startsAtIso },
+  });
 
   revalidatePath("/portal/admin/volunteers");
   return { notice: `${title} added.` };
@@ -96,11 +113,15 @@ export async function assignToShift(
   if (!shiftId || !volunteerId) return { error: "Select a shift and a Change Maker." };
 
   const supabase = await createClient();
-  const { error } = await supabase.from("volunteer_shift_assignments").insert({
-    shift_id: shiftId,
-    volunteer_id: volunteerId,
-    role: role || null,
-  });
+  const { data, error } = await supabase
+    .from("volunteer_shift_assignments")
+    .insert({
+      shift_id: shiftId,
+      volunteer_id: volunteerId,
+      role: role || null,
+    })
+    .select("id")
+    .single();
 
   if (error) {
     if (error.message.includes("duplicate")) {
@@ -108,6 +129,13 @@ export async function assignToShift(
     }
     return { error: `Could not assign: ${error.message}` };
   }
+
+  await writeAudit({
+    action: "volunteer_shift.assigned",
+    entity: "volunteer_shift_assignments",
+    entityId: data.id,
+    after: { shift_id: shiftId, volunteer_id: volunteerId, role: role || null },
+  });
 
   revalidatePath("/portal/admin/volunteers");
   return { notice: "Assigned." };
@@ -123,9 +151,26 @@ export async function removeAssignment(
   if (!id) return { error: "No assignment given." };
 
   const supabase = await createClient();
-  const { error } = await supabase.from("volunteer_shift_assignments").delete().eq("id", id);
+  const { data: before } = await supabase
+    .from("volunteer_shift_assignments")
+    .select("shift_id, volunteer_id")
+    .eq("id", id)
+    .maybeSingle();
+  if (!before) return { error: "That assignment could not be found." };
+
+  const { error } = await supabase
+    .from("volunteer_shift_assignments")
+    .delete()
+    .eq("id", id);
 
   if (error) return { error: `Could not remove: ${error.message}` };
+
+  await writeAudit({
+    action: "volunteer_shift.assignment_removed",
+    entity: "volunteer_shift_assignments",
+    entityId: id,
+    before,
+  });
 
   revalidatePath("/portal/admin/volunteers");
   return { notice: "Removed from the shift." };
@@ -144,14 +189,25 @@ export async function publishBriefing(
   if (!title || !body) return { error: "Give the briefing a title and its content." };
 
   const supabase = await createClient();
-  const { error } = await supabase.from("volunteer_briefings").insert({
-    title,
-    body,
-    shift_id: shiftId || null,
-    publish: "published",
-  });
+  const { data, error } = await supabase
+    .from("volunteer_briefings")
+    .insert({
+      title,
+      body,
+      shift_id: shiftId || null,
+      publish: "published",
+    })
+    .select("id")
+    .single();
 
   if (error) return { error: `Could not publish: ${error.message}` };
+
+  await writeAudit({
+    action: "volunteer_briefing.published",
+    entity: "volunteer_briefings",
+    entityId: data.id,
+    after: { title, shift_id: shiftId || null },
+  });
 
   revalidatePath("/portal/admin/volunteers");
   return { notice: `${title} published to Change Makers.` };

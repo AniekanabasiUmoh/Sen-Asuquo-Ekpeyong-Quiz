@@ -41,6 +41,14 @@ export async function createVenue(
   const capacity = String(formData.get("capacity") ?? "").trim();
 
   if (!name) return { error: "Enter the venue's name." };
+  let capacityValue: number | null = null;
+  if (capacity) {
+    const parsedCapacity = Number(capacity);
+    if (!Number.isInteger(parsedCapacity) || parsedCapacity < 1) {
+      return { error: "Capacity must be a positive whole number." };
+    }
+    capacityValue = parsedCapacity;
+  }
 
   const supabase = await createClient();
   const { error } = await supabase.from("venues").insert({
@@ -48,7 +56,7 @@ export async function createVenue(
     slug: `${slugify(name)}-${Math.random().toString(36).slice(2, 6)}`,
     lga_id: lgaId || null,
     address: address || null,
-    capacity: capacity ? Number(capacity) : null,
+    capacity: capacityValue,
   });
 
   if (error) return { error: `Could not add the venue: ${error.message}` };
@@ -72,6 +80,12 @@ export async function createFixture(
 
   if (!stageId) return { error: "Select the stage this fixture belongs to." };
   if (!name) return { error: "Give the fixture a name." };
+  let scheduledAt: string | null = null;
+  if (when) {
+    const timestamp = Date.parse(when);
+    if (Number.isNaN(timestamp)) return { error: "Enter a valid fixture date and time." };
+    scheduledAt = new Date(timestamp).toISOString();
+  }
 
   const supabase = await createClient();
   const { data: created, error } = await supabase
@@ -81,7 +95,7 @@ export async function createFixture(
       name,
       qualifier_group: group || null,
       venue_id: venueId || null,
-      scheduled_at: when ? new Date(when).toISOString() : null,
+      scheduled_at: scheduledAt,
     })
     .select("id")
     .single();
@@ -127,9 +141,11 @@ export async function rescheduleFixture(
     .maybeSingle();
   if (!fixtureBefore) return { error: "That fixture could not be found." };
 
-  const nextScheduledAt = when ? new Date(when).toISOString() : null;
-  if (when && Number.isNaN(Date.parse(when))) {
-    return { error: "Enter a valid date and time." };
+  let nextScheduledAt: string | null = null;
+  if (when) {
+    const timestamp = Date.parse(when);
+    if (Number.isNaN(timestamp)) return { error: "Enter a valid date and time." };
+    nextScheduledAt = new Date(timestamp).toISOString();
   }
   const sameInstant =
     (fixtureBefore.scheduled_at ? Date.parse(fixtureBefore.scheduled_at) : null) ===

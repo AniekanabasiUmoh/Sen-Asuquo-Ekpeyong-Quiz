@@ -8,6 +8,7 @@ import { createClient } from "@/lib/supabase/server";
 export type BroadcastState = { error?: string; notice?: string };
 
 const ADMIN_ROLES = ["super_admin", "committee"] as const;
+const BROADCAST_STATUSES = ["upcoming", "live", "ended"] as const;
 
 /**
  * Accepts either a YouTube URL or a bare video id and stores the id.
@@ -45,6 +46,14 @@ export async function saveBroadcast(
   const startsAt = String(formData.get("starts_at") ?? "").trim();
 
   if (!title) return { error: "Give the broadcast a title." };
+  if (title.length > 160) return { error: "Keep the broadcast title under 160 characters." };
+
+  let startsAtIso: string | null = null;
+  if (startsAt) {
+    const timestamp = Date.parse(startsAt);
+    if (Number.isNaN(timestamp)) return { error: "Enter a valid start date and time." };
+    startsAtIso = new Date(timestamp).toISOString();
+  }
 
   const embedId = link ? youtubeId(link) : null;
   if (link && !embedId) {
@@ -55,16 +64,25 @@ export async function saveBroadcast(
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.from("broadcasts").insert({
-    title,
-    match_id: matchId || null,
-    embed_id: embedId,
-    starts_at: startsAt ? new Date(startsAt).toISOString() : null,
-  });
+  const { data, error } = await supabase
+    .from("broadcasts")
+    .insert({
+      title,
+      match_id: matchId || null,
+      embed_id: embedId,
+      starts_at: startsAtIso,
+    })
+    .select("id")
+    .single();
 
   if (error) return { error: `Could not save: ${error.message}` };
 
-  await writeAudit({ action: "broadcast.created", entity: "broadcasts", after: { title } });
+  await writeAudit({
+    action: "broadcast.created",
+    entity: "broadcasts",
+    entityId: data.id,
+    after: { title, match_id: matchId || null, embed_id: embedId, starts_at: startsAtIso },
+  });
   revalidatePath("/portal/admin/broadcast");
   revalidatePath("/live");
   return { notice: `${title} saved.` };
@@ -91,12 +109,18 @@ export async function addSimulcastLink(
 
   if (!broadcastId) return { error: "No broadcast given." };
   if (!platform) return { error: "Choose a platform." };
+  if (platform.length > 40) return { error: "Keep the platform name under 40 characters." };
   if (!link) return { error: "Enter the stream link." };
   try {
-    new URL(link);
+    const parsed = new URL(link);
+    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") {
+      return { error: "Use an HTTP or HTTPS stream link." };
+    }
   } catch {
     return { error: "That does not look like a web address." };
   }
+  if (link.length > 2048) return { error: "That stream link is too long." };
+  if (label.length > 120) return { error: "Keep the link label under 120 characters." };
 
   const supabase = await createClient();
   const { data: current } = await supabase
@@ -104,6 +128,7 @@ export async function addSimulcastLink(
     .select("simulcast_links")
     .eq("id", broadcastId)
     .maybeSingle();
+  if (!current) return { error: "That broadcast could not be found." };
 
   const links = [
     ...((current?.simulcast_links as { platform: string; url: string; label?: string }[]) ?? []),
@@ -116,6 +141,13 @@ export async function addSimulcastLink(
     .eq("id", broadcastId);
 
   if (error) return { error: `Could not add the link: ${error.message}` };
+
+  await writeAudit({
+    action: "broadcast.simulcast_added",
+    entity: "broadcasts",
+    entityId: broadcastId,
+    after: { platform, url: link, label: label || null },
+  });
 
   revalidatePath("/portal/admin/broadcast");
   revalidatePath("/live");
@@ -137,10 +169,14 @@ export async function removeSimulcastLink(
     .select("simulcast_links")
     .eq("id", broadcastId)
     .maybeSingle();
+  if (!current) return { error: "That broadcast could not be found." };
 
-  const links = (
-    (current?.simulcast_links as { platform: string; url: string; label?: string }[]) ?? []
-  ).filter((_, i) => i !== index);
+  const currentLinks = (current.simulcast_links as { platform: string; url: string; label?: string }[]) ?? [];
+  if (!Number.isInteger(index) || index < 0 || index >= currentLinks.length) {
+    return { error: "Choose a valid simulcast link." };
+  }
+  const removed = currentLinks[index];
+  const links = currentLinks.filter((_, i) => i !== index);
 
   const { error } = await supabase
     .from("broadcasts")
@@ -148,6 +184,14 @@ export async function removeSimulcastLink(
     .eq("id", broadcastId);
 
   if (error) return { error: `Could not remove the link: ${error.message}` };
+
+  await writeAudit({
+    action: "broadcast.simulcast_removed",
+    entity: "broadcasts",
+    entityId: broadcastId,
+    before: removed,
+    after: { remaining: links.length },
+  });
 
   revalidatePath("/portal/admin/broadcast");
   revalidatePath("/live");
@@ -163,6 +207,9 @@ export async function setBroadcastState(
   const id = String(formData.get("broadcast_id") ?? "");
   const publish = formData.get("publish") === "1";
   const status = String(formData.get("status") ?? "");
+  if (status && !BROADCAST_STATUSES.includes(status as (typeof BROADCAST_STATUSES)[number])) {
+    return { error: "That is not a valid broadcast status." };
+  }
 
   const patch: Record<string, unknown> = {
     publish: publish ? "published" : "draft",
@@ -170,12 +217,27 @@ export async function setBroadcastState(
   if (status) patch.status = status;
 
   const supabase = await createClient();
+  const { data: before } = await supabase
+    .from("broadcasts")
+    .select("publish, status")
+    .eq("id", id)
+    .maybeSingle();
+  if (!before) return { error: "That broadcast could not be found." };
+
   const { error } = await supabase
     .from("broadcasts")
     .update(patch as never)
     .eq("id", id);
 
   if (error) return { error: `Could not update: ${error.message}` };
+
+  await writeAudit({
+    action: "broadcast.status_changed",
+    entity: "broadcasts",
+    entityId: id,
+    before,
+    after: patch,
+  });
 
   revalidatePath("/portal/admin/broadcast");
   revalidatePath("/live");
