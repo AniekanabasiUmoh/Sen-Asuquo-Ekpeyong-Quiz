@@ -147,6 +147,16 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
         <div className="flex items-center gap-2">
           {/* §3.1: fixed in the header, separate from the nav. */}
           <Link
+            href={navCtas.portal.href}
+            className={`hidden rounded-full border px-5 py-2.5 text-[12.5px] font-bold transition sm:inline-block ${
+              light
+                ? "border-white/35 text-white hover:bg-white/10"
+                : "border-black/15 text-primary hover:bg-white"
+            }`}
+          >
+            {navCtas.portal.label}
+          </Link>
+          <Link
             href={navCtas.primary.href}
             className="hidden rounded-full bg-red px-5 py-2.5 text-[12.5px] font-bold text-white transition hover:bg-primary sm:inline-block"
           >
@@ -218,12 +228,20 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
               );
             })}
           </nav>
-          <Link
-            href={navCtas.primary.href}
-            className="mt-6 block rounded-full bg-red px-6 py-4 text-center text-[14px] font-bold text-white"
-          >
-            {navCtas.primary.label}
-          </Link>
+          <div className="mt-6 grid grid-cols-2 gap-2">
+            <Link
+              href={navCtas.portal.href}
+              className="rounded-full border border-black/15 px-3 py-4 text-center text-[13px] font-bold text-primary"
+            >
+              {navCtas.portal.label}
+            </Link>
+            <Link
+              href={navCtas.primary.href}
+              className="rounded-full bg-red px-3 py-4 text-center text-[13px] font-bold text-white"
+            >
+              {navCtas.primary.label}
+            </Link>
+          </div>
         </div>
       )}
     </header>

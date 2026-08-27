@@ -672,8 +672,9 @@ export const nav = [
 ] as const;
 
 
-/** The two primary actions, fixed in the header per the client's brief. */
+/** The header actions, fixed beside the primary navigation. */
 export const navCtas = {
+  portal: { label: "SAEAC Portal", href: "/login" },
   primary: { label: "Register Your School", href: "/register" },
   secondary: { label: "Sponsor the Championship", href: "/get-involved#sponsors" },
 } as const;
