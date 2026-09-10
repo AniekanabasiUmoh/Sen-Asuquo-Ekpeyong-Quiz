@@ -2,7 +2,7 @@ import type { MetadataRoute } from "next";
 
 import { lgaContent } from "@/content/lgas";
 
-const BASE = "https://www.saeac.org";
+const BASE = "https://senatorasuquoekpeyongacademicchampionship.com";
 
 /**
  * Sitemap for the public site.

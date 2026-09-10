@@ -151,7 +151,7 @@ export default async function Image() {
               borderRadius: 999,
             }}
           >
-            saeac.org
+            senatorasuquoekpeyongacademicchampionship.com
           </div>
         </div>
       </div>

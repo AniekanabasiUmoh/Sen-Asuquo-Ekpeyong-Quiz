@@ -12,7 +12,7 @@ export const brand = {
   edition: "2026 Maiden Edition",
   tagline: "Igniting Minds. Inspiring Excellence. Building Leaders.",
   campaignLine: "Who will be the Standard?",
-  domain: "www.saeac.org",
+  domain: "senatorasuquoekpeyongacademicchampionship.com",
 } as const;
 
 export const hero = {

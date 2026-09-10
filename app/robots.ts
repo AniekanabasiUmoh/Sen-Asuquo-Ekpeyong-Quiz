@@ -30,6 +30,7 @@ export default function robots(): MetadataRoute.Robots {
         "/directions",
       ],
     },
-    sitemap: "https://www.saeac.org/sitemap.xml",
+    sitemap:
+      "https://senatorasuquoekpeyongacademicchampionship.com/sitemap.xml",
   };
 }

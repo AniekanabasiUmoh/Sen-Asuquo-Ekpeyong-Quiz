@@ -9,7 +9,9 @@ export const metadata: Metadata = {
   },
   description:
     "A district-wide academic championship for secondary schools across the seven Local Government Areas of the Cross River South Senatorial District.",
-  metadataBase: new URL("https://www.saeac.org"),
+  metadataBase: new URL(
+    "https://senatorasuquoekpeyongacademicchampionship.com",
+  ),
   // The card image itself is app/opengraph-image.tsx — Next discovers it by
   // file convention and fills in the url/width/height, so it is deliberately
   // not repeated here.

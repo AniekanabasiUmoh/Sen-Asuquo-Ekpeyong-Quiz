@@ -20,7 +20,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
   const format = (date: Date) => date.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
   const body = [
     "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//SAEAC//Schedule//EN", "BEGIN:VEVENT",
-    `UID:${fixture.id}@saeac.org`, `DTSTAMP:${format(new Date())}`, `DTSTART:${format(start)}`, `DTEND:${format(end)}`,
+    `UID:${fixture.id}@senatorasuquoekpeyongacademicchampionship.com`, `DTSTAMP:${format(new Date())}`, `DTSTART:${format(start)}`, `DTEND:${format(end)}`,
     `SUMMARY:${escapeIcs(fixture.name)}`, `LOCATION:${escapeIcs(location)}`, fixture.notes ? `DESCRIPTION:${escapeIcs(fixture.notes)}` : "",
     "END:VEVENT", "END:VCALENDAR", "",
   ].filter(Boolean).join("\r\n");
