@@ -58,7 +58,8 @@ $$;
 -- ---------------------------------------------------------------------------
 
 /**
- * Registered-school and student counts, safe to expose publicly.
+ * Registered-school and student counts. The follow-up migration makes this
+ * RPC admin-only; it is retained here as the schema definition for upgrades.
  *
  * A view rather than a direct count so the public never needs read access to
  * the students table. security_invoker is off deliberately: the function runs

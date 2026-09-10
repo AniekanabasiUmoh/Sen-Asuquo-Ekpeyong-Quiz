@@ -180,7 +180,6 @@ export const statsAll = [
  */
 export const statsFinancial = [
   { display: "₦25M", label: "Seed Fund", note: "Diaspora Educational Trust Fund" },
-  { display: "₦200M", label: "Project Value", note: "Total championship investment" },
   { display: "Annual", label: "Championship", note: "Returning every year" },
 ] as const;
 
@@ -302,12 +301,17 @@ export const origin = {
  * corrected against the source cards rather than guessed at.
  */
 export const scholars = [
-  { name: "Dr. Grace Obo", detail: "MSc Public Health, University of Bristol", img: "/img/scholars/grace-obo.jpg" },
-  { name: "Offiong Andem Bassey", detail: "Media and Public Relations, University of Leicester", img: "/img/scholars/offiong-andem-bassey.jpg" },
+  // Editorial order supplied by the committee: Alice replaces Grace in the
+  // lead position; Emmanuel, Abasi and Lawrence are promoted to the first row.
+  // Grace remains in the collection but is moved away from Offiong.
   { name: "Alice Oyo-Ita", detail: "MSc Financial Technology, Coventry University", img: "/img/scholars/alice-oyo-ita.jpg" },
-  { name: "Dr. Unaowo Akpan Udodung", detail: "Coventry University", img: "/img/scholars/unaowo-akpan-udodung.jpg" },
+  { name: "Offiong Andem Bassey", detail: "Media and Public Relations, University of Leicester", img: "/img/scholars/offiong-andem-bassey.jpg" },
+  { name: "Emmanuel David Nsemo", detail: "Sheffield Hallam University", img: "/img/scholars/emmanuel-david-nsemo.jpg" },
   { name: "Engr. Abasi Ekpenyong Ndarake", detail: "Construction Project and Cost Management, University of Coventry", img: "/img/scholars/abasi-ekpenyong-ndarake.jpg" },
+  { name: "Lawrence Eko-Owai", detail: "MSc Data Science, University of Greenwich", img: "/img/scholars/lawrence-eko-owai.jpg" },
+  { name: "Dr. Unaowo Akpan Udodung", detail: "Coventry University", img: "/img/scholars/unaowo-akpan-udodung.jpg" },
   { name: "Wisdom Umina Sumuko, Esq.", detail: "LLM International Business and Commercial Law, Anglia Ruskin University", img: "/img/scholars/wisdom-umina-sumuko.jpg" },
+  { name: "Dr. Grace Obo", detail: "MSc Public Health, University of Bristol", img: "/img/scholars/grace-obo.jpg" },
   { name: "Prince Otu Ndor-Odok", detail: "MSc Global Healthcare Management", img: "/img/scholars/prince-otu-ndor-odok.jpg" },
   { name: "Dr. Sinebari Nwilegbara", detail: "King's College Hospital, London", img: "/img/scholars/sinebari-nwilegbara.jpg" },
   { name: "Emmanuel Effa Ojong", detail: "MSc Chemical Engineering, Teesside University", img: "/img/scholars/emmanuel-effa-ojong.jpg" },
@@ -315,11 +319,9 @@ export const scholars = [
   { name: "Akwa Archibong Eyo", detail: "Royal Bolton Hospital, UK", img: "/img/scholars/akwa-archibong-eyo.jpg" },
   { name: "Mr. Edem Essien Edem", detail: "University of South Wales", img: "/img/scholars/edem-essien-edem.jpg" },
   { name: "Dr. Cletus Obun", detail: "Scholars in Diaspora", img: "/img/scholars/cletus-obun.jpg" },
-  { name: "Emmanuel David Nsemo", detail: "Sheffield Hallam University", img: "/img/scholars/emmanuel-david-nsemo.jpg" },
   { name: "Dr. Daniel Faithful", detail: "London School of Medicine", img: "/img/scholars/daniel-faithful.jpg" },
   { name: "Solomon Offem Iyam", detail: "BSc (Unical), MSc (London), MRes (Liverpool)", img: "/img/scholars/solomon-offem-iyam.jpg" },
   { name: "Dr. Williams Undebe", detail: "Tropical Health and Infectious Disease, Liverpool School of Tropical Medicine", img: "/img/scholars/williams-undebe.jpg" },
-  { name: "Lawrence Eko-Owai", detail: "MSc Data Science, University of Greenwich", img: "/img/scholars/lawrence-eko-owai.jpg" },
   { name: "Dr. Ewa Anthony Obi", detail: "MSc Global Public Health, Coventry University", img: "/img/scholars/ewa-anthony-obi.jpg" },
   { name: "Egbonyi Ntami Egbe", detail: "Oil and Gas Management, Coventry University", img: "/img/scholars/egbonyi-ntami-egbe.jpg" },
   { name: "Fredrick Ozu", detail: "Scholars in Diaspora", img: "/img/scholars/fredrick-ozu.jpg" },

@@ -34,7 +34,16 @@ const INK_SOFT = "#4a5b8f";
 const FONT_STACK =
   "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, ui-sans-serif, system-ui, sans-serif";
 
-const SITE_URL = "https://saeac.org";
+const SITE_URL = "https://senatorasuquoekpenyongacademicchampionship.com";
+const LOGO_URL = `${SITE_URL}/brand/saeac-logo-blue-280.png`;
+const SOCIAL_LINKS = [
+  { label: "Instagram", href: "https://www.instagram.com/saeac_?igsh=MTlnNmRvZ2ZvM3A5dA%3D%3D&utm_source=qr" },
+  { label: "Facebook", href: "https://www.facebook.com/share/1HkkKcApmR/?mibextid=wwXIfr" },
+  { label: "TikTok", href: "https://vt.tiktok.com/ZSCK4TePt/" },
+  { label: "X", href: "https://x.com/_saeac?s=21" },
+  { label: "Threads", href: "https://www.threads.com/@saeac_?igshid=NTc4MTIwNjQ2YQ==" },
+  { label: "YouTube", href: "https://www.youtube.com/@SenatorAsuquoEkpenyongAcademic" },
+] as const;
 
 function shell(opts: {
   eyebrow: string;
@@ -65,7 +74,9 @@ function shell(opts: {
       <table role="presentation" width="100%" style="max-width:560px;" cellpadding="0" cellspacing="0">
 
         <tr><td style="padding:0 8px 24px;">
-          <span style="font-family:${FONT_STACK};font-size:20px;font-weight:800;letter-spacing:-0.01em;color:${NAVY};">SÆAC</span>
+          <a href="${SITE_URL}" style="text-decoration:none;">
+            <img src="${LOGO_URL}" width="170" alt="Senator Asuquo Ekpenyong Academic Championship" style="display:block;width:170px;height:auto;border:0;" />
+          </a>
         </td></tr>
 
         <tr><td style="background:#ffffff;border-radius:16px;padding:36px 32px;">
@@ -93,9 +104,12 @@ function shell(opts: {
 
         <tr><td style="padding:22px 8px 0;">
           <p style="margin:0;font-size:12px;line-height:1.6;color:${INK_SOFT};">
-            Senator Asuquo Ekpenyong Academic Championship &middot; Cross River South
-            <br />
-            <a href="${SITE_URL}" style="color:${NAVY};text-decoration:underline;">saeac.org</a>
+            <strong style="color:${NAVY};">Senator Asuquo Ekpenyong Academic Championship</strong>
+            &middot; Cross River South<br />
+            <a href="${SITE_URL}" style="color:${NAVY};text-decoration:underline;">Official website</a>
+          </p>
+          <p style="margin:8px 0 0;font-size:11px;line-height:1.7;">
+            ${SOCIAL_LINKS.map(({ label, href }) => `<a href="${escapeHtml(href)}" style="color:${NAVY};text-decoration:none;">${label}</a>`).join(` <span style="color:#aab2c0;">&middot;</span> `)}
           </p>
         </td></tr>
 
