@@ -261,6 +261,60 @@ export function scheduleChangedEmail(opts: {
   };
 }
 
+export function volunteerApplicationReceivedEmail(volunteerName: string) {
+  return {
+    subject: "We have received your volunteer registration",
+    html: shell({
+      eyebrow: "Change Maker Registration",
+      heading: "Your application is with us",
+      bodyHtml: `
+        <p style="margin:0 0 14px;">Dear ${escapeHtml(volunteerName)},</p>
+        <p style="margin:0 0 14px;">
+          Thank you for registering as a Change Maker for the Senator Asuquo
+          Ekpenyong Academic Championship. The Organising Committee has received
+          your application and will review it.
+        </p>
+        <p style="margin:0;">
+          You do not need to create an account. The Committee will contact you
+          about the next steps using the details you provided.
+        </p>`,
+      ctaLabel: "Visit the championship website",
+      ctaHref: SITE_URL,
+    }),
+  };
+}
+
+export function volunteerApplicationAdminAlertEmail(opts: {
+  volunteerName: string;
+  volunteerEmail: string;
+  phone: string;
+  lgaName: string;
+  roleSought: string;
+  hasPhoto: boolean;
+}) {
+  const { volunteerName, volunteerEmail, phone, lgaName, roleSought, hasPhoto } = opts;
+  return {
+    subject: `New volunteer application: ${safeSubjectPart(volunteerName)}`,
+    html: shell({
+      eyebrow: "Committee Notification",
+      heading: "A volunteer has registered",
+      bodyHtml: `
+        <p style="margin:0 0 14px;">A new Change Maker application has been received.</p>
+        <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 18px;width:100%;font-size:14px;">
+          <tr><td style="padding:7px 0;color:${INK_SOFT};width:145px;">Name</td><td style="padding:7px 0;font-weight:700;color:${NAVY};">${escapeHtml(volunteerName)}</td></tr>
+          <tr><td style="padding:7px 0;color:${INK_SOFT};">Email</td><td style="padding:7px 0;"><a href="mailto:${escapeHtml(volunteerEmail)}" style="color:${NAVY};">${escapeHtml(volunteerEmail)}</a></td></tr>
+          <tr><td style="padding:7px 0;color:${INK_SOFT};">Phone</td><td style="padding:7px 0;">${escapeHtml(phone || "Not provided")}</td></tr>
+          <tr><td style="padding:7px 0;color:${INK_SOFT};">Local government</td><td style="padding:7px 0;">${escapeHtml(lgaName)}</td></tr>
+          <tr><td style="padding:7px 0;color:${INK_SOFT};">Preferred role</td><td style="padding:7px 0;">${escapeHtml(roleSought || "Not specified")}</td></tr>
+          <tr><td style="padding:7px 0;color:${INK_SOFT};">Photo supplied</td><td style="padding:7px 0;">${hasPhoto ? "Yes" : "No"}</td></tr>
+        </table>
+        <p style="margin:0;">Review the application in the protected committee dashboard.</p>`,
+      ctaLabel: "Review volunteer applications",
+      ctaHref: `${SITE_URL}/portal/admin/volunteers`,
+    }),
+  };
+}
+
 function escapeHtml(s: string): string {
   return s
     .replace(/&/g, "&amp;")

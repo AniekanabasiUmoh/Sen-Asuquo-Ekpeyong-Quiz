@@ -20,12 +20,14 @@ import {
   registrationRejectedEmail,
   registrationSubmittedEmail,
   scheduleChangedEmail,
+  volunteerApplicationAdminAlertEmail,
+  volunteerApplicationReceivedEmail,
 } from "./_shared/templates.ts";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const FROM_ADDRESS =
   Deno.env.get("RESEND_FROM_ADDRESS") ??
-  "SAEAC <registrations@senatorasuquoekpenyongacademicchampionship.com>";
+  "Senator Asuquo Ekpenyong Academic Championship <info@senatorasuquoekpenyongacademicchampionship.com>";
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
 type EmailKind =
@@ -33,7 +35,9 @@ type EmailKind =
   | "registration_approved"
   | "registration_changes_requested"
   | "registration_rejected"
-  | "schedule_changed";
+  | "schedule_changed"
+  | "volunteer_application_received"
+  | "volunteer_application_admin_alert";
 
 type RequestBody = {
   kind: EmailKind;
@@ -68,6 +72,17 @@ function buildEmail(kind: EmailKind, data: Record<string, unknown>) {
         oldValue: data.oldValue == null ? null : String(data.oldValue),
         newValue: data.newValue == null ? null : String(data.newValue),
         reason: String(data.reason ?? ""),
+      });
+    case "volunteer_application_received":
+      return volunteerApplicationReceivedEmail(String(data.volunteerName ?? ""));
+    case "volunteer_application_admin_alert":
+      return volunteerApplicationAdminAlertEmail({
+        volunteerName: String(data.volunteerName ?? ""),
+        volunteerEmail: String(data.volunteerEmail ?? ""),
+        phone: String(data.phone ?? ""),
+        lgaName: String(data.lgaName ?? "Not available"),
+        roleSought: String(data.roleSought ?? ""),
+        hasPhoto: data.hasPhoto === true,
       });
     default:
       throw new Error(`Unknown email kind: ${kind}`);
@@ -170,7 +185,7 @@ serve(async (req) => {
 // To activate once a Resend API key exists:
 //
 //   npx supabase secrets set RESEND_API_KEY=re_xxxxxxxx
-//   npx supabase secrets set RESEND_FROM_ADDRESS="SAEAC <registrations@senatorasuquoekpenyongacademicchampionship.com>"
+//   npx supabase secrets set RESEND_FROM_ADDRESS="Senator Asuquo Ekpenyong Academic Championship <info@senatorasuquoekpenyongacademicchampionship.com>"
 //   npx supabase functions deploy send-email
 //
 // The sending domain (senatorasuquoekpenyongacademicchampionship.com, or a

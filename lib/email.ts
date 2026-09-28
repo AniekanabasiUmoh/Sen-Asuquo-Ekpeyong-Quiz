@@ -92,3 +92,20 @@ export function sendScheduleChangedEmail(
 ) {
   return sendEmail("schedule_changed", to, data);
 }
+
+export function sendVolunteerApplicationReceivedEmail(to: string, volunteerName: string) {
+  return sendEmail("volunteer_application_received", to, { volunteerName });
+}
+
+export function sendVolunteerApplicationAdminAlertEmail(data: {
+  volunteerName: string;
+  volunteerEmail: string;
+  phone: string;
+  lgaName: string;
+  roleSought: string;
+  hasPhoto: boolean;
+}) {
+  const to = process.env.VOLUNTEER_APPLICATION_NOTIFICATION_EMAIL ??
+    "info@senatorasuquoekpenyongacademicchampionship.com";
+  return sendEmail("volunteer_application_admin_alert", to, data);
+}

@@ -3,6 +3,10 @@
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 
+import {
+  sendVolunteerApplicationAdminAlertEmail,
+  sendVolunteerApplicationReceivedEmail,
+} from "@/lib/email";
 import { createAdminClient, createClient } from "@/lib/supabase/server";
 
 export type VolunteerState = { error?: string; notice?: string };
@@ -100,6 +104,26 @@ export async function applyToVolunteer(
     console.error("[volunteer] application insert failed", error.code);
     return { error: "We could not record your application. Please check your details and try again." };
   }
+
+  const { data: lga } = await supabase
+    .from("lgas")
+    .select("name")
+    .eq("id", lgaId)
+    .maybeSingle();
+
+  // Email is a courtesy after the application is safely recorded. Provider
+  // failures must not make a successful registration look unsuccessful.
+  await Promise.all([
+    sendVolunteerApplicationReceivedEmail(email, fullName),
+    sendVolunteerApplicationAdminAlertEmail({
+      volunteerName: fullName,
+      volunteerEmail: email,
+      phone,
+      lgaName: lga?.name ?? "Not available",
+      roleSought,
+      hasPhoto: Boolean(photoPath),
+    }),
+  ]);
 
   revalidatePath("/portal/admin/volunteers");
 
