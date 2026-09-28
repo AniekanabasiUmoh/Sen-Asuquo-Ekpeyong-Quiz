@@ -17,9 +17,8 @@ export const brand = {
 
 export const hero = {
   eyebrow: "Cross River South Senatorial District · Maiden Edition",
-  /* Secondary CTA reads "Become a Change Maker" and points at the volunteer
-     section; "Partner" was corporate-sponsor language aimed at the wrong
-     audience. Round 3 item 4. */
+  /* Secondary CTA leads straight to the public volunteer form; no account is
+     needed to apply. */
   headline: "Who will be the Standard?",
   /** Split for the two-tone hero treatment. */
   headlineLead: "Who will be",
@@ -49,7 +48,7 @@ export const hero = {
     { src: "/img/hero-5.jpg", alt: "Students outside their school building", position: "center 35%" },
   ],
   primaryCta: { label: "Register Now", href: "#register" },
-  secondaryCta: { label: "Become a Change Maker", href: "#changemaker" },
+  secondaryCta: { label: "Become a Change Maker", href: "/volunteer/register" },
   tertiaryCta: { label: "Watch Promo", href: "#patron" },
 } as const;
 
@@ -666,7 +665,7 @@ export const nav = [
     href: "/get-involved",
     children: [
       { label: "School Registration", href: "/register" },
-      { label: "Become a Change Maker", href: "/get-involved" },
+      { label: "Volunteer Registration", href: "/volunteer/register" },
       { label: "Sponsors & Partners", href: "/get-involved#sponsors" },
     ],
   },
@@ -694,7 +693,7 @@ export const changeMaker = {
   title: "Become a",
   titleTrail: "Change Maker",
   body: "Change Makers power the championship, on the ground and behind it. Volunteer at the LGA qualifiers and the Grand Finale, or back the Trust Fund that puts students through school.",
-  cta: { label: "Volunteer With Us", href: "#changemaker" },
+  cta: { label: "Register as a Volunteer", href: "/volunteer/register" },
   /** Second route for organisations rather than individuals. */
   ctaSecondary: { label: "Sponsor the Championship", href: "#sponsors" },
 } as const;

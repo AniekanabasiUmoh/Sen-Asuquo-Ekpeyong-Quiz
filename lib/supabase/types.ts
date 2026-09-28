@@ -299,6 +299,7 @@ export type Volunteer = Timestamps & {
   role_sought: string | null;
   status: VolunteerStatus;
   notes: string | null;
+  photo_path: string | null;
 };
 
 export type VolunteerShift = Timestamps & {

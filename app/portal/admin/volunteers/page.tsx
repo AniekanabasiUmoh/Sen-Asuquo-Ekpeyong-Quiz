@@ -26,6 +26,20 @@ export default async function AdminVolunteersPage() {
 
   const rows = volunteers ?? [];
   const applied = rows.filter((v) => v.status === "applied");
+  const accepted = rows.filter((v) => v.status === "accepted");
+
+  // Headshots are held in a private bucket. Sign them briefly only after the
+  // page's committee-role check, then pass the links to this admin-only UI.
+  const photoUrls: Record<string, string> = {};
+  const withPhotos = rows.filter((v) => v.photo_path);
+  if (withPhotos.length > 0) {
+    const { data: signed } = await supabase.storage
+      .from("volunteer-photos")
+      .createSignedUrls(withPhotos.map((v) => v.photo_path as string), 3600);
+    signed?.forEach((entry, index) => {
+      if (entry.signedUrl) photoUrls[withPhotos[index].id] = entry.signedUrl;
+    });
+  }
 
   return (
     <div>
@@ -42,9 +56,16 @@ export default async function AdminVolunteersPage() {
           : " Nothing is awaiting a decision."}
       </p>
 
+      <dl className="mt-7 grid gap-3 sm:grid-cols-3">
+        <Metric label="Applications received" value={rows.length} />
+        <Metric label="Awaiting review" value={applied.length} />
+        <Metric label="Accepted" value={accepted.length} />
+      </dl>
+
       <div className="mt-9">
         <VolunteerRows
           volunteers={rows}
+          photoUrls={photoUrls}
           lgaNames={Object.fromEntries((lgas ?? []).map((l) => [l.id, l.name]))}
           shifts={shifts ?? []}
         />
@@ -59,6 +80,19 @@ export default async function AdminVolunteersPage() {
           <ShiftsAndBriefings shifts={shifts ?? []} briefings={briefings ?? []} messages={messages ?? []} />
         </div>
       </section>
+    </div>
+  );
+}
+
+function Metric({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-2xl bg-white px-5 py-4">
+      <dt className="text-[11px] font-bold uppercase tracking-[0.14em] text-primary/45">
+        {label}
+      </dt>
+      <dd className="mt-1 font-display text-2xl font-extrabold text-primary">
+        {value.toLocaleString("en-NG")}
+      </dd>
     </div>
   );
 }

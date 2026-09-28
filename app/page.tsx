@@ -98,10 +98,10 @@ export default function HomePage() {
                   Register Now
                 </Link>
                 <Link
-                  href="/get-involved"
+                  href="/volunteer/register"
                   className="rounded-full border border-white/30 px-7 py-3.5 text-[13px] font-bold text-white transition hover:bg-white/10"
                 >
-                  Become a Change Maker
+                  Volunteer Registration
                 </Link>
                 <Link
                   href="/about#patron"

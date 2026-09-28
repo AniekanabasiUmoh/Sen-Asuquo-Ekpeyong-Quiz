@@ -18,10 +18,12 @@ const TONE: Record<VolunteerStatus, string> = {
 
 export function VolunteerRows({
   volunteers,
+  photoUrls,
   lgaNames,
   shifts,
 }: {
   volunteers: Volunteer[];
+  photoUrls: Record<string, string>;
   lgaNames: Record<string, string>;
   shifts: VolunteerShift[];
 }) {
@@ -49,9 +51,25 @@ export function VolunteerRows({
                 <h3 className="font-display text-base font-bold">{v.full_name}</h3>
                 <p className="mt-0.5 text-[13px] text-primary/55">{v.email}</p>
                 <p className="mt-0.5 text-[12px] text-primary/45">
-                  {v.lga_id ? lgaNames[v.lga_id] ?? "Unknown LGA" : "Anywhere"}
+                  {v.lga_id ? lgaNames[v.lga_id] ?? "Unknown LGA" : "Not provided"}
                   {v.phone ? ` · ${v.phone}` : ""}
                 </p>
+                {v.photo_path ? (
+                  photoUrls[v.id] ? (
+                    <a
+                      href={photoUrls[v.id]}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-2 inline-flex text-[12px] font-semibold text-primary underline decoration-primary/25 underline-offset-4 hover:decoration-primary"
+                    >
+                      View photo for volunteer design ↗
+                    </a>
+                  ) : (
+                    <p className="mt-2 text-[12px] text-primary/45">
+                      Photo uploaded · preview temporarily unavailable
+                    </p>
+                  )
+                ) : null}
                 {v.role_sought ? (
                   <p className="mt-2 text-[13px] text-primary/70">{v.role_sought}</p>
                 ) : null}

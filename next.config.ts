@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // Volunteer photos arrive as multipart form data. Keep room above the
+    // 3 MB file limit for the remaining fields and multipart boundaries.
+    serverActions: { bodySizeLimit: "4mb" },
+  },
   images: {
     // AVIF first, WebP fallback: both are generated automatically by
     // next/image and served by content negotiation, no extra work at the call

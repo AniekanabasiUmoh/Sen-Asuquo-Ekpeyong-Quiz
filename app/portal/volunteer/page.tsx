@@ -63,17 +63,17 @@ export default async function VolunteerDashboardPage() {
     return (
       <div className="max-w-2xl">
         <h1 className="font-display text-[clamp(1.9rem,4vw,2.6rem)] font-extrabold leading-[1.05] tracking-[-0.02em]">
-          You have not applied to volunteer
+          Volunteer registration
         </h1>
         <p className="mt-4 text-[15px] leading-relaxed text-primary/60">
-          Change Makers power the championship on the ground and behind it, at
-          the LGA qualifiers and the Grand Finale.
+          Register as a Change Maker for the LGA qualifiers and Grand Finale.
+          You do not need to create an account to apply.
         </p>
         <Link
-          href="/get-involved#changemaker"
+          href="/volunteer/register"
           className="mt-8 inline-block rounded-full bg-gold px-7 py-3.5 text-[13px] font-bold text-primary transition hover:bg-primary hover:text-white"
         >
-          Become a Change Maker
+          Register as a Volunteer
         </Link>
       </div>
     );

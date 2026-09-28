@@ -34,7 +34,7 @@ const sections = [
     body: [
       "From schools: the school name, address, Local Government Area, type, and the name, email address and phone number of the coordinating member of staff.",
       "From students entered into the championship: full name, stream, class, date of birth where given, and a photograph where the school uploads one.",
-      "From Change Makers and officials: name, email address, phone number and the Local Government Area they wish to serve.",
+      "From Change Makers and officials: name, email address, phone number and the Local Government Area they live in or wish to serve. A volunteer may also upload a photograph for the Committee to prepare their volunteer design.",
       "From everyone who signs in: an email address and an encrypted password, held by our authentication provider.",
     ],
   },
@@ -61,6 +61,7 @@ const sections = [
     body: [
       "A school sees its own registration and its own students, and nobody else's.",
       "The Organising Committee sees the registrations and records it needs in order to run the championship.",
+      "Volunteer applications and any uploaded volunteer photographs are private and visible only to the Organising Committee.",
       "Quiz masters and judges see only the matches they are assigned to.",
       "The public sees approved schools, published fixtures and published results. Nothing else.",
     ],
