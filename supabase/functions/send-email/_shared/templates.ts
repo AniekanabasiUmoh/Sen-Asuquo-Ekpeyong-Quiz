@@ -34,7 +34,7 @@ const INK_SOFT = "#4a5b8f";
 const FONT_STACK =
   "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, ui-sans-serif, system-ui, sans-serif";
 
-const SITE_URL = "https://senatorasuquoekpenyongacademicchampionship.com";
+const SITE_URL = "https://senatorasuquoekpeyongacademicchampionship.com";
 const LOGO_URL = `${SITE_URL}/brand/saeac-logo-blue-280.png`;
 const SOCIAL_LINKS = [
   { label: "Instagram", href: "https://www.instagram.com/saeac_?igsh=MTlnNmRvZ2ZvM3A5dA%3D%3D&utm_source=qr" },

@@ -106,6 +106,6 @@ export function sendVolunteerApplicationAdminAlertEmail(data: {
   hasPhoto: boolean;
 }) {
   const to = process.env.VOLUNTEER_APPLICATION_NOTIFICATION_EMAIL ??
-    "info@senatorasuquoekpenyongacademicchampionship.com";
+    "info@senatorasuquoekpeyongacademicchampionship.com";
   return sendEmail("volunteer_application_admin_alert", to, data);
 }

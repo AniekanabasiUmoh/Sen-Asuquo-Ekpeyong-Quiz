@@ -27,7 +27,7 @@ import {
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const FROM_ADDRESS =
   Deno.env.get("RESEND_FROM_ADDRESS") ??
-  "Senator Asuquo Ekpenyong Academic Championship <info@senatorasuquoekpenyongacademicchampionship.com>";
+  "Senator Asuquo Ekpenyong Academic Championship <info@senatorasuquoekpeyongacademicchampionship.com>";
 const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
 type EmailKind =
@@ -185,10 +185,10 @@ serve(async (req) => {
 // To activate once a Resend API key exists:
 //
 //   npx supabase secrets set RESEND_API_KEY=re_xxxxxxxx
-//   npx supabase secrets set RESEND_FROM_ADDRESS="Senator Asuquo Ekpenyong Academic Championship <info@senatorasuquoekpenyongacademicchampionship.com>"
+//   npx supabase secrets set RESEND_FROM_ADDRESS="Senator Asuquo Ekpenyong Academic Championship <info@senatorasuquoekpeyongacademicchampionship.com>"
 //   npx supabase functions deploy send-email
 //
-// The sending domain (senatorasuquoekpenyongacademicchampionship.com, or a
+// The sending domain (senatorasuquoekpeyongacademicchampionship.com, or a
 // subdomain of it) also needs its SPF/
 // DKIM records added at the registrar before Resend will deliver from it —
 // Resend's dashboard gives the exact DNS records once the domain is added
