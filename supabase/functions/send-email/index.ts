@@ -1,12 +1,10 @@
 // SAEAC — transactional email, Sprint 2.2 confirmation + Sprint 3.1 schedule
 // notices.
 //
-// PLACEHOLDER, WAITING ON A KEY: this function is complete and ready to
-// deploy, but RESEND_API_KEY has not been set yet. Until it is, every call
-// here is logged and returns { ok: true, skipped: true } rather than
-// failing, so nothing in the app breaks or blocks on email being absent. See
-// "To activate" below for the two commands that turn this on once the key
-// arrives.
+// The provider key is optional in development: without it, the function logs
+// only the email kind and returns a skipped result so an email outage never
+// blocks the underlying application action. Production has a domain-scoped
+// sending key configured.
 //
 // Called from Next.js server actions with the service-role key (never from
 // the browser: this function must not be invokable by an anonymous client,
@@ -28,7 +26,10 @@ const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const FROM_ADDRESS =
   Deno.env.get("RESEND_FROM_ADDRESS") ??
   "Senator Asuquo Ekpenyong Academic Championship <info@senatorasuquoekpeyongacademicchampionship.com>";
-const SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+// Supabase reserves the SUPABASE_ prefix for platform variables and no longer
+// guarantees the legacy SERVICE_ROLE_KEY name in every Edge Function runtime.
+// Keep an explicit server-only copy for the exact bearer check below.
+const EMAIL_AUTH_TOKEN = Deno.env.get("SAEAC_EMAIL_AUTH_TOKEN");
 
 type EmailKind =
   | "registration_submitted"
@@ -98,7 +99,7 @@ serve(async (req) => {
   // email. This is not RLS-governed data, so the check is a bearer match
   // against the same secret Postgres calls already carry.
   const auth = req.headers.get("Authorization") ?? "";
-  if (!SERVICE_ROLE_KEY || auth !== `Bearer ${SERVICE_ROLE_KEY}`) {
+  if (!EMAIL_AUTH_TOKEN || auth !== `Bearer ${EMAIL_AUTH_TOKEN}`) {
     return new Response(JSON.stringify({ ok: false, error: "unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" },
@@ -133,10 +134,9 @@ serve(async (req) => {
   }
 
   // ---------------------------------------------------------------------
-  // PLACEHOLDER: no key yet. Record only the template kind (never recipient,
-  // subject, or body) and return success so the calling action (approve a
-  // school, reschedule a fixture, ...) completes normally. Remove this block
-  // once RESEND_API_KEY is set — the real send below is already written.
+  // Without a provider key in a development environment, record only the
+  // template kind (never recipient, subject, or body) and let the calling
+  // application action complete normally.
   // ---------------------------------------------------------------------
   if (!RESEND_API_KEY) {
     console.log(
@@ -182,17 +182,8 @@ serve(async (req) => {
 });
 
 // ---------------------------------------------------------------------------
-// To activate once a Resend API key exists:
-//
-//   npx supabase secrets set RESEND_API_KEY=re_xxxxxxxx
-//   npx supabase secrets set RESEND_FROM_ADDRESS="Senator Asuquo Ekpenyong Academic Championship <info@senatorasuquoekpeyongacademicchampionship.com>"
-//   npx supabase functions deploy send-email
-//
-// The sending domain (senatorasuquoekpeyongacademicchampionship.com, or a
-// subdomain of it) also needs its SPF/
-// DKIM records added at the registrar before Resend will deliver from it —
-// Resend's dashboard gives the exact DNS records once the domain is added
-// there. Until DNS is verified, Resend will only deliver to the account's own
-// verified email addresses, which is enough to test this function end to end
-// before the real domain is ready.
+// Production Edge Function secrets: RESEND_API_KEY (domain-scoped sending
+// access), RESEND_FROM_ADDRESS, and SAEAC_EMAIL_AUTH_TOKEN (the server-only
+// bearer expected from the app). The sending domain's DNS must be verified
+// with Resend before provider delivery is enabled.
 // ---------------------------------------------------------------------------
