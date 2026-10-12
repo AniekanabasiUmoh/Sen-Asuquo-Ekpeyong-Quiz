@@ -1,6 +1,14 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+// Temporary site shutdown requested by the owner. Set false and restore the
+// normal matcher below when reopening the site.
+const TEMPORARY_SITE_OFFLINE = true;
+const temporaryNotFoundPage = `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow"><title>404 - Page not found</title>
+<style>html{color-scheme:light}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#fff;color:#111;font-family:Arial,Helvetica,sans-serif}main{display:flex;align-items:center;padding:24px}h1{font-size:24px;font-weight:500;margin:0 20px 0 0;padding:0 23px 0 0;border-right:1px solid #ddd;line-height:49px}p{font-size:14px;margin:0;line-height:24px}</style>
+</head><body><main><h1>404</h1><p>This page could not be found.</p></main></body></html>`;
+
 /**
  * Refreshes the Supabase auth session on every matched request.
  *
@@ -17,6 +25,17 @@ import { NextResponse, type NextRequest } from "next/server";
  * missing key should cost you the session refresh, not the homepage.
  */
 export async function proxy(request: NextRequest) {
+  if (TEMPORARY_SITE_OFFLINE) {
+    return new NextResponse(temporaryNotFoundPage, {
+      status: 404,
+      headers: {
+        "Content-Type": "text/html; charset=utf-8",
+        "Cache-Control": "no-store, max-age=0",
+        "X-Robots-Tag": "noindex, nofollow",
+      },
+    });
+  }
+
   let response = NextResponse.next({ request });
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -66,11 +85,6 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    /*
-     * Everything except static assets and image files, which never need a
-     * session and would only add latency.
-     */
-    "/((?!_next/static|_next/image|favicon.ico|img/|fonts/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|woff2?)$).*)",
-  ],
+  // Cover public pages, login, portals, API requests, and static assets.
+  matcher: "/:path*",
 };
