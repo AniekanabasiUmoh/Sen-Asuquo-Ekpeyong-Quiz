@@ -284,6 +284,30 @@ export function volunteerApplicationReceivedEmail(volunteerName: string) {
   };
 }
 
+export function volunteerAcceptedEmail(
+  volunteerName: string,
+  designUrl: string | null,
+) {
+  const bodyHtml = [
+    '<p style="margin:0 0 14px;">Dear ' + escapeHtml(volunteerName) + ',</p>',
+    '<p style="margin:0 0 14px;">Your application to join the Senator Asuquo Ekpenyong Academic Championship as a Change Maker has been accepted. Thank you for volunteering.</p>',
+    designUrl
+      ? '<p style="margin:0 0 14px;">We prepared a shareable graphic using the photo you submitted. Open your private link and download the image. The link expires in 30 days. Keep the link private, then share the saved image wherever you like.</p>'
+      : '<p style="margin:0;">You did not include a photo, so a personalized shareable graphic is not available yet. You do not need to create an account. The Organising Committee will contact you about next steps.</p>',
+  ].join("");
+
+  return {
+    subject: "You are confirmed as a SAEAC Change Maker",
+    html: shell({
+      eyebrow: "Change Maker Confirmation",
+      heading: "Your application was accepted",
+      bodyHtml,
+      ctaLabel: designUrl ? "Download your shareable design" : "Visit the championship website",
+      ctaHref: designUrl ?? SITE_URL,
+    }),
+  };
+}
+
 export function volunteerApplicationAdminAlertEmail(opts: {
   volunteerName: string;
   volunteerEmail: string;

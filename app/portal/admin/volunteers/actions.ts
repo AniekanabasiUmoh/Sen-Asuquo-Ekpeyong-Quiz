@@ -3,8 +3,14 @@
 import { revalidatePath } from "next/cache";
 
 import { requireStepUp, writeAudit } from "@/lib/auth";
+import { sendVolunteerAcceptedEmail } from "@/lib/email";
 import { createClient } from "@/lib/supabase/server";
 import type { PublishStatus, VolunteerStatus } from "@/lib/supabase/types";
+import {
+  createVolunteerDesignGrant,
+  VOLUNTEER_DESIGN_LINK_DAYS,
+  volunteerDesignUrl,
+} from "@/lib/volunteer-design";
 
 export type VolunteerAdminState = { error?: string; notice?: string };
 
@@ -24,29 +30,114 @@ export async function setVolunteerStatus(
   if (!VALID.includes(status)) return { error: "Unknown status." };
 
   const supabase = await createClient();
-  const { data: before } = await supabase
+  const { data: before, error: lookupError } = await supabase
     .from("volunteers")
-    .select("status, full_name")
+    .select("status, full_name, email, photo_path")
     .eq("id", id)
     .maybeSingle();
+  if (lookupError) return { error: "Could not load that application." };
+  if (!before) return { error: "That application could not be found." };
+
+  const grant =
+    status === "accepted" && before.photo_path
+      ? createVolunteerDesignGrant()
+      : null;
 
   const { error } = await supabase
     .from("volunteers")
-    .update({ status })
+    .update({
+      status,
+      share_token_hash: grant?.tokenHash ?? null,
+      share_token_expires_at: grant?.expiresAt ?? null,
+    })
     .eq("id", id);
 
-  if (error) return { error: `Could not update: ${error.message}` };
+  if (error) return { error: "Could not update: " + error.message };
 
   await writeAudit({
-    action: `volunteer.${status}`,
+    action: "volunteer." + status,
     entity: "volunteers",
     entityId: id,
-    before: before ? { status: before.status } : undefined,
-    after: { status },
+    before: { status: before.status },
+    after: { status, designLinkExpiresAt: grant?.expiresAt ?? null },
   });
 
+  const emailSent =
+    status === "accepted"
+      ? await sendVolunteerAcceptedEmail(
+          before.email,
+          before.full_name,
+          grant ? volunteerDesignUrl(grant.token) : null,
+        )
+      : null;
+
   revalidatePath("/portal/admin/volunteers");
-  return { notice: `${before?.full_name ?? "Application"} ${status}.` };
+  const emailNotice =
+    status === "accepted" && !emailSent
+      ? " Acceptance email could not be delivered; you can retry it from this row."
+      : "";
+  return { notice: before.full_name + " " + status + "." + emailNotice };
+}
+
+export async function resendVolunteerAcceptance(
+  _prev: VolunteerAdminState,
+  formData: FormData,
+): Promise<VolunteerAdminState> {
+  const user = await requireStepUp(["super_admin", "committee"], "/portal/admin/volunteers");
+  const id = String(formData.get("volunteer_id") ?? "");
+  if (!id) return { error: "No application given." };
+
+  const supabase = await createClient();
+  const { data: volunteer, error: lookupError } = await supabase
+    .from("volunteers")
+    .select("full_name, email, photo_path, status")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (lookupError) return { error: "Could not load that application." };
+  if (!volunteer) return { error: "That application could not be found." };
+  if (volunteer.status !== "accepted") {
+    return { error: "Only accepted Change Makers can receive a design link." };
+  }
+  const grant = volunteer.photo_path ? createVolunteerDesignGrant() : null;
+  const { error } = await supabase
+    .from("volunteers")
+    .update({
+      share_token_hash: grant?.tokenHash ?? null,
+      share_token_expires_at: grant?.expiresAt ?? null,
+    })
+    .eq("id", id);
+
+  if (error) return { error: "Could not prepare a fresh acceptance email." };
+
+  await writeAudit({
+    action: "volunteer.acceptance_email_resent",
+    entity: "volunteers",
+    entityId: id,
+    after: { designLinkExpiresAt: grant?.expiresAt ?? null, issuedBy: user.id },
+  });
+
+  const sent = await sendVolunteerAcceptedEmail(
+    volunteer.email,
+    volunteer.full_name,
+    grant ? volunteerDesignUrl(grant.token) : null,
+  );
+
+  revalidatePath("/portal/admin/volunteers");
+  return sent
+    ? {
+        notice:
+          "Acceptance email sent." +
+          (grant
+            ? " The fresh design link expires in " +
+              VOLUNTEER_DESIGN_LINK_DAYS +
+              " days; any previous link is no longer valid."
+            : " No photo was submitted, so no personal design link was included."),
+      }
+    : {
+        error:
+          "The acceptance email could not be delivered. Check the email service and try again.",
+      };
 }
 
 /**

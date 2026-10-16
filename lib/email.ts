@@ -97,6 +97,14 @@ export function sendVolunteerApplicationReceivedEmail(to: string, volunteerName:
   return sendEmail("volunteer_application_received", to, { volunteerName });
 }
 
+export function sendVolunteerAcceptedEmail(
+  to: string,
+  volunteerName: string,
+  designUrl: string | null,
+) {
+  return sendEmail("volunteer_accepted", to, { volunteerName, designUrl });
+}
+
 export function sendVolunteerApplicationAdminAlertEmail(data: {
   volunteerName: string;
   volunteerEmail: string;

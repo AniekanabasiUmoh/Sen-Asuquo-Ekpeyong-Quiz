@@ -17,7 +17,10 @@ export default async function AdminVolunteersPage() {
 
   const [{ data: volunteers }, { data: lgas }, { data: shifts }, { data: briefings }, { data: messages }] =
     await Promise.all([
-      supabase.from("volunteers").select("*").order("created_at", { ascending: false }),
+      supabase
+        .from("volunteers")
+        .select("id, user_id, full_name, email, phone, lga_id, role_sought, status, notes, photo_path, created_at, updated_at")
+        .order("created_at", { ascending: false }),
       supabase.from("lgas").select("id, name").order("sort_order"),
       supabase.from("volunteer_shifts").select("*").order("starts_at"),
       supabase.from("volunteer_briefings").select("*").order("created_at", { ascending: false }),

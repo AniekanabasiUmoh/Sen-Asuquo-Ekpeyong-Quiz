@@ -18,6 +18,7 @@ import {
   registrationRejectedEmail,
   registrationSubmittedEmail,
   scheduleChangedEmail,
+  volunteerAcceptedEmail,
   volunteerApplicationAdminAlertEmail,
   volunteerApplicationReceivedEmail,
 } from "./_shared/templates.ts";
@@ -38,7 +39,8 @@ type EmailKind =
   | "registration_rejected"
   | "schedule_changed"
   | "volunteer_application_received"
-  | "volunteer_application_admin_alert";
+  | "volunteer_application_admin_alert"
+  | "volunteer_accepted";
 
 type RequestBody = {
   kind: EmailKind;
@@ -85,6 +87,11 @@ function buildEmail(kind: EmailKind, data: Record<string, unknown>) {
         roleSought: String(data.roleSought ?? ""),
         hasPhoto: data.hasPhoto === true,
       });
+    case "volunteer_accepted":
+      return volunteerAcceptedEmail(
+        String(data.volunteerName ?? ""),
+        data.designUrl == null ? null : String(data.designUrl),
+      );
     default:
       throw new Error(`Unknown email kind: ${kind}`);
   }

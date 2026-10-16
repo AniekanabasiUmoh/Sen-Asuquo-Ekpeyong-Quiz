@@ -300,6 +300,8 @@ export type Volunteer = Timestamps & {
   status: VolunteerStatus;
   notes: string | null;
   photo_path: string | null;
+  share_token_hash: string | null;
+  share_token_expires_at: string | null;
 };
 
 export type VolunteerShift = Timestamps & {

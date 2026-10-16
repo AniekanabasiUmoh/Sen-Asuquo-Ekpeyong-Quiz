@@ -5,9 +5,19 @@ import { useActionState } from "react";
 import { FormError, FormNotice } from "@/components/form";
 import type { Volunteer, VolunteerShift, VolunteerStatus } from "@/lib/supabase/types";
 
-import { assignToShift, setVolunteerStatus, type VolunteerAdminState } from "./actions";
+import {
+  assignToShift,
+  resendVolunteerAcceptance,
+  setVolunteerStatus,
+  type VolunteerAdminState,
+} from "./actions";
 
 const EMPTY: VolunteerAdminState = {};
+
+type VolunteerAdminRow = Omit<
+  Volunteer,
+  "share_token_hash" | "share_token_expires_at"
+>;
 
 const TONE: Record<VolunteerStatus, string> = {
   applied: "bg-gold/25 text-gold-ink",
@@ -22,13 +32,14 @@ export function VolunteerRows({
   lgaNames,
   shifts,
 }: {
-  volunteers: Volunteer[];
+  volunteers: VolunteerAdminRow[];
   photoUrls: Record<string, string>;
   lgaNames: Record<string, string>;
   shifts: VolunteerShift[];
 }) {
   const [state, action] = useActionState(setVolunteerStatus, EMPTY);
   const [assignState, assignAction] = useActionState(assignToShift, EMPTY);
+  const [designState, designAction] = useActionState(resendVolunteerAcceptance, EMPTY);
 
   if (volunteers.length === 0) {
     return (
@@ -40,8 +51,8 @@ export function VolunteerRows({
 
   return (
     <div>
-      <FormError message={state.error ?? assignState.error} />
-      <FormNotice message={state.notice ?? assignState.notice} />
+      <FormError message={state.error ?? assignState.error ?? designState.error} />
+      <FormNotice message={state.notice ?? assignState.notice ?? designState.notice} />
 
       <ul className="mt-5 space-y-3">
         {volunteers.map((v) => (
@@ -140,6 +151,27 @@ export function VolunteerRows({
                   Assign
                 </button>
               </form>
+            ) : null}
+
+            {v.status === "accepted" ? (
+              <div className="mt-4 border-t border-black/10 pt-4">
+                <form action={designAction}>
+                  <input type="hidden" name="volunteer_id" value={v.id} />
+                  <button
+                    type="submit"
+                    className="rounded-full border border-primary/20 px-4 py-2 text-[12px] font-semibold text-primary transition hover:bg-cream"
+                  >
+                    {v.photo_path
+                      ? "Resend acceptance email and renew design link"
+                      : "Resend acceptance email"}
+                  </button>
+                </form>
+                {!v.photo_path ? (
+                  <p className="mt-2 text-[12px] text-primary/45">
+                    No photo was submitted, so a personal share graphic is not available.
+                  </p>
+                ) : null}
+              </div>
             ) : null}
           </li>
         ))}

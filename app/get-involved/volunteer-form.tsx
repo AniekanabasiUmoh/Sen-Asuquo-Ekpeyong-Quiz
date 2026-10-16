@@ -82,7 +82,7 @@ export function VolunteerForm({ lgas }: { lgas: { id: string; name: string }[] }
           name="photo"
           type="file"
           accept="image/jpeg,image/png,image/webp"
-          hint="A clear photo helps us prepare your volunteer design. JPG, PNG or WebP, up to 3 MB. It is kept private and seen only by the Organising Committee."
+          hint="A clear photo helps us prepare your share graphic. JPG, PNG or WebP, up to 3 MB. It is stored privately. If accepted, you will receive a private link, valid for 30 days, to preview and download the design. Anyone you share that link with can view it, so share the downloaded image rather than the link."
           className="file:mr-3 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white"
         />
         <Textarea
