@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { requireRole } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -17,10 +18,11 @@ export default async function AdminRegistrationsPage() {
   await requireRole(["super_admin", "committee"], "/portal/admin");
   const supabase = await createClient();
 
-  const [{ data: schools }, { data: lgas }] = await Promise.all([
+  const [{ data: schools, error: schoolsError }, { data: lgas }] = await Promise.all([
     supabase.from("schools").select("*").order("submitted_at", { ascending: true }),
     supabase.from("lgas").select("*").order("sort_order"),
   ]);
+  if (schoolsError) throw new Error("School registrations could not be loaded. Please try again.");
 
   const rows = schools ?? [];
   const lgaName = new Map((lgas ?? []).map((l) => [l.id, l.name]));
@@ -91,6 +93,7 @@ export default async function AdminRegistrationsPage() {
                 </dl>
 
                 <ReviewPanel schoolId={s.id} schoolName={s.name} />
+                <Link href={`/portal/admin/schools/${s.id}`} className="mt-4 inline-block font-semibold underline underline-offset-4">View school, students and passports</Link>
               </li>
             ))}
           </ul>
@@ -99,7 +102,7 @@ export default async function AdminRegistrationsPage() {
 
       <section className="mt-14">
         <h2 className="font-display text-xl font-bold">
-          All registrations ({settled.length})
+          Approved, draft and other registrations ({settled.length})
         </h2>
         {settled.length === 0 ? (
           <p className="mt-3 text-[14px] text-primary/55">
@@ -119,7 +122,7 @@ export default async function AdminRegistrationsPage() {
               <tbody>
                 {settled.map((s) => (
                   <tr key={s.id} className="border-b border-black/[0.06]">
-                    <td className="py-3 pr-4 font-semibold">{s.name}</td>
+                    <td className="py-3 pr-4 font-semibold"><Link href={`/portal/admin/schools/${s.id}`} className="underline underline-offset-4">{s.name}<span className="block text-xs font-normal">View school</span></Link></td>
                     <td className="py-3 pr-4 text-primary/60">
                       {lgaName.get(s.lga_id) ?? "-"}
                     </td>
