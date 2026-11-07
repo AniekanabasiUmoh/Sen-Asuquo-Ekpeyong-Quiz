@@ -88,6 +88,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
             return (
               <div key={n.label} className="group relative">
                 <Link
+                  prefetch={false}
                   href={n.href}
                   aria-current={active ? "page" : undefined}
                   className={`inline-flex items-center gap-1.5 whitespace-nowrap py-1 transition ${
@@ -129,6 +130,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
                     <div className="min-w-60 rounded-2xl border border-black/10 bg-ink p-2 shadow-[0_16px_40px_rgba(6,18,47,0.22)]">
                       {kids.map((c) => (
                         <Link
+                          prefetch={false}
                           key={c.label}
                           href={c.href}
                           className="flex items-center justify-between gap-3 rounded-xl px-3.5 py-2.5 text-[12.5px] text-white/75 transition hover:bg-white/10 hover:text-white"
@@ -147,6 +149,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
         <div className="flex items-center gap-2">
           {/* §3.1: fixed in the header, separate from the nav. */}
           <Link
+            prefetch={false}
             href={navCtas.portal.href}
             className={`hidden rounded-full border px-5 py-2.5 text-[12.5px] font-bold transition sm:inline-block ${
               light
@@ -157,6 +160,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
             {navCtas.portal.label}
           </Link>
           <Link
+            prefetch={false}
             href={navCtas.primary.href}
             className="hidden rounded-full bg-red px-5 py-2.5 text-[12.5px] font-bold text-white transition hover:bg-primary sm:inline-block"
           >
@@ -205,6 +209,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
               return (
                 <div key={n.label} className="border-b border-black/[0.08] py-1">
                   <Link
+                    prefetch={false}
                     href={n.href}
                     className="block py-3 font-display text-lg font-bold text-primary"
                   >
@@ -215,6 +220,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
                       {kids.map((c) => (
                         <li key={c.label}>
                           <Link
+                            prefetch={false}
                             href={c.href}
                             className="block py-2 text-[14px] text-primary/55"
                           >
@@ -230,12 +236,14 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
           </nav>
           <div className="mt-6 grid grid-cols-2 gap-2">
             <Link
+              prefetch={false}
               href={navCtas.portal.href}
               className="rounded-full border border-black/15 px-3 py-4 text-center text-[13px] font-bold text-primary"
             >
               {navCtas.portal.label}
             </Link>
             <Link
+              prefetch={false}
               href={navCtas.primary.href}
               className="rounded-full bg-red px-3 py-4 text-center text-[13px] font-bold text-white"
             >

@@ -50,6 +50,7 @@ export function SiteFooter() {
                 {footerLinks.map((l) => (
                   <li key={l.label}>
                     <Link
+                      prefetch={false}
                       href={l.href}
                       className="text-white/60 transition hover:text-white"
                     >
@@ -68,6 +69,7 @@ export function SiteFooter() {
                 {portalLinks.map((l) => (
                   <li key={l.label}>
                     <Link
+                      prefetch={false}
                       href={l.href}
                       className="text-white/60 transition hover:text-white"
                     >
