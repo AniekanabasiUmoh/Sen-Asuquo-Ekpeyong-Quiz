@@ -21,7 +21,7 @@ export const metadata: Metadata = {
  * it did. It belongs on its own page, which is where the guide always had it.
  */
 export default async function FaqPage() {
-  const supabase = createPublicClient();
+  const supabase = createPublicClient({ revalidate: 300 });
   const { data: databaseFaqs } = supabase
     ? await supabase.from("faqs").select("question, answer").eq("status", "published").order("sort_order").order("created_at", { ascending: false })
     : { data: null };

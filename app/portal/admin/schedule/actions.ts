@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePublicContent } from "@/lib/public-cache";
+
 import { revalidatePath } from "next/cache";
 
 import { requireStepUp, writeAudit } from "@/lib/auth";
@@ -236,7 +238,7 @@ export async function rescheduleFixture(
   });
 
   revalidatePath("/portal/admin/schedule");
-  revalidatePath("/schedule");
+  revalidatePublicContent("/schedule");
   return { notice: `Fixture updated and the change logged.${deliveryWarning}` };
 }
 
@@ -265,6 +267,6 @@ export async function setFixturePublish(
   });
 
   revalidatePath("/portal/admin/schedule");
-  revalidatePath("/schedule");
+  revalidatePublicContent("/schedule");
   return { notice: publish ? "Published to the public schedule." : "Unpublished." };
 }

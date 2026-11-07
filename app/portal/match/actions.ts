@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePublicContent } from "@/lib/public-cache";
+
 import { revalidatePath } from "next/cache";
 
 import { requireRole, requireStepUp, writeAudit } from "@/lib/auth";
@@ -214,7 +216,7 @@ export async function publishResults(
   });
 
   revalidatePath(`/portal/match/${matchId}`);
-  revalidatePath("/results");
+  revalidatePublicContent("/results");
   return { notice: `Published results for ${data} schools.` };
 }
 

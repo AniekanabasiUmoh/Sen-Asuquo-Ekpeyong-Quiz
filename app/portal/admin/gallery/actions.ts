@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePublicContent } from "@/lib/public-cache";
+
 import { revalidatePath } from "next/cache";
 import { requireStepUp, writeAudit } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -26,7 +28,7 @@ export async function createGalleryItem(_prev: GalleryAdminState, formData: Form
   const { data, error } = await supabase.from("gallery_items").insert({ title: title || null, caption: caption || null, image_path: imagePath, lga_id: lgaId, stage_id: stageId, content_type: contentType, status, sort_order: Number.isFinite(sortOrder) ? sortOrder : 0 }).select("id").single();
   if (error) return { error: `Could not create gallery item: ${error.message}` };
   await writeAudit({ action: "gallery.created", entity: "gallery_items", entityId: data.id, after: { title, imagePath, lgaId, stageId, contentType, status } });
-  revalidatePath("/portal/admin/gallery"); revalidatePath("/gallery");
+  revalidatePath("/portal/admin/gallery"); revalidatePublicContent("/gallery");
   return { notice: "Gallery item saved." };
 }
 
@@ -41,6 +43,6 @@ export async function setGalleryStatus(_prev: GalleryAdminState, formData: FormD
   const { error } = await supabase.from("gallery_items").update({ status }).eq("id", id);
   if (error) return { error: `Could not update gallery item: ${error.message}` };
   await writeAudit({ action: "gallery.status_changed", entity: "gallery_items", entityId: id, before: { status: before.status }, after: { status } });
-  revalidatePath("/portal/admin/gallery"); revalidatePath("/gallery");
+  revalidatePath("/portal/admin/gallery"); revalidatePublicContent("/gallery");
   return { notice: `${before.title || "Gallery item"} is now ${status}.` };
 }

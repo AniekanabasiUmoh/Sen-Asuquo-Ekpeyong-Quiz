@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 /** Shareable, public volunteer application. Registration never creates an account. */
 export default async function VolunteerRegistrationPage() {
-  const supabase = createPublicClient();
+  const supabase = createPublicClient({ revalidate: 300 });
   const { data: lgas } = supabase
     ? await supabase.from("lgas").select("id, name").order("sort_order")
     : { data: null };

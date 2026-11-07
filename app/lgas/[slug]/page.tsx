@@ -56,7 +56,7 @@ export default async function LgaPage({
   const lga = lgaBySlug(slug);
   if (!lga) notFound();
 
-  const supabase = createPublicClient();
+  const supabase = createPublicClient({ revalidate: 300 });
 
   // Resolve the LGA row first — everything else keys off its id. Null when
   // Supabase is unconfigured, in which case the live panels take their

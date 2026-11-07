@@ -823,7 +823,7 @@ export function PrizesSection() {
 }
 
 export async function NewsSection({ category }: { category?: string } = {}) {
-  const supabase = createPublicClient();
+  const supabase = createPublicClient({ revalidate: 300 });
   const { data: databaseNews } = supabase
     ? await supabase
         .from("news")
@@ -1123,7 +1123,7 @@ export function FannedCtaSection() {
 }
 
 export async function SponsorsSection() {
-  const supabase = createPublicClient();
+  const supabase = createPublicClient({ revalidate: 300 });
   const { data: databaseSponsors } = supabase
     ? await supabase.from("sponsors").select("name, tier, logo_path, website").eq("status", "published").order("sort_order", { ascending: true })
     : { data: null };

@@ -5,17 +5,18 @@ import { PageHero } from "@/components/page-hero";
 import { createPublicClient } from "@/lib/supabase/server";
 
 export const revalidate = 300;
+export function generateStaticParams() { return []; }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const supabase = createPublicClient();
+  const supabase = createPublicClient({ revalidate: 300 });
   const { data } = supabase ? await supabase.from("news").select("title, excerpt").eq("slug", slug).eq("status", "published").maybeSingle() : { data: null };
   return { title: data?.title ?? "News article", description: data?.excerpt ?? "News from the Senator Asuquo Ekpenyong Academic Championship." };
 }
 
 export default async function NewsArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const supabase = createPublicClient();
+  const supabase = createPublicClient({ revalidate: 300 });
   const { data: article } = supabase ? await supabase.from("news").select("title, excerpt, body, category, image_path, published_at").eq("slug", slug).eq("status", "published").maybeSingle() : { data: null };
   if (!article) notFound();
   return <>

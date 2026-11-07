@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePublicContent } from "@/lib/public-cache";
+
 import { revalidatePath } from "next/cache";
 import { requireStepUp, writeAudit } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
@@ -21,7 +23,7 @@ export async function createFaq(_prev: ContentAdminState, formData: FormData): P
   const { data, error } = await supabase.from("faqs").insert({ question, answer, category: category || null, status }).select("id").single();
   if (error) return { error: `Could not create FAQ: ${error.message}` };
   await writeAudit({ action: "faq.created", entity: "faqs", entityId: data.id, after: { question, status, author_id: user.id } });
-  revalidatePath("/portal/admin/content"); revalidatePath("/faq");
+  revalidatePath("/portal/admin/content"); revalidatePublicContent("/faq");
   return { notice: "FAQ saved." };
 }
 
@@ -36,7 +38,7 @@ export async function setFaqStatus(_prev: ContentAdminState, formData: FormData)
   const { error } = await supabase.from("faqs").update({ status }).eq("id", id);
   if (error) return { error: `Could not update FAQ: ${error.message}` };
   await writeAudit({ action: "faq.status_changed", entity: "faqs", entityId: id, before: { status: before.status }, after: { status } });
-  revalidatePath("/portal/admin/content"); revalidatePath("/faq");
+  revalidatePath("/portal/admin/content"); revalidatePublicContent("/faq");
   return { notice: "FAQ status updated." };
 }
 
@@ -56,7 +58,7 @@ export async function createDownload(_prev: ContentAdminState, formData: FormDat
   const { data, error } = await supabase.from("downloads").insert({ title, description: description || null, version: version || null, file_url: fileUrl, file_size_bytes: Number.isFinite(fileSize) && fileSize > 0 ? fileSize : null, status, published_at: status === "published" ? new Date().toISOString() : null }).select("id").single();
   if (error) return { error: `Could not create download: ${error.message}` };
   await writeAudit({ action: "download.created", entity: "downloads", entityId: data.id, after: { title, status, author_id: user.id } });
-  revalidatePath("/portal/admin/content"); revalidatePath("/downloads");
+  revalidatePath("/portal/admin/content"); revalidatePublicContent("/downloads");
   return { notice: "Download saved." };
 }
 
@@ -71,6 +73,6 @@ export async function setDownloadStatus(_prev: ContentAdminState, formData: Form
   const { error } = await supabase.from("downloads").update({ status, published_at: status === "published" ? new Date().toISOString() : null }).eq("id", id);
   if (error) return { error: `Could not update download: ${error.message}` };
   await writeAudit({ action: "download.status_changed", entity: "downloads", entityId: id, before: { status: before.status }, after: { status } });
-  revalidatePath("/portal/admin/content"); revalidatePath("/downloads");
+  revalidatePath("/portal/admin/content"); revalidatePublicContent("/downloads");
   return { notice: "Download status updated." };
 }

@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePublicContent } from "@/lib/public-cache";
+
 import { revalidatePath } from "next/cache";
 
 import { requireStepUp, writeAudit } from "@/lib/auth";
@@ -62,7 +64,7 @@ export async function createNews(
     after: { title, slug, status },
   });
   revalidatePath("/portal/admin/news");
-  revalidatePath("/news");
+  revalidatePublicContent("/news");
   revalidatePath("/", "layout");
   return { notice: `${title} saved.` };
 }
@@ -102,7 +104,7 @@ export async function setNewsStatus(
     after: { status },
   });
   revalidatePath("/portal/admin/news");
-  revalidatePath("/news");
+  revalidatePublicContent("/news");
   revalidatePath("/", "layout");
   return { notice: `${before.title} is now ${status}.` };
 }

@@ -16,7 +16,7 @@ function sizeLabel(bytes: number | null) {
 }
 
 export default async function DownloadsPage() {
-  const supabase = createPublicClient();
+  const supabase = createPublicClient({ revalidate: 300 });
   const { data } = supabase
     ? await supabase.from("downloads").select("title, description, version, file_url, file_size_bytes, published_at").eq("status", "published").order("published_at", { ascending: false })
     : { data: null };

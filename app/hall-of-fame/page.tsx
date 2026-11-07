@@ -32,7 +32,7 @@ const KIND_LABEL: Record<string, string> = {
 export default async function HallOfFamePage() {
   // Null when Supabase is not configured; the page renders its empty state
   // rather than failing the build. See createPublicClient().
-  const supabase = createPublicClient();
+  const supabase = createPublicClient({ revalidate: 300 });
 
   const [{ data: seasons }, { data: awards }, { data: schools }, { data: legacy }] = supabase
     ? await Promise.all([

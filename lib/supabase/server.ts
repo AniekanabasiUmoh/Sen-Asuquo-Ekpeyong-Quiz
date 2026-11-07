@@ -2,6 +2,7 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { createServerClient } from "@supabase/ssr";
+import { createClient as createAnonymousClient } from "@supabase/supabase-js";
 
 import type { Database } from "./types";
 
@@ -90,7 +91,7 @@ export function createAdminClient() {
  * deploy. Callers handle null by rendering their empty state; see
  * app/get-involved/page.tsx for the pattern.
  */
-export function createPublicClient() {
+export function createPublicClient(options: { revalidate?: number } = {}) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -102,8 +103,15 @@ export function createPublicClient() {
     return null;
   }
 
-  return createServerClient<Database>(url, key, {
-    cookies: { getAll: () => [], setAll: () => {} },
-    auth: { persistSession: false, autoRefreshToken: false },
+  return createAnonymousClient<Database>(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    global: {
+      fetch: (input, init) => fetch(input, {
+        ...init,
+        ...(options.revalidate && (!init?.method || init.method === "GET")
+          ? { cache: "force-cache", next: { revalidate: options.revalidate, tags: ["saeac-public"] } }
+          : { cache: "no-store" }),
+      }),
+    },
   });
 }
