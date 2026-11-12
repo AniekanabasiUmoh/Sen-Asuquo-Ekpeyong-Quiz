@@ -171,17 +171,19 @@ export default async function HomePage() {
         <div>
           <h2 className="font-display text-[clamp(2rem,4vw,3.5rem)] font-extrabold leading-[1.05]">Watch the SAEAC story</h2>
           <p className="mt-4 max-w-lg leading-relaxed text-primary/70">Watch the championship launch trailer and follow the journey across Cross River South.</p>
+          <p className="mt-3 text-sm text-primary/70">Automatic English captions are available; they may contain errors.</p>
           <Link href="/news" className="mt-6 inline-flex rounded-full border border-primary/30 px-6 py-3 text-sm font-semibold hover:bg-white">Explore championship updates</Link>
         </div>
         <video controls preload="none" poster="/news-media/municipality-cover.jpg" className="aspect-video w-full rounded-2xl bg-primary object-contain" aria-label="SAEAC championship launch trailer">
           <source src="/news-media/saeac-launch.mp4" type="video/mp4" />
+          <track kind="captions" src="/news-media/saeac-launch.en.vtt" srcLang="en" label="English (automatic, unreviewed)" />
           Your browser does not support video playback.
         </video>
       </section>
       <section className="mx-auto max-w-7xl px-5 pb-14 sm:pb-20" aria-label="More SAEAC videos">
         <div className="grid gap-6 md:grid-cols-2">
-          <figure><video controls preload="none" className="aspect-video w-full rounded-2xl bg-primary object-contain" aria-label="Commissioner of Education endorsement"><source src="/news-media/education-endorsement.mp4" type="video/mp4" />Your browser does not support video playback.</video><figcaption className="mt-3 font-semibold">Commissioner of Education endorsement</figcaption></figure>
-          <figure><video controls preload="none" className="aspect-video w-full rounded-2xl bg-primary object-contain" aria-label="Be the next standard"><source src="/news-media/be-the-next-standard.mp4" type="video/mp4" />Your browser does not support video playback.</video><figcaption className="mt-3 font-semibold">Be the next standard</figcaption></figure>
+          <figure><video controls preload="none" className="aspect-video w-full rounded-2xl bg-primary object-contain" aria-label="Commissioner of Education endorsement"><source src="/news-media/education-endorsement.mp4" type="video/mp4" /><track kind="captions" src="/news-media/education-endorsement.en.vtt" srcLang="en" label="English (automatic, unreviewed)" />Your browser does not support video playback.</video><figcaption className="mt-3 font-semibold">Commissioner of Education endorsement</figcaption></figure>
+          <figure><video controls preload="none" className="aspect-video w-full rounded-2xl bg-primary object-contain" aria-label="Be the next standard"><source src="/news-media/be-the-next-standard.mp4" type="video/mp4" /><track kind="captions" src="/news-media/be-the-next-standard.en.vtt" srcLang="en" label="English (automatic, unreviewed)" />Your browser does not support video playback.</video><figcaption className="mt-3 font-semibold">Be the next standard</figcaption></figure>
         </div>
       </section>
 
