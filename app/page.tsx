@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { HeadlineReveal } from "@/components/headline-reveal";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { Reveal } from "@/components/reveal";
@@ -9,7 +10,7 @@ import {
   NumbersSection,
 } from "@/components/sections";
 import { Teaser } from "@/components/teaser";
-import { board, hero, principalsMeeting } from "@/content/homepage";
+import { board, hero } from "@/content/homepage";
 import { createPublicClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const supabase = createPublicClient({ revalidate: 300 });
   const { data: latest } = supabase
-    ? await supabase.from("news").select("title, slug, excerpt, image_path").eq("status", "published").order("published_at", { ascending: false, nullsFirst: false }).limit(1).maybeSingle()
+    ? await supabase.from("news").select("title, slug, excerpt, image_path, published_at").eq("status", "published").order("published_at", { ascending: false, nullsFirst: false }).limit(3)
     : { data: null };
   return (
     <>
@@ -155,36 +156,23 @@ export default async function HomePage() {
         reverse
       />
 
-      <Teaser
-        eyebrow="Latest from Schools"
-        title={latest?.title ?? "Principals Across the District"}
-        titleTrail={latest ? "" : "Back the Championship"}
-        body={latest?.excerpt ?? principalsMeeting.body}
-        href={latest ? `/news/${latest.slug}` : "/news"}
-        cta="Read the latest"
-        image={latest?.image_path || "/img/meeting-group.jpg"}
-        imageAlt={latest ? latest.title : "Principals and the SAEAC Planning Committee at Axari Hotel, Calabar"}
-        facts={latest ? undefined : principalsMeeting.facts}
-      />
-
-      <section className="mx-auto grid max-w-7xl items-center gap-8 px-5 py-14 md:grid-cols-2 sm:py-20">
-        <div>
-          <h2 className="font-display text-[clamp(2rem,4vw,3.5rem)] font-extrabold leading-[1.05]">Watch the SAEAC story</h2>
-          <p className="mt-4 max-w-lg leading-relaxed text-primary/70">Watch the championship launch trailer and follow the journey across Cross River South.</p>
-          <p className="mt-3 text-sm text-primary/70">Automatic English captions are available; they may contain errors.</p>
-          <Link href="/news" className="mt-6 inline-flex rounded-full border border-primary/30 px-6 py-3 text-sm font-semibold hover:bg-white">Explore championship updates</Link>
+      <section className="mx-auto max-w-7xl px-5 py-14 sm:py-20" aria-labelledby="latest-news-heading">
+        <div className="flex flex-wrap items-end justify-between gap-5">
+          <h2 id="latest-news-heading" className="font-display text-[clamp(2.25rem,4.6vw,3.5rem)] font-extrabold leading-[1.03]">Latest <span className="text-primary/45">updates</span></h2>
+          <Link href="/news" className="rounded-full border border-black/15 px-6 py-3 text-[13px] font-semibold transition hover:bg-white">See more posts</Link>
         </div>
-        <video controls preload="none" poster="/news-media/municipality-cover.jpg" className="aspect-video w-full rounded-2xl bg-primary object-contain" aria-label="SAEAC championship launch trailer">
-          <source src="/news-media/saeac-launch.mp4" type="video/mp4" />
-          <track kind="captions" src="/news-media/saeac-launch.en.vtt" srcLang="en" label="English (automatic, unreviewed)" />
-          Your browser does not support video playback.
-        </video>
-      </section>
-      <section className="mx-auto max-w-7xl px-5 pb-14 sm:pb-20" aria-label="More SAEAC videos">
-        <div className="grid gap-6 md:grid-cols-2">
-          <figure><video controls preload="none" className="aspect-video w-full rounded-2xl bg-primary object-contain" aria-label="Commissioner of Education endorsement"><source src="/news-media/education-endorsement.mp4" type="video/mp4" /><track kind="captions" src="/news-media/education-endorsement.en.vtt" srcLang="en" label="English (automatic, unreviewed)" />Your browser does not support video playback.</video><figcaption className="mt-3 font-semibold">Commissioner of Education endorsement</figcaption></figure>
-          <figure><video controls preload="none" className="aspect-video w-full rounded-2xl bg-primary object-contain" aria-label="Be the next standard"><source src="/news-media/be-the-next-standard.mp4" type="video/mp4" /><track kind="captions" src="/news-media/be-the-next-standard.en.vtt" srcLang="en" label="English (automatic, unreviewed)" />Your browser does not support video playback.</video><figcaption className="mt-3 font-semibold">Be the next standard</figcaption></figure>
-        </div>
+        {latest?.length ? <div className="mt-10 grid gap-4 md:grid-cols-3">
+          {latest.map((post) => <article key={post.slug} className="group overflow-hidden rounded-2xl bg-white">
+            <Link href={`/news/${post.slug}`} className="block">
+              <div className="relative aspect-[16/10] overflow-hidden"><Image src={post.image_path || "/img/meeting-group.jpg"} alt="" fill sizes="(min-width: 768px) 33vw, 100vw" className="object-cover transition duration-500 group-hover:scale-105" /></div>
+              <div className="p-6">
+                {post.published_at ? <time dateTime={post.published_at} className="text-[11px] text-primary/55">{new Date(post.published_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })}</time> : null}
+                <h3 className="mt-3 font-display text-lg font-bold leading-snug group-hover:text-red">{post.title}</h3>
+                {post.excerpt ? <p className="mt-2 text-sm leading-relaxed text-primary/65">{post.excerpt}</p> : null}
+              </div>
+            </Link>
+          </article>)}
+        </div> : <p className="mt-8 text-primary/70">Visit our news page for the latest updates.</p>}
       </section>
 
       <Teaser
