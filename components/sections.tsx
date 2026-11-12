@@ -18,7 +18,6 @@ import {
   lgaNote,
   lgas,
   mentorPrize,
-  news,
   origin,
   overview,
   principalsMeeting,
@@ -824,25 +823,23 @@ export function PrizesSection() {
 
 export async function NewsSection({ category }: { category?: string } = {}) {
   const supabase = createPublicClient({ revalidate: 300 });
-  const { data: databaseNews } = supabase
+  const { data: databaseNews, error: newsError } = supabase
     ? await supabase
         .from("news")
         .select("title, slug, excerpt, category, image_path, published_at")
         .eq("status", "published")
         .order("published_at", { ascending: false, nullsFirst: false })
-        .limit(6)
-    : { data: null };
+        .limit(100)
+    : { data: null, error: new Error("News is unavailable") };
 
-  const items = (databaseNews ?? []).length
-    ? databaseNews!.map((item) => ({
+  const items = (databaseNews ?? []).map((item) => ({
         category: item.category ?? "SAEAC",
         date: item.published_at ?? new Date().toISOString(),
         title: item.title,
         excerpt: item.excerpt ?? "Read the latest update from the championship.",
       img: item.image_path || "/img/meeting-group.jpg",
       slug: item.slug,
-      }))
-    : news.map((item) => ({ ...item, slug: "" }));
+      }));
   const categories = [...new Set(items.map((item) => item.category))].sort();
   const visibleItems = category
     ? items.filter((item) => item.category.toLowerCase() === category.toLowerCase())
@@ -852,8 +849,8 @@ export async function NewsSection({ category }: { category?: string } = {}) {
     <section id="news" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-14 sm:py-20">
       <div className="flex flex-wrap items-end justify-between gap-6">
         <Split
-          lead="Latest from"
-          trail="the Championship"
+          lead="News and"
+          trail="announcements"
           className="text-[clamp(2.25rem,4.6vw,3.5rem)] leading-[1.03]"
         />
         <Link
@@ -890,13 +887,14 @@ export async function NewsSection({ category }: { category?: string } = {}) {
         </form>
       ) : null}
 
-      <div className="mt-10 grid gap-3 md:grid-cols-3">
+      {newsError ? <p role="status" className="mt-8 text-primary/70">News is temporarily unavailable. Please try again shortly.</p> : null}
+      <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {visibleItems.map((n, i) => (
           <Reveal
             key={n.title}
             delay={i * 90}
             as="article"
-            className="group overflow-hidden rounded-2xl bg-white"
+            className={`group overflow-hidden rounded-2xl bg-white ${i === 0 && !category ? "md:col-span-2" : ""}`}
           >
             <Link href={n.slug ? `/news/${n.slug}` : "/news"} className="block">
               <ZoomImage
@@ -926,7 +924,7 @@ export async function NewsSection({ category }: { category?: string } = {}) {
           </Reveal>
         ))}
       </div>
-      {visibleItems.length === 0 ? (
+      {!newsError && visibleItems.length === 0 ? (
         <p className="mt-8 rounded-2xl border border-dashed border-black/15 px-5 py-8 text-center text-[14px] text-primary/55">
           No updates match that category yet.
         </p>

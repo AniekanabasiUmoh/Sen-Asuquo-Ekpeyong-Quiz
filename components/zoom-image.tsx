@@ -75,6 +75,7 @@ export function ZoomImage({
     >
       <Image
         src={src}
+        unoptimized={src.startsWith("/api/news-media/")}
         alt={alt}
         fill
         sizes={sizes}

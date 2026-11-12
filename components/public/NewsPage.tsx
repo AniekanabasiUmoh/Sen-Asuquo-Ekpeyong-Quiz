@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "News & Updates",
   description:
     "Announcements, stage reports and school spotlights from the Senator Asuquo Ekpenyong Academic Championship.",
+  alternates: { canonical: "/news" },
 };
 
 /**

@@ -40,6 +40,7 @@ export function PageHero({
         <div className="relative isolate overflow-hidden rounded-[28px]">
           <Image
             src={image}
+            unoptimized={image.startsWith("/api/news-media/")}
             alt={imageAlt}
             fill
             priority

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Countdown } from "@/components/countdown";
 import { HeadlineReveal } from "@/components/headline-reveal";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { Reveal } from "@/components/reveal";
@@ -10,7 +9,8 @@ import {
   NumbersSection,
 } from "@/components/sections";
 import { Teaser } from "@/components/teaser";
-import { board, countdown, hero, principalsMeeting } from "@/content/homepage";
+import { board, hero, principalsMeeting } from "@/content/homepage";
+import { createPublicClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   title: {
@@ -35,7 +35,11 @@ export const metadata: Metadata = {
  * wholesale would be a hero and a button. Each teaser says what is on the
  * page behind it and gets out of the way.
  */
-export default function HomePage() {
+export default async function HomePage() {
+  const supabase = createPublicClient({ revalidate: 300 });
+  const { data: latest } = supabase
+    ? await supabase.from("news").select("title, slug, excerpt, image_path").eq("status", "published").order("published_at", { ascending: false, nullsFirst: false }).limit(1).maybeSingle()
+    : { data: null };
   return (
     <>
       {/* ── Hero: full-bleed photography, headline low-left ── */}
@@ -77,16 +81,8 @@ export default function HomePage() {
           <div className="relative z-10 px-3 pb-3 sm:px-4 sm:pb-4">
             <div className="flex flex-col gap-5 rounded-[20px] border border-white/12 bg-white/10 p-5 backdrop-blur-xl md:flex-row md:items-center md:justify-between md:gap-8">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/55">
-                  {countdown.label}
-                </p>
-                <Countdown
-                  targetIso={countdown.targetIso}
-                  className="mt-2.5 gap-5 sm:gap-7"
-                  boxClass="!min-w-0 !flex-none text-left"
-                  valueClass="font-display text-3xl font-extrabold text-white sm:text-4xl"
-                  labelClass="mt-0.5 text-[10px] uppercase tracking-[0.14em] text-white/50"
-                />
+                <p className="font-display text-xl font-bold text-white">Follow the Championship</p>
+                <div className="mt-2 flex gap-5 text-sm font-semibold text-white"><Link href="/schedule" className="underline underline-offset-4">Schedule</Link><Link href="/results" className="underline underline-offset-4">Results</Link></div>
               </div>
               {/* Stacked full-width on phones so nothing wraps to uneven
                   heights; side by side from sm upward. */}
@@ -161,15 +157,33 @@ export default function HomePage() {
 
       <Teaser
         eyebrow="Latest from Schools"
-        title="Principals Across the District"
-        titleTrail="Back the Championship"
-        body={principalsMeeting.body}
-        href="/news"
+        title={latest?.title ?? "Principals Across the District"}
+        titleTrail={latest ? "" : "Back the Championship"}
+        body={latest?.excerpt ?? principalsMeeting.body}
+        href={latest ? `/news/${latest.slug}` : "/news"}
         cta="Read the latest"
-        image="/img/meeting-group.jpg"
-        imageAlt="Principals and the SAEAC Planning Committee at Axari Hotel, Calabar"
-        facts={principalsMeeting.facts}
+        image={latest?.image_path || "/img/meeting-group.jpg"}
+        imageAlt={latest ? latest.title : "Principals and the SAEAC Planning Committee at Axari Hotel, Calabar"}
+        facts={latest ? undefined : principalsMeeting.facts}
       />
+
+      <section className="mx-auto grid max-w-7xl items-center gap-8 px-5 py-14 md:grid-cols-2 sm:py-20">
+        <div>
+          <h2 className="font-display text-[clamp(2rem,4vw,3.5rem)] font-extrabold leading-[1.05]">Watch the SAEAC story</h2>
+          <p className="mt-4 max-w-lg leading-relaxed text-primary/70">Watch the championship launch trailer and follow the journey across Cross River South.</p>
+          <Link href="/news" className="mt-6 inline-flex rounded-full border border-primary/30 px-6 py-3 text-sm font-semibold hover:bg-white">Explore championship updates</Link>
+        </div>
+        <video controls preload="none" poster="/news-media/municipality-cover.jpg" className="aspect-video w-full rounded-2xl bg-primary object-contain" aria-label="SAEAC championship launch trailer">
+          <source src="/news-media/saeac-launch.mp4" type="video/mp4" />
+          Your browser does not support video playback.
+        </video>
+      </section>
+      <section className="mx-auto max-w-7xl px-5 pb-14 sm:pb-20" aria-label="More SAEAC videos">
+        <div className="grid gap-6 md:grid-cols-2">
+          <figure><video controls preload="none" className="aspect-video w-full rounded-2xl bg-primary object-contain" aria-label="Commissioner of Education endorsement"><source src="/news-media/education-endorsement.mp4" type="video/mp4" />Your browser does not support video playback.</video><figcaption className="mt-3 font-semibold">Commissioner of Education endorsement</figcaption></figure>
+          <figure><video controls preload="none" className="aspect-video w-full rounded-2xl bg-primary object-contain" aria-label="Be the next standard"><source src="/news-media/be-the-next-standard.mp4" type="video/mp4" />Your browser does not support video playback.</video><figcaption className="mt-3 font-semibold">Be the next standard</figcaption></figure>
+        </div>
+      </section>
 
       <Teaser
         eyebrow="Get Involved"

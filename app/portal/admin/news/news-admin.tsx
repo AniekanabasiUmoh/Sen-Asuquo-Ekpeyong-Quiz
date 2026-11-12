@@ -1,14 +1,52 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 
 import { FormError, FormNotice, Input, SubmitButton, Textarea } from "@/components/form";
 import type { News, PublishStatus } from "@/lib/supabase/types";
 
-import { createNews, setNewsStatus, type NewsAdminState } from "./actions";
+import { addNewsVideo, createNews, setNewsStatus, updateNews, uploadNewsCover, type NewsAdminState } from "./actions";
 
 const EMPTY: NewsAdminState = {};
 const STATUSES: PublishStatus[] = ["draft", "review", "published", "archived"];
+
+function EditArticle({ article }: { article: News }) {
+  const [state, action, pending] = useActionState(updateNews, EMPTY);
+  const [uploadState, uploadAction, uploading] = useActionState(uploadNewsCover, EMPTY);
+  const [videoState, videoAction, addingVideo] = useActionState(addNewsVideo, EMPTY);
+  const [initialVersion] = useState(article.updated_at);
+  const [title, setTitle] = useState(article.title);
+  const [category, setCategory] = useState(article.category ?? "");
+  const [imagePath, setImagePath] = useState(article.image_path ?? "");
+  const [excerpt, setExcerpt] = useState(article.excerpt ?? "");
+  const [body, setBody] = useState(article.body ?? "");
+  return (
+    <details className="mt-4 border-t border-black/10 pt-4">
+      <summary className="cursor-pointer text-sm font-bold">Edit article</summary>
+      <form action={action} className="mt-4 space-y-4">
+        <input type="hidden" name="news_id" value={article.id} />
+        <input type="hidden" name="updated_at" value={state.updatedAt ?? initialVersion} />
+        <FormError message={state.error} /><FormNotice message={state.notice} />
+        <Input id={`title-${article.id}`} label="Title" name="title" value={title} onChange={(event) => setTitle(event.target.value)} required />
+        <Input id={`category-${article.id}`} label="Category" name="category" value={category} onChange={(event) => setCategory(event.target.value)} />
+        <Input id={`image-${article.id}`} label="Image path" name="image_path" value={imagePath} onChange={(event) => setImagePath(event.target.value)} hint="Use a website image path or upload an image below." />
+        <Textarea id={`excerpt-${article.id}`} label="Summary" name="excerpt" value={excerpt} onChange={(event) => setExcerpt(event.target.value)} rows={3} required />
+        <Textarea id={`body-${article.id}`} label="Article body" name="body" value={body} onChange={(event) => setBody(event.target.value)} rows={10} />
+        {article.updated_at !== (state.updatedAt ?? initialVersion) ? <p className="text-sm font-semibold">The saved article has changed. Copy any unsaved text, then reload before editing again.</p> : null}
+        <div className="flex flex-wrap items-center gap-4"><SubmitButton pending={pending}>Save changes</SubmitButton><a href={`/portal/admin/news/preview/${article.id}`} target="_blank" rel="noreferrer" className="text-sm font-semibold underline underline-offset-4">Preview saved article</a></div>
+      </form>
+      <form action={uploadAction} className="mt-5 space-y-3 border-t border-black/10 pt-4">
+        <input type="hidden" name="news_id" value={article.id} /><input type="hidden" name="updated_at" value={article.updated_at} />
+        <FormError message={uploadState.error} /><FormNotice message={uploadState.notice} />
+        <Input id={`cover-${article.id}`} label="Upload an image" name="cover" type="file" accept="image/jpeg,image/png,image/webp" required hint="JPEG, PNG or WebP, up to 3 MB. Images added to a published article become public." />
+        <label className="block text-sm font-semibold">Place image<select name="placement" className="mt-2 block w-full rounded-xl border border-black/15 px-3 py-2"><option value="cover">Replace cover</option><option value="gallery">Add to article gallery</option></select></label>
+        <Input id={`caption-${article.id}`} label="Image caption" name="caption" hint="Required for gallery images." />
+        <SubmitButton pending={uploading}>Upload image</SubmitButton>
+      </form>
+      <form action={videoAction} className="mt-5 space-y-3 border-t border-black/10 pt-4"><input type="hidden" name="news_id" value={article.id} /><input type="hidden" name="updated_at" value={article.updated_at} /><FormError message={videoState.error} /><FormNotice message={videoState.notice} /><Input id={`video-${article.id}`} label="YouTube video link" name="video_url" type="url" required /><Input id={`video-title-${article.id}`} label="Video title" name="caption" required /><SubmitButton pending={addingVideo}>Add video</SubmitButton></form>
+    </details>
+  );
+}
 
 export function NewsAdmin({ articles }: { articles: News[] }) {
   const [createState, createAction, createPending] = useActionState(createNews, EMPTY);
@@ -55,6 +93,7 @@ export function NewsAdmin({ articles }: { articles: News[] }) {
                   </label>
                   <SubmitButton pending={statusPending}>Save status</SubmitButton>
                 </form>
+                <EditArticle article={article} />
               </li>
             ))}
           </ul>

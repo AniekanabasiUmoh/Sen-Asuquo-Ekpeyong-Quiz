@@ -84,6 +84,7 @@ export function Teaser({
         >
           <Image
             src={image}
+            unoptimized={image.startsWith("/api/news-media/")}
             alt={imageAlt}
             fill
             sizes="(min-width: 1024px) 48vw, 100vw"
