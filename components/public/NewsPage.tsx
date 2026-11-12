@@ -13,14 +13,8 @@ export const metadata: Metadata = {
  * News and Updates, per Content Guide §4.12.
  *
  * The public feed is database-backed; cards link to the article detail route.
- * Category filtering is URL-driven so a filtered feed can be shared directly.
  */
-export default async function NewsPage({
-  filters = {},
-}: {
-  filters?: { category?: string };
-}) {
-  const { category } = filters;
+export default async function NewsPage() {
   return (
     <>
       <PageHero
@@ -29,7 +23,7 @@ export default async function NewsPage({
         titleTrail="the Championship"
         intro="Announcements, stage reports and news from schools across the district."
       />
-      <NewsSection category={category} />
+      <NewsSection />
       <PrincipalsSection />
     </>
   );

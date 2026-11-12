@@ -821,29 +821,24 @@ export function PrizesSection() {
   );
 }
 
-export async function NewsSection({ category }: { category?: string } = {}) {
+export async function NewsSection() {
   const supabase = createPublicClient({ revalidate: 300 });
   const { data: databaseNews, error: newsError } = supabase
     ? await supabase
         .from("news")
-        .select("title, slug, excerpt, category, image_path, published_at")
+        .select("title, slug, excerpt, image_path, published_at")
         .eq("status", "published")
         .order("published_at", { ascending: false, nullsFirst: false })
         .limit(100)
     : { data: null, error: new Error("News is unavailable") };
 
   const items = (databaseNews ?? []).map((item) => ({
-        category: item.category ?? "SAEAC",
-        date: item.published_at ?? new Date().toISOString(),
+        date: item.published_at,
         title: item.title,
         excerpt: item.excerpt ?? "Read the latest update from the championship.",
       img: item.image_path || "/img/meeting-group.jpg",
       slug: item.slug,
       }));
-  const categories = [...new Set(items.map((item) => item.category))].sort();
-  const visibleItems = category
-    ? items.filter((item) => item.category.toLowerCase() === category.toLowerCase())
-    : items;
   /* ── News ── */
   return (
     <section id="news" className="mx-auto max-w-7xl scroll-mt-24 px-5 py-14 sm:py-20">
@@ -861,40 +856,14 @@ export async function NewsSection({ category }: { category?: string } = {}) {
         </Link>
       </div>
 
-      {categories.length > 1 ? (
-        <form className="mt-7 flex flex-wrap items-end gap-3" aria-label="Filter news">
-          <label className="text-[13px] font-semibold text-primary">
-            Category
-            <select
-              name="category"
-              defaultValue={category ?? ""}
-              className="mt-2 block rounded-2xl border border-black/15 bg-white px-4 py-3 text-[14px] outline-none focus:border-primary"
-            >
-              <option value="">All updates</option>
-              {categories.map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select>
-          </label>
-          <button
-            type="submit"
-            className="rounded-full border border-black/15 px-5 py-3 text-[13px] font-semibold transition hover:bg-white"
-          >
-            Filter
-          </button>
-        </form>
-      ) : null}
-
       {newsError ? <p role="status" className="mt-8 text-primary/70">News is temporarily unavailable. Please try again shortly.</p> : null}
       <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {visibleItems.map((n, i) => (
+        {items.map((n, i) => (
           <Reveal
             key={n.title}
             delay={i * 90}
             as="article"
-            className={`group overflow-hidden rounded-2xl bg-white ${i === 0 && !category ? "md:col-span-2" : ""}`}
+            className={`group overflow-hidden rounded-2xl bg-white ${i === 0 ? "md:col-span-2" : ""}`}
           >
             <Link href={n.slug ? `/news/${n.slug}` : "/news"} className="block">
               <ZoomImage
@@ -905,28 +874,24 @@ export async function NewsSection({ category }: { category?: string } = {}) {
               />
             </Link>
             <div className="p-6">
-              <div className="flex items-center gap-3 text-[11px]">
-                <span className="font-bold uppercase tracking-wider text-primary/45">
-                  {n.category}
-                </span>
-                <span className="text-primary/25">·</span>
-                <time className="text-primary/45">
+              {n.date ? <div className="text-[11px]">
+                <time dateTime={n.date} className="text-primary/45">
                   {new Date(n.date).toLocaleDateString("en-GB", {
                     day: "numeric",
                     month: "short",
                     year: "numeric",
                   })}
                 </time>
-              </div>
+              </div> : null}
               <h3 className="mt-3 font-display text-lg font-bold leading-snug"><Link href={n.slug ? `/news/${n.slug}` : "/news"} className="transition hover:text-red">{n.title}</Link></h3>
               <p className="mt-2 text-sm leading-relaxed text-primary/55">{n.excerpt}</p>
             </div>
           </Reveal>
         ))}
       </div>
-      {!newsError && visibleItems.length === 0 ? (
+      {!newsError && items.length === 0 ? (
         <p className="mt-8 rounded-2xl border border-dashed border-black/15 px-5 py-8 text-center text-[14px] text-primary/55">
-          No updates match that category yet.
+          No updates have been published yet.
         </p>
       ) : null}
     </section>

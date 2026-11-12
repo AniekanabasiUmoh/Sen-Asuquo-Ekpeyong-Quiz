@@ -22,10 +22,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function NewsArticlePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const supabase = createPublicClient({ revalidate: 300 });
-  const { data: article } = supabase ? await supabase.from("news").select("title, excerpt, body, category, image_path, published_at").eq("slug", slug).eq("status", "published").maybeSingle() : { data: null };
+  const { data: article } = supabase ? await supabase.from("news").select("title, excerpt, body, image_path, published_at").eq("slug", slug).eq("status", "published").maybeSingle() : { data: null };
   if (!article) notFound();
   return <>
-    <PageHero eyebrow={article.category || "News & Updates"} title={article.title} titleTrail="" intro={article.excerpt || "From the SAEAC Organising Committee."} image={article.image_path || "/img/meeting-group.jpg"} imageAlt="SAEAC news" />
+    <PageHero eyebrow="News & Updates" title={article.title} titleTrail="" intro={article.excerpt || "From the SAEAC Organising Committee."} image={article.image_path || "/img/meeting-group.jpg"} imageAlt="SAEAC news" />
     <article className="mx-auto max-w-3xl px-5 py-14 sm:py-20">
       <p className="text-[12px] text-primary/45">{article.published_at ? new Date(article.published_at).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" }) : ""}</p>
       <div className="mt-6"><ArticleBody body={article.body || article.excerpt || ""} /></div>
