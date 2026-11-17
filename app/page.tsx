@@ -13,6 +13,10 @@ import { Teaser } from "@/components/teaser";
 import { board, hero } from "@/content/homepage";
 import { createPublicClient } from "@/lib/supabase/server";
 
+// Editorial homepage content changes on publication, not on every visit.
+// Admin news actions invalidate saeac-public immediately after a save.
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: {
     absolute: "SÆAC · Senator Asuquo Ekpenyong Academic Championship",
@@ -37,7 +41,7 @@ export const metadata: Metadata = {
  * page behind it and gets out of the way.
  */
 export default async function HomePage() {
-  const supabase = createPublicClient({ revalidate: 300 });
+  const supabase = createPublicClient({ revalidate: 3600 });
   const { data: latest } = supabase
     ? await supabase.from("news").select("title, slug, excerpt, image_path, published_at").eq("status", "published").order("published_at", { ascending: false, nullsFirst: false }).limit(3)
     : { data: null };
